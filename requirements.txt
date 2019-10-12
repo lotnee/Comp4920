@@ -1,0 +1,6 @@
+Flask
+flask-wtf
+flask_login
+pymongo
+dnspython
+Werkzeug
