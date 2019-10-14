@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Profile</title>
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    <h2>{{ current_user.email }}'s profile</h2>
+    {% endif %}
+    <img src="static/images/{{current_user.email}}.jpg" />
+    <p>* edit doesn't work yet but it is use to create profile</p>
+    <a href="/edit-profile"> Edit profile </a>
+    <p> *remember to logout, I haven't tried login 2 users simultaneously</p>
+  	<a href="/logout"> Logout </a>
+</body>
+</html>

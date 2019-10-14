@@ -1,6 +1,7 @@
 Flask
 flask-wtf
 flask_login
+flask_uploads
 pymongo
 dnspython
 Werkzeug

@@ -1,14 +1,12 @@
 from app import login_manager
 from app.database import DB
 from flask_login import UserMixin
-from werkzeug.security import generate_password_hash
 
 class User(UserMixin, object):
 
-	def __init__(self, email, password, name):
+	def __init__(self, email, password):
 		self.email = email
-		self.password = generate_password_hash(password)
-		self.name = name
+		self.password = password
 
 	def insert(self):
 		if not DB.find_one("User", {"email": self.email}):
@@ -17,8 +15,7 @@ class User(UserMixin, object):
 	def json(self):
 		return {
 			'email': self.email,
-			'password': self.password,
-			'name': self.name
+			'password': self.password
 		}
 
 	@staticmethod
@@ -41,4 +38,4 @@ class User(UserMixin, object):
 		user = DB.find_one("User", {"email": email})
 		if not user:
 			return None
-		return User(user['email'], user['password'], user['name'])
+		return User(user['email'], user['password'])

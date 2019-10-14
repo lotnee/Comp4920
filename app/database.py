@@ -14,3 +14,12 @@ class DB(object):
     @staticmethod
     def find_one(collection, query):
         return DB.DATABASE[collection].find_one(query)
+    
+    @staticmethod
+    def update_one(collection, filter, query):
+        DB.DATABASE[collection].update_one(filter, query)
+
+    # TODO
+    # @staticmethod
+    # def aggregate(collection, query):
+    #     DB.DATABASE[collection].aggregate(query)
