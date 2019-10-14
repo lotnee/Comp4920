@@ -4,15 +4,11 @@
     <title>Dashboard </title>
 </head>
 <body>
-	<p>
-	Welcome back! 
-	{% with messages = get_flashed_messages() %}
-       {% if messages %}
-          {% for message in messages %}
-             {{ message }}
-          {% endfor %}
-       {% endif %}
-    {% endwith %}
-    </p>
+	<h2> Welcome back! </h2>
+  <p>
+    {% if current_user.is_authenticated %}
+      Hello {{ current_user.name }}!
+    {% endif %}
+  </p>
 </body>
 </html>

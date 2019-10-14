@@ -22,15 +22,15 @@ class User(UserMixin, object):
 		}
 
 	@staticmethod
-	def is_authenticated():
+	def is_authenticated(self):
 		return True
 
 	@staticmethod
-	def is_active():
+	def is_active(self):
 		return True
 
 	@staticmethod
-	def is_anonymous():
+	def is_anonymous(self):
 		return False
 
 	def get_id(self):
@@ -41,4 +41,4 @@ class User(UserMixin, object):
 		user = DB.find_one("User", {"email": email})
 		if not user:
 			return None
-		return user
+		return User(user['email'], user['password'], user['name'])
