@@ -1,17 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Dashboard </title>
 </head>
 <body>
-	<h2> Welcome back! </h2>
-  <p>
-    {% if current_user.is_authenticated %}
-      Hello {{ current_user.email }}!
-    {% endif %}
-  </p>
-  <a href="/profile"> My profile </a>
-  <p> *remember to logout, I haven't tried login 2 users simultaneously</p>
-  <a href="/logout"> Logout </a>
+   <div class="container">
+	   <h3> Welcome back! </h3>
+         <p>
+          {% if current_user.is_authenticated %}
+            Hello {{ current_user.email }}!
+          {% endif %}
+         </p>
+
+     <p> *remember to logout, I haven't tried login 2 users simultaneously</p>
+
 </body>
+{% endblock %}
 </html>
