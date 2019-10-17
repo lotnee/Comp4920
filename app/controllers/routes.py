@@ -60,6 +60,8 @@ def edit_profile():
 	form = ProfileForm()
 	if form.validate_on_submit():
 		user = DB.find_one(collection="User", query={"email": current_user.email})
+		# a question about the code below: shouldn't we determine whether the user managed to sign up first in the registration page, and then if
+		# user doesn't succeed, they are unable to log in to edit their profile? or am i misunderstanding it ahaha
 		if user is None:
 			flash("Sign Up Failed")
 			return redirect(url_for('register'))

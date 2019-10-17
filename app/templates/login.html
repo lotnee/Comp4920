@@ -21,7 +21,7 @@ body {
 }
 
 button {
-   background-color: #1E90FF;
+   background-color: #778899;
    color: white;
    cursor: pointer;
    width: auto;
@@ -32,6 +32,17 @@ button {
 
 button:hover{
    opacity: 0.8;
+}
+
+.button-reg {
+   background-color: #1E90FF;
+   color: white;
+   cursor: pointer;
+   width: auto;
+   border: none;
+   padding: 10px 15px;
+   margin: 8px 0;
+   float: right;
 }
 
 .input[type=text], input[type=password] {
@@ -65,7 +76,6 @@ span.register {
       <div class="text-center">
          <h1>Welcome to Hangouts</h1>
       </div>
-   
       <form action="/login" method="post">
          {{ form.hidden_tag() }}
          {% with messages = get_flashed_messages() %}
@@ -81,7 +91,9 @@ span.register {
      
          <input type="text" class="form-control" name="email" placeholder="Email" required=""autofocus=""/></br>
          <input type="password" class="form-control" name="password" placeholder="Password" required/></br>
-         <button class="button" type="submit">Login</button>
-         <span class="register"><a href="/register">Register</a></span>
+         <button class="button" type="submit">Sign In</button>
+         <button class="button-reg" onclick="window.location.href = '/register';">Register</button>
       </form>
    </div>
+</body>
+</html>
