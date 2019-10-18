@@ -1,59 +1,28 @@
-{% extends "base.html" %}
-{% block content %}
-<!DOCTYPE html>
-<html>
-<head>
-   <title>Edit Profile</title>
-</head>
-
-<style>
-<!-- CSS -->
-.input[type=text] {
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-
-.button {
-   background-color: #1E90FF;
-   color: white;
-   cursor: pointer;
-   width: auto;
-   border: none;
-   padding: 10px 15px;
-   margin: 8px 0;
-   float: right;
-}
-</style>
-
-<!-- Body -->
-<body>
-   <div class="container">
-      <h1>Edit Profile</h1>
-      <form action="/edit-profile" method="post" enctype="multipart/form-data">
-          {{ form.hidden_tag() }}
-          {% with messages = get_flashed_messages() %}
-             {% if messages %}
-                {% for message in messages %}
-                   {{ message }}
-                {% endfor %}
-             {% endif %}
-          {% endwith %}
-          <input type="text" class="form-control" name="name" placeholder="Name" required=""autofocus=""/></br>
-          <input type="text" class="form-control" name="description" placeholder="Description" required=""autofocus=""/></br>
-           <p>
-              {{ form.gender.label }}<br>
-              {{ form.gender(size=12) }}
-          </p>
-          {{ form.pictureDir }}
-          {% for error in form.pictureDir.errors %}
-           <span style="color: red;">{{ error }}</span>
+<h1>Edit Profile</h1>
+<form action="/edit-profile" method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    {% with messages = get_flashed_messages() %}
+       {% if messages %}
+          {% for message in messages %}
+             {{ message }}
           {% endfor %}
-          <button class="button" type="submit" onclick="window.location.href = '/profile';">Save changes</button>
-      </form>
-   </div>
-</body>
-{% endblock %}
-</html>
+       {% endif %}
+    {% endwith %}
+    <p>
+        {{ form.name.label }}<br>
+        {{ form.name(size=64) }}
+    </p>
+    <p>
+        {{ form.descriptions.label }}<br>
+        {{ form.descriptions(size=128) }}
+    </p>
+     <p>
+        {{ form.gender.label }}<br>
+        {{ form.gender(size=12) }}
+    </p>
+    {{ form.pictureDir }}
+    {% for error in form.pictureDir.errors %}
+     <span style="color: red;">{{ error }}</span>
+    {% endfor %}
+    <p>{{ form.submit() }}</p>
+</form>
