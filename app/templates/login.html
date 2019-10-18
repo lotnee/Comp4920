@@ -26,23 +26,23 @@ button {
    cursor: pointer;
    width: auto;
    border: none;
-   padding: 10px 15px;
-   margin: 8px 0;
+
+   float: right;
 }
 
-button:hover{
-   opacity: 0.8;
-}
-
-.button-reg {
+.button-signin {
    background-color: #1E90FF;
    color: white;
    cursor: pointer;
-   width: auto;
+   width: 100%;
    border: none;
    padding: 10px 15px;
    margin: 8px 0;
    float: right;
+}
+
+button:hover{
+   opacity: 0.8;
 }
 
 .input[type=text], input[type=password] {
@@ -63,9 +63,11 @@ img.avatar {
   border-radius: 50%;
 }
 
-span.register {
-  float: right;
-  padding-top: 16px;
+.box {
+  color: black;
+  background: #fff;
+  height: 30px;  
+  line-height: 30px; /* Same as height  */
 }
 
 </style>
@@ -91,8 +93,9 @@ span.register {
      
          <input type="text" class="form-control" name="email" placeholder="Email" required=""autofocus=""/></br>
          <input type="password" class="form-control" name="password" placeholder="Password" required/></br>
-         <button class="button" type="submit">Sign In</button>
-         <button class="button-reg" onclick="window.location.href = '/register';">Register</button>
+         <button class="button-signin" type="submit">Sign In</button>
+         <p class="box">Don't have an account?
+         <button class="button" onclick="window.location.href = '/register';">Register now</button></p>
       </form>
    </div>
 </body>
