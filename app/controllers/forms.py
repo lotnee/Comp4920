@@ -1,5 +1,6 @@
 from app import app
 from flask_wtf import FlaskForm
+from wtforms.fields.html5 import DateField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from flask_uploads import UploadSet, IMAGES, configure_uploads, patch_request_class
 from wtforms import StringField, PasswordField, SubmitField
@@ -26,3 +27,9 @@ class ProfileForm(FlaskForm):
 	pictureDir = FileField(validators=[FileRequired('File empty :('), FileAllowed(photos, 'image only')])
 	submit = SubmitField('Edit Profile')
 
+class EventForm(FlaskForm):
+	name  = StringField('Name', validators=[DataRequired()],render_kw = {"placeholder": "Enter The Name Of Your Event"})
+	description = StringField('Description', validators=[DataRequired()], render_kw = {"placeholder": "Enter A Short Description Of Your Event"})
+	submit = SubmitField('Create Event')
+	start = DateField('Enter Your Start Date', format='%Y-%m-%d')
+	end = DateField('When Does The Event End', format='%Y-%m-%d')

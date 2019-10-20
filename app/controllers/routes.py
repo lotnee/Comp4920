@@ -2,11 +2,13 @@ from app import app
 from app.database import DB
 from app.models.user import User
 from app.models.profile import Profile
-from app.controllers.forms import LoginForm, RegistrationForm, ProfileForm, photos
+from app.models.events import Event
+from app.controllers.forms import LoginForm, RegistrationForm, ProfileForm, photos,EventForm
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
+from datetime import datetime
 
 @app.route('/dashboard')
 @login_required
@@ -91,8 +93,17 @@ def edit_profile():
 def profile():
 	return render_template('profile.html')
 
-
-
-
-
-
+@app.route('/events', methods=['GET', 'POST'])
+@login_required
+def events():
+	form = EventForm()
+	if form.validate_on_submit():
+		date1 = datetime(2011, 11, 4, 0, 0)
+		date2 = datetime(2011, 11, 4, 0, 0)
+		print("start date is " + date1.isoformat())
+		# //startDate = datetime.strptime(date1,'%m-%d-%Y').date()
+		# endDate = datetime.strptime(date2,'%m-%d-%Y').date()
+		event = Event(name = form.name.data, description = form.description.data, start = date1, end = date2)
+		event.insert()
+		return "hehe"
+	return render_template('events.html', title = "Create Your Event", form = form)

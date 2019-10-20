@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Welcome {{ current_user.email }}</h1>
+<p>You can create your events here</p>
+<form action="{{url_for('events')}}" method = "post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.name.label }}<br>
+        {{ form.name(size=64) }}
+    </p>
+    <p>
+      {{form.description.label}}
+      {{form.description(size=128)}}
+      </p>
+        {{form.start.label}}
+        {{form.start(class="datepicker")}}
+
+        {{form.end.label}}
+        {{form.end(class="datepicker")}}
+      <p>{{ form.submit() }}</p>
+  </form>
+{% endblock %}
