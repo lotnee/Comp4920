@@ -98,11 +98,10 @@ def profile():
 def events():
 	form = EventForm()
 	if form.validate_on_submit():
-		date1 = datetime(2011, 11, 4, 0, 0)
+		print(type(form.start.data))
+		date1 = datetime((form.start.data).year,(form.start.data).month,(form.start.data).day)
 		date2 = datetime(2011, 11, 4, 0, 0)
 		print("start date is " + date1.isoformat())
-		# //startDate = datetime.strptime(date1,'%m-%d-%Y').date()
-		# endDate = datetime.strptime(date2,'%m-%d-%Y').date()
 		event = Event(name = form.name.data, description = form.description.data, start = date1, end = date2)
 		event.insert()
 		return "hehe"
