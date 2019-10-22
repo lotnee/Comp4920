@@ -1,22 +1,94 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Welcome {{ current_user.email }}</h1>
-<p>You can create your events here</p>
-<form action="{{url_for('events')}}" method = "post">
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.name.label }}<br>
-        {{ form.name(size=64) }}
-    </p>
-    <p>
-      {{form.description.label}}
-      {{form.description(size=128)}}
-      </p>
-        {{form.start.label}}
-        {{form.start(class="datepicker")}}
+<!DOCTYPE html>
 
-        {{form.end.label}}
-        {{form.end(class="datepicker")}}
-      <p>{{ form.submit() }}</p>
-  </form>
+<style>
+	.container{
+		padding:15px;
+		margin-top:60px;
+   		width:600px; 
+		text-align:left;
+		background-color: #fafafa;
+	}
+	.firstbody{
+   		width:150px; 
+		text-align:right;
+		padding:10px;
+		font-size:12px;
+		margin-top:10px;
+	}
+	.secondbody{
+   		width:400px; 
+   		margin-left:150px;
+   		margin-top:-155px;
+		text-align:left;
+		padding:10px;
+		font-size: 12px;
+	}
+	.heading{
+		padding:10px;
+		font-size: 30px;
+		width:600px;
+		margin-left:-15px;
+		margin-top:-15px;
+		background-color: #0040ff;
+		text-align:center;
+		color: white;
+	}
+	.text{
+		text-align: center;
+		padding-top:5px;
+		padding-bottom: 30px;
+		font-size: 10px;
+	}
+	.button {
+		text-align: center;
+		margin-top:100px;
+		border-color:#333;
+	}
+</style>
+
+<body>
+	<div class ="container">
+		<div class ="heading">
+			Welcome {{ current_user.email }}!
+		</div>
+		<div class ="text">
+			You can create your events here
+		</div>
+
+
+
+		<form action="{{url_for('events')}}" method = "post">
+			<div class ="firstbody">
+	    	{{ form.hidden_tag() }}
+		        {{ form.name.label }}</p>
+		        {{form.description.label}}</p>
+		        {{form.start.label}}</p>
+		        {{form.end.label}}
+		    </div>
+		    <div class ="secondbody">
+		    	{{ form.name(size=55) }}</p>
+		    	{{form.description(size=55)}}</p>
+		    	{{form.start(class="datepicker")}}</p>
+		    	{{form.end(class="datepicker")}}
+		    </div>
+		        
+		    </p>
+		    <p>
+		      
+		      
+		    </p>
+				
+		        <div class ="date">
+		       </div>
+		    	
+		    
+
+		    <div class ="button">{{ form.submit() }}</div>
+		</form>
+
+	</div>
+</body>
 {% endblock %}
+</html>
