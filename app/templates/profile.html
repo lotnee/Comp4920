@@ -13,6 +13,7 @@
   margin: auto;
   text-align: center;
   float: center;
+  margin-top: 80px;
 }
 
 .picture {
@@ -48,16 +49,14 @@ button:hover, a:hover {
 
 <!-- Body -->
 <body>   
-   <div class="card">
-      <!-- <img src="static/images/{{current_user.email}}.jpg" class="picture"/> -->
-      <img src="static/images/{{profile.pictureDir}}" class="picture"/>
-      
-      <h1>{{ current_user.email}}'s Profile</h1>
-      <hr>
-      <p>* edit doesn't work yet but it is use to create profile</p>
-      {% if current_user.is_authenticated %}
-      <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile</button>
-      {% endif %}  
+   <div class="card"> 
+         <img src="static/images/{{profile.pictureDir}}" class="picture"/>      
+         <h1>{{ current_user.email}}'s Profile</h1>
+         <hr>
+         <p>* edit doesn't work yet but it is use to create profile</p>
+         {% if current_user.is_authenticated %}
+         <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile</button>
+         {% endif %}  
    </div>
 </body>
 {% endblock %}
