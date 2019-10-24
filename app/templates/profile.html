@@ -1,17 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Profile</title>
 </head>
-<body>
-    {% if current_user.is_authenticated %}
-    <h2>{{ current_user.email }}'s profile</h2>
-    {% endif %}
-    <img src="static/images/{{current_user.email}}.jpg" />
-    <p>* edit doesn't work yet but it is use to create profile</p>
-    <a href="/edit-profile"> Edit profile </a>
-    <p> *remember to logout, I haven't tried login 2 users simultaneously</p>
-  	<a href="/logout"> Logout </a>
-    <a href="/dashboard">Return To Dashboard</a>
+<!-- CSS -->
+<style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  margin: auto;
+  text-align: center;
+  float: center;
+}
+
+.picture {
+  margin-top: 20px;
+  border-radius: 50%;
+  width: 35%;
+}
+
+button {
+   background-color: #1E90FF;
+   color: white;
+   cursor: pointer;
+   width: 100%;
+   border: none;
+   padding: 10px 15px;
+   margin: 8px 0;
+}
+
+button:hover{
+   opacity: 0.8;
+}
+
+a {
+  text-decoration: none;
+  font-size: 22px;
+  color: black;
+}
+
+button:hover, a:hover {
+  opacity: 0.7;
+}
+</style>
+
+<!-- Body -->
+<body>   
+   <div class="card">
+      <img src="static/images/{{current_user.email}}.jpg" class="picture"/>
+      
+      <h1>{{ current_user.email}}'s Profile</h1>
+      <hr>
+      <p>* edit doesn't work yet but it is use to create profile</p>
+      {% if current_user.is_authenticated %}
+      <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile</button>
+      {% endif %}  
+   </div>
 </body>
+{% endblock %}
 </html>

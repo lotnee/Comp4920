@@ -2,9 +2,10 @@ from app.database import DB
 
 class Profile(object):
 
-	def __init__(self, email, name, gender, descriptions, pictureDir):
+	def __init__(self, email, firstName, lastName, gender, descriptions, pictureDir):
 		self.email = email
-		self.name = name
+		self.firstName = firstName
+		self.lastName = lastName
 		self.gender = gender
 		self.descriptions = descriptions
 		self.pictureDir = pictureDir
@@ -17,6 +18,8 @@ class Profile(object):
 		return {
 			'email': self.email,
 			'name': self.name,
+			'firstName': self.firstName,
+			'lastName': self.lastName,
 			'gender': self.gender,
 			'descriptions': self.descriptions,
 			'pictureDir': self.pictureDir
