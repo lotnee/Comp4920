@@ -14,6 +14,7 @@ from datetime import datetime
 @app.route('/dashboard')
 @login_required
 def dashboard():
+	print(DB.count('Events'))
 	return render_template('dashboard.html')
 
 @app.route('/')
@@ -125,7 +126,7 @@ def events():
 @login_required
 def friends():
 	users = list(DB.find_all(collection="Profile"))
-	me = DB.find_one(collection="Profile", query={"email": current_user.email}) 
+	me = DB.find_one(collection="Profile", query={"email": current_user.email})
 	requests = DB.find(collection="Profile", query={"friends.email": current_user.email, "friends.status":"pending"})
 	return render_template('friend.html', title='Friend List', users=users, me=me, requests=requests)
 
@@ -157,7 +158,7 @@ def delete_request(email):
 	added = DB.find_one(collection="Profile", query={"friends.email": email})
 	added2 = DB.find_one(collection="Profile", query={"friends.email": current_user.email})
 	# added = DB.find_one(collection="Profile", query={"friends": {"$elemMatch": {"email": email} }})
-	# print(added['friends'][0]['email']) 
+	# print(added['friends'][0]['email'])
 	# ^ LMAO can't seem to convert list to dict and i found this way works so ...
 	if added is not None and added['friends'][0]['status'] == "pending":
 		friend_obj = Friend(email=added['friends'][0]['email'], firstName=added['friends'][0]['firstName'], lastName=added['friends'][0]['lastName'], status=added['friends'][0]['status'])
@@ -167,7 +168,7 @@ def delete_request(email):
 		friend_obj2 = Friend(email=added2['friends'][0]['email'], firstName=added2['friends'][0]['firstName'], lastName=added2['friends'][0]['lastName'], status=added2['friends'][0]['status'])
 		friend_obj2.remove(email)
 		flash('Friend request ' + email + ' rejected!')
-	elif added and added2 is not None: 
+	elif added and added2 is not None:
 		friend_obj = Friend(email=added['friends'][0]['email'], firstName=added['friends'][0]['firstName'], lastName=added['friends'][0]['lastName'], status=added['friends'][0]['status'])
 		friend_obj.remove(current_user.email)
 		friend_obj2 = Friend(email=added2['friends'][0]['email'], firstName=added2['friends'][0]['firstName'], lastName=added2['friends'][0]['lastName'], status=added2['friends'][0]['status'])

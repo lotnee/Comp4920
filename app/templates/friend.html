@@ -1,62 +1,66 @@
-<html>
-<body>   
+{% extends "base.html" %}
+{% block content %}
+
   <!-- move these to dashboard maybe -->
-   <h1>Friend list</h1>
-   {% for friend in me.friends %}
-      {% if friend.status != "pending" %}
-        <p>Email: {{friend.email}}</p>
-        <p>First Name: {{friend.firstName}}</p>
-        <p>Last Name: {{friend.lastName}}</p>
-        <a href="{{url_for('delete_request', email=friend.email)}}">Delete Friend</a>
-        <br />
-      {% else %}
-        <p>Much empty :'(</p>
-      {% endif %}
-   {% endfor %}
-      <br />
-   <h1>Friend requests</h1>
-   <h3>Incoming requests:</h3>
-   {% for friend in requests %}
-      <p>Email: {{friend.email}}</p>
-      <p>First Name: {{friend.firstName}}</p>
-      <p>Last Name: {{friend.lastName}}</p>
-      <a href="{{url_for('accept_request', email=friend.email)}}">Accept Request</a>
-      <a href="{{url_for('delete_request', email=friend.email)}}">Delete Request</a>
-      <br />
-   {% endfor %}
-   <h3>Sent Request to :</h3>
-   {% for friend in me.friends %}
-      {% if friend.status == "pending" %}
-        <p>Email: {{friend.email}}</p>
-        <p>First Name: {{friend.firstName}}</p>
-        <p>Last Name: {{friend.lastName}}</p>
-        <a href="{{url_for('delete_request', email=friend.email)}}">Cancel Request</a>
-      <br />
-      {% else %}
-        <p>Much empty :'(</p>
-      {% endif %}
-   {% endfor %}
-   <br /><br />
-   <!-- testing can be use for search-->
-   {% with messages = get_flashed_messages() %}
-      {% if messages %}
-         {% for message in messages %}
-            <p style="color:red;">{{ message }}</p>
-         {% endfor %}
-      {% endif %}
-   {% endwith %}
-   <h1>Show all Users</h1>
-   {% for user in users%}
-   		{% if user.email != current_user.email %}
-  			<p>Email: {{user.email}}</p>
-  			<p>First Name: {{user.firstName}}</p>
-  			<p>Last Name: {{user.lastName}}</p>
-        <a href="{{url_for('send_request', email=user.email)}}">Send Request</a>
-  			<br/>
-  			<br/>
-      {% else %}
-        <p>Much empty :'(</p>
-		  {% endif %}
-   {% endfor %}
-</body>
+  <div class="friend-body" style="padding-top:45px;">
+       <h1>Friend list</h1>
+       {% for friend in me.friends %}
+          {% if friend.status != "pending" %}
+            <p>Email: {{friend.email}}</p>
+            <p>First Name: {{friend.firstName}}</p>
+            <p>Last Name: {{friend.lastName}}</p>
+            <a href="{{url_for('delete_request', email=friend.email)}}">Delete Friend</a>
+            <br />
+          {% else %}
+            <p>Much empty :'(</p>
+          {% endif %}
+       {% endfor %}
+          <br />
+       <h1>Friend requests</h1>
+       <h3>Incoming requests:</h3>
+       {% for friend in requests %}
+          <p>Email: {{friend.email}}</p>
+          <p>First Name: {{friend.firstName}}</p>
+          <p>Last Name: {{friend.lastName}}</p>
+          <a href="{{url_for('accept_request', email=friend.email)}}">Accept Request</a>
+          <a href="{{url_for('delete_request', email=friend.email)}}">Delete Request</a>
+          <br />
+       {% endfor %}
+       <h3>Sent Request to :</h3>
+       {% for friend in me.friends %}
+          {% if friend.status == "pending" %}
+            <p>Email: {{friend.email}}</p>
+            <p>First Name: {{friend.firstName}}</p>
+            <p>Last Name: {{friend.lastName}}</p>
+            <a href="{{url_for('delete_request', email=friend.email)}}">Cancel Request</a>
+          <br />
+          {% else %}
+            <p>Much empty :'(</p>
+          {% endif %}
+       {% endfor %}
+       <br /><br />
+       <!-- testing can be use for search-->
+       {% with messages = get_flashed_messages() %}
+          {% if messages %}
+             {% for message in messages %}
+                <p style="color:red;">{{ message }}</p>
+             {% endfor %}
+          {% endif %}
+       {% endwith %}
+       <h1>Show all Users</h1>
+       {% for user in users%}
+       		{% if user.email != current_user.email %}
+      			<p>Email: {{user.email}}</p>
+      			<p>First Name: {{user.firstName}}</p>
+      			<p>Last Name: {{user.lastName}}</p>
+            <a href="{{url_for('send_request', email=user.email)}}">Send Request</a>
+      			<br/>
+      			<br/>
+          {% else %}
+            <p>Much empty :'(</p>
+    		  {% endif %}
+       {% endfor %}
+
+       {% endblock %}
+   </div>
 </html>
