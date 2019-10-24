@@ -3,6 +3,7 @@ from app.database import DB
 from app.models.user import User
 from app.models.profile import Profile
 from app.models.events import Event
+from app.models.friend import Friend
 from app.controllers.forms import LoginForm, RegistrationForm, ProfileForm, photos,EventForm
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_user, login_required, logout_user
@@ -124,4 +125,72 @@ def events():
 @login_required
 def friends():
 	users = list(DB.find_all(collection="Profile"))
-	return render_template('friend.html', title='Friend List', users=users)
+	me = DB.find_one(collection="Profile", query={"email": current_user.email}) 
+	requests = DB.find(collection="Profile", query={"friends.email": current_user.email, "friends.status":"pending"})
+	return render_template('friend.html', title='Friend List', users=users, me=me, requests=requests)
+
+@app.route('/send-request/<email>')
+@login_required
+def send_request(email):
+	# only can add user with a profile
+	friend = DB.find_one(collection="Profile", query={"email": email})
+	if friend is None:
+		flash('User %s not found!' % email)
+		return redirect(url_for('friends'))
+	added = DB.find_one(collection="Profile", query={"friends.email": email})
+	if added is not None:
+		flash('Request to %s sent!' % email)
+		return redirect(url_for('friends'))
+	friend_obj = Friend(email=friend['email'], firstName=friend['firstName'], lastName=friend['lastName'], status="pending")
+	friend_obj.insert(current_user.email)
+	flash('Friend request sent to ' + email + '!')
+	return redirect(url_for('friends'))
+
+@app.route('/delete-request/<email>')
+@login_required
+def delete_request(email):
+	# only can add user with a profile
+	friend = DB.find_one(collection="Profile", query={"email": email})
+	if friend is None:
+		flash('User %s not found!' % email)
+		return redirect(url_for('friends'))
+	added = DB.find_one(collection="Profile", query={"friends.email": email})
+	added2 = DB.find_one(collection="Profile", query={"friends.email": current_user.email})
+	# added = DB.find_one(collection="Profile", query={"friends": {"$elemMatch": {"email": email} }})
+	# print(added['friends'][0]['email']) 
+	# ^ LMAO can't seem to convert list to dict and i found this way works so ...
+	if added is not None and added['friends'][0]['status'] == "pending":
+		friend_obj = Friend(email=added['friends'][0]['email'], firstName=added['friends'][0]['firstName'], lastName=added['friends'][0]['lastName'], status=added['friends'][0]['status'])
+		friend_obj.remove(current_user.email)
+		flash('Friend request ' + email + ' cancelled!')
+	elif added2 is not None and added2['friends'][0]['status'] == "pending":
+		friend_obj2 = Friend(email=added2['friends'][0]['email'], firstName=added2['friends'][0]['firstName'], lastName=added2['friends'][0]['lastName'], status=added2['friends'][0]['status'])
+		friend_obj2.remove(email)
+		flash('Friend request ' + email + ' rejected!')
+	elif added and added2 is not None: 
+		friend_obj = Friend(email=added['friends'][0]['email'], firstName=added['friends'][0]['firstName'], lastName=added['friends'][0]['lastName'], status=added['friends'][0]['status'])
+		friend_obj.remove(current_user.email)
+		friend_obj2 = Friend(email=added2['friends'][0]['email'], firstName=added2['friends'][0]['firstName'], lastName=added2['friends'][0]['lastName'], status=added2['friends'][0]['status'])
+		friend_obj2.remove(email)
+		flash('Friend request ' + email + ' deleted!')
+	else:
+		flash('No such request to %s!' % email)
+	return redirect(url_for('friends'))
+
+@app.route('/accept-request/<email>')
+@login_required
+def accept_request(email):
+	# only can add user with a profile
+	friend = DB.find_one(collection="Profile", query={"email": email})
+	if friend is None:
+		flash('User %s not found!' % email)
+		return redirect(url_for('friends'))
+	added = DB.find_one(collection="Profile", query={"friends.email": current_user.email, "friends.status": "pending"})
+	if added is not None:
+		DB.update_one(collection="Profile", filter={"friends.email": current_user.email}, data={"$set": {"friends.0.status": "accepted"}})
+		friend_obj = Friend(email=friend['email'], firstName=friend['firstName'], lastName=friend['lastName'], status="accepted")
+		friend_obj.insert(current_user.email)
+		flash('Accepted %s\'s friend request!' % email)
+		return redirect(url_for('friends'))
+	flash('%s is already a friend' % email)
+	return redirect(url_for('friends'))

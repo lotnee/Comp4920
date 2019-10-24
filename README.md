@@ -12,6 +12,9 @@ python3 run.py
 ```
 email: adm1n@hangouts
 password: adm1n
+
+email: friend@hangouts
+password: friend
 ```
 ## Basic idea
 ```
@@ -39,11 +42,11 @@ Logout: clear current user redirect to / or login
     <th/> WORKS
   <tr/>
   	<th/> Add & Del friends
-    <th/> TODO
-    <th/> -
+    <th/> COMPLETED
+    <th/> WORKS
   <tr/>
   	<th/> Create & Del event
-    <th/> TODO
+    <th/> IN PROGRESS
     <th/> -
   <tr/>
   	<th/> Upload photo(event)
