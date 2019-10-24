@@ -7,15 +7,14 @@
 	.container{
 		padding:15px;
 		margin-top:60px;
-   		width:600px; 
-		text-align:left;
-		background-color: #fafafa;
+   	max-width:500px; 
+		text-align:center;
+
 	}
 	.firstbody{
-   		width:150px; 
-		text-align:right;
+      max-width: 500px; 
+		text-align:left;
 		padding:10px;
-		font-size:12px;
 		margin-top:10px;
 	}
 	.secondbody{
@@ -26,16 +25,6 @@
 		padding:10px;
 		font-size: 12px;
 	}
-	.heading{
-		padding:10px;
-		font-size: 26px;
-		width:600px;
-		margin-left:-15px;
-		margin-top:-15px;
-		background-color: #1E90FF;
-		text-align:center;
-		color: white;
-	}
 	.text{
 		text-align: center;
 		padding-top:5px;
@@ -43,7 +32,7 @@
 		font-size: 10px;
 	}
 	.button {
-		text-align: right;
+		float: right;
 		margin-top:20px;
 		border-color:#333;
 	}
@@ -51,11 +40,11 @@
 	   background-color: #1E90FF;
 	   color: white;
 	   cursor: pointer;
-	   width: 60px;
+	   width: auto;
 	   border: none;
-	   border-radius: 14px;
+	   border-radius:14px;
 	   padding: 10px;
-	   font-size:12px;
+	   float:right;
 	}
 
 button:hover{
@@ -66,25 +55,16 @@ button:hover{
 <body>
 	
 	<div class ="container">
-		<div class ="heading">
-			Welcome {{ current_user.email }}!
-		</div>
-		<div class ="text">
-			You can create your events here
-		</div>
+		<h1>Create an event</h1>
 
 		<form action="{{url_for('events')}}" method = "post">
 			<div class ="firstbody">
-	    	{{ form.hidden_tag() }}
-		        {{ form.name.label }}</p>
-		        {{form.description.label}}</p>
-		        {{form.start.label}}</p>
-		        {{form.end.label}}
-		    </div>
-		    <div class ="secondbody">
+		    	<text> Event Name </text></p>
 		    	{{ form.name(size=60) }}</p>
+		    	<text> Event Description</text></p>
 		    	{{form.description(size=60)}}</p>
-		    	{{form.start(class="datepicker")}}</p>
+		    	{{form.start(class="datepicker")}} 
+		    	<text> &mdash;</text>
 		    	{{form.end(class="datepicker")}}
 		    </div>
 

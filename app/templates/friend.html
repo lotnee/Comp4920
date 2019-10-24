@@ -1,7 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!DOCTYPE html>
+<head>
+   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+   <title>Friends</title>
+</head>
 <html>
 <body>   
   <!-- move these to dashboard maybe -->
-   <h1>Friend list</h1>
+   <h1>Friends</h1>
    {% for friend in me.friends %}
       {% if friend.status != "pending" %}
         <p>Email: {{friend.email}}</p>
@@ -59,4 +67,5 @@
 		  {% endif %}
    {% endfor %}
 </body>
+{% endblock %}
 </html>
