@@ -17,7 +17,6 @@ class Profile(object):
 	def json(self):
 		return {
 			'email': self.email,
-			'name': self.name,
 			'firstName': self.firstName,
 			'lastName': self.lastName,
 			'gender': self.gender,

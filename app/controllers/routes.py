@@ -61,9 +61,13 @@ def register():
 def edit_profile():
 	form = ProfileForm()
 	if form.validate_on_submit():
+		print(form.pictureDir.data)
 		user = DB.find_one(collection="User", query={"email": current_user.email})
 		# a question about the code below: shouldn't we determine whether the user managed to sign up first in the registration page, and then if
 		# user doesn't succeed, they are unable to log in to edit their profile? or am i misunderstanding it ahaha
+		# ^ hi to answer your question, i assume you are a front end dev
+		# how the registration works is if you successfully sign up, you will be automatically logged in.
+		# if failed obviously can't even edit profile
 		if user is None:
 			flash("Sign Up Failed")
 			return redirect(url_for('register'))
@@ -76,12 +80,18 @@ def edit_profile():
 				# file = secure_filename(form.pictureDir.data.filename)
 				# file = os.path.join(app.config['UPLOADED_PHOTOS_DEST'], file)
 				# print(file)
-				filename = photos.save(form.pictureDir.data, name=user['email'] + '.')
+				if form.pictureDir.data is None:
+					if form.gender.data == "male":
+						filename = "male.jpg"
+					else:
+						filename = "female.jpg"
+				else:
+					filename = photos.save(form.pictureDir.data, name=user['email'] + '.')
 				# print(filename)
 				# fileDest = photos.path(filename)
 				# print(fileDest)
 
-				profile_obj = Profile(email=user['email'], name=form.name.data, descriptions=form.descriptions.data, gender=form.gender.data, pictureDir=filename)
+				profile_obj = Profile(email=user['email'], firstName=form.firstName.data, lastName=form.lastName.data, descriptions=form.descriptions.data, gender=form.gender.data, pictureDir=filename)
 				profile_obj.insert()
 				# TODO database aggregation
 				# DB.aggregate(collection="User", query=[{"$lookup":{"from":"Profile", "localField":"email", "foreignField":"email", "as":"user_profile"}}])
@@ -93,7 +103,8 @@ def edit_profile():
 @app.route('/profile')
 @login_required
 def profile():
-	return render_template('profile.html')
+	profile = DB.find_one(collection="Profile", query={"email": current_user.email})
+	return render_template('profile.html', profile=profile)
 
 @app.route('/events', methods=['GET', 'POST'])
 @login_required
@@ -108,3 +119,8 @@ def events():
 		event.insert()
 		return "hehe"
 	return render_template('events.html', title = "Create Your Event", form = form)
+
+@app.route('/friends', methods=['GET', 'POST'])
+@login_required
+def friends():
+	return

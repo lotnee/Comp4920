@@ -16,17 +16,19 @@ class LoginForm(FlaskForm):
 	submit = SubmitField('Sign In')
 
 class RegistrationForm(FlaskForm):
-	firstName = StringField('First Name', validators=[DataRequired()])
-	lastName = StringField('Last Name', validators=[DataRequired()])
+	# firstName = StringField('First Name', validators=[DataRequired()])
+	# lastName = StringField('Last Name', validators=[DataRequired()])
 	email = StringField('Email', validators=[DataRequired()])
 	password = PasswordField('Password', validators=[DataRequired()])
 	submit = SubmitField('Sign Up')
 
 class ProfileForm(FlaskForm):
-	name = StringField('Name', validators=[DataRequired()])
+	firstName = StringField('First Name', validators=[DataRequired()])
+	lastName = StringField('Last Name', validators=[DataRequired()])
 	descriptions = StringField('Descriptions', validators=[DataRequired()])
 	gender = StringField('Gender', validators=[DataRequired()])
-	pictureDir = FileField(validators=[FileRequired('File empty :('), FileAllowed(photos, 'image only')])
+	# pictureDir = FileField(validators=[FileRequired('File empty :('), FileAllowed(photos, 'image only')])
+	pictureDir = FileField(validators=[FileAllowed(photos, 'image only')])
 	submit = SubmitField('Edit Profile')
 
 class EventForm(FlaskForm):
