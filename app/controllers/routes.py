@@ -123,4 +123,5 @@ def events():
 @app.route('/friends', methods=['GET', 'POST'])
 @login_required
 def friends():
-	return
+	users = list(DB.find_all(collection="Profile"))
+	return render_template('friend.html', title='Friend List', users=users)
