@@ -29,35 +29,57 @@ li a {
    font-size: 16px; 
 }
 
+#header .navbar-nav li > a {
+	color: ##1E90FF;
+	transition: background-color .2s, color .2s;
+	&:hover,
+	&:focus {
+		background-color: ##1E90FF;
+		color: #fff;
+	}
+}
+
+#header .navbar-nav li.active > a {
+	background-color: #1E90FF;
+	color: #fff;
+}
 </style>
 
 <!-- Body -->
 <body>
 	<!-- Navigation Bar -->
-	<nav class="navbar navbar-default navbar-fixed-top">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="/">
-				   <img alt="Hangouts" src="https://cdn.discordapp.com/attachments/352464623108096002/633928057681477642/hicon.png" width="30px" height="30px">
-			   </a>
-			</div>
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="/dashboard">Dashboard<span class="sr-only">(current)</span></a></li>
-				<li ><a href="/profile">Profile</a></li>
-				<li><a href="/events">Events</a></li>
-            <li><a href="/friends">Friends</a></li>
-         </ul>
-         <form class="navbar-form navbar-left" action="/action_page.php">
-            <div class="input-group">
-                  <input type="search" class="form-control" placeholder="Search" id="sitesearch" name="query">
-            </div> 
-            </form>
-			<ul class="nav navbar-nav navbar-right">
-            <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-         </ul>
-		</div>
-	</nav>
+	<div id="header">
+	   <nav class="navbar navbar-default navbar-fixed-top">
+		   <div class="container-fluid">
+			   <div class="navbar-header">
+				   <a class="navbar-brand" href="/">
+				      <img alt="Hangouts" src="https://cdn.discordapp.com/attachments/352464623108096002/633928057681477642/hicon.png" width="30px" height="30px">
+			      </a>
+			   </div>
+			   <ul class="nav navbar-nav">
+				   <li class="active"><a href="/dashboard">Dashboard<span class="sr-only">(current)</span></a></li>
+				   <li ><a href="/profile">Profile</a></li>
+				   <li><a href="/events">Events</a></li>
+               <li><a href="/friends">Friends</a></li>
+            </ul>
+            <form class="navbar-form navbar-left" action="/action_page.php">
+               <div class="input-group">
+                     <input type="search" class="form-control" placeholder="Search" id="sitesearch" name="query">
+               </div> 
+               </form>
+			   <ul class="nav navbar-nav navbar-right">
+               <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            </ul>
+		   </div>
+	   </nav>
+   </div>
 
 	{% block content %}{% endblock %}
-
+<script>
+$(document).ready(function() {
+  $('li.active').removeClass('active');
+  $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
+});
+</script>
 </body>
+</html>
