@@ -30,7 +30,7 @@ Logout: clear current user redirect to / or login
     <th/> test
   <tr/>
   	<th/> IU & UX
-    <th/> TODO
+    <th/> IN PROGRESS
     <th/> -
   <tr/>
   	<th/> Authentication System & profile creation
