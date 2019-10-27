@@ -11,7 +11,6 @@
 .container{
    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 	padding:15px;
-	margin-top:60px;
 	max-width:500px; 
 	text-align:left;
 	margin-top: 80px;
@@ -34,10 +33,11 @@ a.button {
    cursor: pointer;
    width: auto;
    border-radius: 14px;
-   padding: 10px 15px;
+   padding: 8px 12px;
    margin: 8px 0;
    float: right;
    margin-top:-50px;
+   font-size: 10px;
 }
 
 a.cancel {
@@ -59,10 +59,11 @@ a.accept {
    cursor: pointer;
    width: auto;
    border-radius: 14px;
-   padding: 10px 15px;
+   padding: 8px 12px;
    margin: 8px 0;
    float: right;
    margin-top:-50px;
+   font-size: 10px;
 }
 
 h1 {
@@ -99,61 +100,61 @@ h1 {
         <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">Delete Friend</a>
         <br />
       {% else %}
-        <!-- <p>Much empty :'(</p> -->
+        <p>Much empty :'(</p>
       {% endif %}
    {% endfor %}
    <br>
 
-
+    <div class ="container2">
+       <h4>Friend requests</h4>
+        <hr class="w3-clear">
+       <h5>Incoming requests:</h5>
+       {% for friend in requests %}
+          <div class="detail">
+              <p><b>Email:</b> {{friend.email}}</p>
+              <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
+            </div>
+            <img src="static/images/{{friend.pictureDir}}" class="dp">
+          <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">✓</a>
+          <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel"></a>
+          <br />
+       {% endfor %}
+       <h5>Sent Request to:</h5>
+       {% for friend in me.friends %}
+          {% if friend.status == "pending" %}
+            <div class="detail">
+              <p><b>Email:</b> {{friend.email}}</p>
+              <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
+            </div>
+            <img src="static/images/{{friend.pictureDir}}" class="dp">
+            <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">
+            x</a>
+          <br />
+          {% else %}
+            <p>Much empty :'(</p>
+          {% endif %}
+       {% endfor %}
+    </div>
+   </div>
+<div class="container" style="margin-top: 10px;">
    <!-- testing can be use for search-->
-   <h2>Show all Users</h2>
+   <h2>All Users</h2>
    <hr class="w3-clear">
    {% for user in users%}
-   		{% if user.email != current_user.email %}
+      {% if user.email != current_user.email %}
       <div class="detail">
-  			<p><b>Email:</b> {{user.email}}</p>
-  			<p><b>Name:</b> {{user.firstName}} {{user.lastName}}</p>
+        <p><b>Email:</b> {{user.email}}</p>
+        <p><b>Name:</b> {{user.firstName}} {{user.lastName}}</p>
       </div>
         <img src="static/images/{{user.pictureDir}}" class="dp">
          <a href="{{url_for('send_request', email=user.email)}}" class="button">Send Request</a>
-  			<br/>
-  			<br/>
+        <br/>
+        <br/>
       {% else %}
         <!-- <p>Much empty :'(</p> -->
-		  {% endif %}
-   {% endfor %}
-      <div class ="container2">
-   <h4>Friend requests</h4>
-    <hr class="w3-clear">
-   <h5>Incoming requests:</h5>
-   {% for friend in requests %}
-      <div class="detail">
-          <p><b>Email:</b> {{friend.email}}</p>
-          <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
-        </div>
-        <img src="static/images/{{friend.pictureDir}}" class="dp">
-      <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">✓</a>
-      <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">x</a>
-      <br />
-   {% endfor %}
-   <h5>Sent Request to:</h5>
-   {% for friend in me.friends %}
-      {% if friend.status == "pending" %}
-        <div class="detail">
-          <p><b>Email:</b> {{friend.email}}</p>
-          <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
-        </div>
-        <img src="static/images/{{friend.pictureDir}}" class="dp">
-        <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">
-        x</a>
-      <br />
-      {% else %}
-        <p>Much empty :'(</p>
       {% endif %}
    {% endfor %}
-   </div>
-   </div>
-
+ </div>
    
 </body>
 {% endblock %}
