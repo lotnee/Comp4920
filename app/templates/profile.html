@@ -9,18 +9,40 @@
 <style>
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 500px;
+  max-width: 80%;
   margin: auto;
   text-align: center;
   float: center;
   margin-top: 80px;
   padding: 20px;
+  background-color: #FAFAFA;
+}
+.card2 {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 25%;
+  margin:auto;
+  margin-left: 10%;
+  text-align: center;
+  float: center;
+  margin-top: 80px;
+  padding: 20px;
+  background-color: #FAFAFA;
+}
+.card3 {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 53%;
+  margin-left: 37%;
+  text-align: center;
+  float: center;
+  margin-top:-60px;
+  padding: 20px;
+  background-color: #FAFAFA;
 }
 
 .picture {
   margin-top: 20px;
   border-radius: 50%;
-  width: 35%;
+  width: 200px;
 }
 
 button {
@@ -53,20 +75,23 @@ button:hover, a:hover {
 <!-- Body -->
 <body>   
    <div class="card"> 
-         <img src="static/images/{{profile.pictureDir}}" class="picture"/>      
-         <h1>{{ current_user.email}}'s Profile</h1>
+         <img src="static/images/{{profile.pictureDir}}" class="picture"/>
+         <h2>{{ current_user.email}}'s Profile</h2>
          {% if current_user.is_authenticated %}
          <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile</button>
          {% endif %} 
          <hr>
          <p>* edit doesn't work yet but it is use to create profile</p>
-         About Me<p>
-        *description*<p>
    </div>
-      <div class="card" style ="margin-top:20px;"> 
+   <div class="card2" style ="margin-top:20px;"> 
 
-        *insert personal calender*
-   </div>
+          *description*
+     </div>
+        <div class="card3"> 
+
+          *calender*
+     </div>
+
 
 </body>
 {% endblock %}

@@ -43,6 +43,7 @@ li a {
 	background-color: #1E90FF;
 	color: #fff;
 }
+
 </style>
 
 <!-- Body -->
@@ -73,7 +74,6 @@ li a {
 		   </div>
 	   </nav>
    </div>
-
 	{% block content %}{% endblock %}
 <script>
 $(document).ready(function() {
@@ -81,5 +81,6 @@ $(document).ready(function() {
   $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
 });
 </script>
+
 </body>
 </html>
