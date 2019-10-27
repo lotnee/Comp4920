@@ -26,10 +26,44 @@ a.button {
    padding: 10px 15px;
    margin: 8px 0;
    float: right;
+   margin-top:-50px;
+}
+
+a.cancel {
+   background-color: grey;
+   color: white;
+   cursor: pointer;
+   width: auto;
+   border-radius: 14px;
+   padding: 10px 15px;
+   margin: 8px 0;
+   float: right;
+   margin-top:-50px;
+}
+
+a.accept {
+   background-color: silver;
+   color: white;
+   cursor: pointer;
+   width: auto;
+   border-radius: 14px;
+   padding: 10px 15px;
+   margin: 8px 0;
+   float: right;
+   margin-top:-50px;
 }
 
 h1 {
    text-align: center;
+}
+
+.dp {
+  width:50px;
+  height:50px;
+  margin-top:-90px;
+}
+.detail {
+  margin-left: 60px;
 }
 </style>
 <body>  
@@ -45,13 +79,15 @@ h1 {
    <h1>Friends</h1>
    {% for friend in me.friends %}
       {% if friend.status != "pending" %}
-        <p><b>Email:</b> {{friend.email}}</p>
-        <p><b>First Name:</b> {{friend.firstName}}</p>
-        <p><b>Last Name:</b> {{friend.lastName}}</p>
-        <a href="{{url_for('delete_request', email=friend.email)}}">Delete Friend</a>
+        <div class="detail">
+          <p><b>Email:</b> {{friend.email}}</p>
+          <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
+        </div>
+        <img src="static/images/{{friend.pictureDir}}" class="dp">
+        <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">Delete Friend</a>
         <br />
       {% else %}
-        <p>Much empty :'(</p>
+        <!-- <p>Much empty :'(</p> -->
       {% endif %}
    {% endfor %}
    <br>
@@ -59,20 +95,24 @@ h1 {
     <hr class="w3-clear">
    <h4>Incoming requests:</h4>
    {% for friend in requests %}
-      <p><b>Email:</b> {{friend.email}}</p>
-      <p><b>First Name:</b> {{friend.firstName}}</p>
-      <p><b>Last Name:</b> {{friend.lastName}}</p>
-      <a href="{{url_for('accept_request', email=friend.email)}}">Accept Request</a>
-      <a href="{{url_for('delete_request', email=friend.email)}}">Delete Request</a>
+      <div class="detail">
+          <p><b>Email:</b> {{friend.email}}</p>
+          <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
+        </div>
+        <img src="static/images/{{friend.pictureDir}}" class="dp">
+      <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">Accept Request</a>
+      <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">Delete Request</a>
       <br />
    {% endfor %}
    <h4>Sent Request to:</h4>
    {% for friend in me.friends %}
       {% if friend.status == "pending" %}
-        <p><b>Email:</b> {{friend.email}}</p>
-        <p><b>First Name:</b> {{friend.firstName}}</p>
-        <p><b>Last Name:</b> {{friend.lastName}}</p>
-        <a href="{{url_for('delete_request', email=friend.email)}}">Cancel Request</a>
+        <div class="detail">
+          <p><b>Email:</b> {{friend.email}}</p>
+          <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
+        </div>
+        <img src="static/images/{{friend.pictureDir}}" class="dp">
+        <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">Cancel Request</a>
       <br />
       {% else %}
         <p>Much empty :'(</p>
@@ -84,14 +124,16 @@ h1 {
    <hr class="w3-clear">
    {% for user in users%}
    		{% if user.email != current_user.email %}
+      <div class="detail">
   			<p><b>Email:</b> {{user.email}}</p>
-  			<p><b>First Name:</b> {{user.firstName}}</p>
-  			<p><b>Last Name:</b> {{user.lastName}}</p>
+  			<p><b>Name:</b> {{user.firstName}} {{user.lastName}}</p>
+      </div>
+        <img src="static/images/{{user.pictureDir}}" class="dp">
          <a href="{{url_for('send_request', email=user.email)}}" class="button">Send Request</a>
   			<br/>
   			<br/>
       {% else %}
-        <p>Much empty :'(</p>
+        <!-- <p>Much empty :'(</p> -->
 		  {% endif %}
    {% endfor %}
    </div>
