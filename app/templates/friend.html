@@ -52,6 +52,19 @@ a.cancel {
    padding: 8px 12px;
    margin: 8px 0;
    float: right;
+   margin-top:-30px;
+   font-size: 10px;
+}
+
+a.delete {
+   background-color: grey;
+   color: white;
+   cursor: pointer;
+   width: auto;
+   border-radius: 14px;
+   padding: 8px 12px;
+   margin: 8px 0;
+   float: right;
    margin-top:-50px;
    font-size: 10px;
 }
@@ -62,10 +75,10 @@ a.accept {
    cursor: pointer;
    width: auto;
    border-radius: 14px;
-   padding: 8px 12px;
+   padding: 8px 11px;
    margin: 8px 0;
    float: right;
-   margin-top:-50px;
+   margin-top:-68px;
    font-size: 10px;
 }
 
@@ -102,8 +115,6 @@ h1 {
         <img src="static/images/{{friend.pictureDir}}" class="dp">
         <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">Delete Friend</a>
         <br />
-      {% else %}
-        <p>Much empty :'(</p>
       {% endif %}
    {% endfor %}
    <br>
@@ -119,7 +130,7 @@ h1 {
             </div>
             <img src="static/images/{{friend.pictureDir}}" class="dp">
           <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">✓</a>
-          <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel"></a>
+          <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">x</a>
           <br />
        {% endfor %}
        <h5>Sent Request to:</h5>
@@ -130,11 +141,9 @@ h1 {
               <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
             </div>
             <img src="static/images/{{friend.pictureDir}}" class="dp">
-            <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">
+            <a href="{{url_for('delete_request', email=friend.email)}}"class="delete">
             x</a>
           <br />
-          {% else %}
-            <p>Much empty :'(</p>
           {% endif %}
        {% endfor %}
     </div>
