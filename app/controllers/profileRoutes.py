@@ -1,0 +1,62 @@
+from app import app
+from app.database import DB
+from app.models.profile import Profile
+from app.controllers.forms import ProfileForm, photos
+from flask import render_template, flash, redirect, url_for
+from flask_login import current_user, login_required
+from werkzeug.utils import secure_filename
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+	return render_template('dashboard.html')
+
+@app.route('/edit-profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+	form = ProfileForm()
+	if form.validate_on_submit():
+		# print(form.pictureDir.data)
+		user = DB.find_one(collection="User", query={"email": current_user.email})
+		# a question about the code below: shouldn't we determine whether the user managed to sign up first in the registration page, and then if
+		# user doesn't succeed, they are unable to log in to edit their profile? or am i misunderstanding it ahaha
+		# ^ hi to answer your question, i assume you are a front end dev
+		# how the registration works is if you successfully sign up, you will be automatically logged in.
+		# if failed obviously can't even edit profile
+		if user is None:
+			flash("Sign Up Failed")
+			return redirect(url_for('register'))
+		else:
+			profile = DB.find_one(collection="Profile", query={"email": user['email']})
+			if profile is None:
+				# https://pythonise.com/feed/flask/flask-uploading-files
+				# can possibly add more checks (e.g. file extension)
+				# can't seem to get secure_filename() to work
+				# file = secure_filename(form.pictureDir.data.filename)
+				# file = os.path.join(app.config['UPLOADED_PHOTOS_DEST'], file)
+				# print(file)
+				if form.pictureDir.data is None:
+					if form.gender.data == "male":
+						filename = "male.jpg"
+					else:
+						filename = "female.jpg"
+				else:
+					filename = photos.save(form.pictureDir.data, name=user['email'] + '.')
+				# print(filename)
+				# fileDest = photos.path(filename)
+				# print(fileDest)
+
+				profile_obj = Profile(email=user['email'], firstName=form.firstName.data, lastName=form.lastName.data, descriptions=form.descriptions.data, gender=form.gender.data, pictureDir=filename)
+				profile_obj.insert()
+				# TODO database aggregation
+				# DB.aggregate(collection="User", query=[{"$lookup":{"from":"Profile", "localField":"email", "foreignField":"email", "as":"user_profile"}}])
+			#  else:
+				# TODO update existing profile
+		return redirect(url_for('profile'))
+	return render_template('edit-profile.html', title='Edit profile', form=form)
+
+@app.route('/profile')
+@login_required
+def profile():
+	profile = DB.find_one(collection="Profile", query={"email": current_user.email})
+	return render_template('profile.html', profile=profile)

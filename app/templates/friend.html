@@ -83,6 +83,8 @@ h1 {
 }
 </style>
 <body>  
+  <!-- can be use to display friend list in dashboard -->
+  <div class="container">
   {% with messages = get_flashed_messages() %}
       {% if messages %}
          {% for message in messages %}
@@ -90,8 +92,6 @@ h1 {
          {% endfor %}
       {% endif %}
   {% endwith %} 
-  <!-- can be use to display friend list in dashboard -->
-  <div class="container">
    <h1>Friends</h1>
    {% for friend in me.friends %}
       {% if friend.status != "pending" %}
