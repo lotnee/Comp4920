@@ -5,6 +5,7 @@ from app.controllers.forms import ProfileForm, photos
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
+import os
 
 @app.route('/dashboard')
 @login_required
@@ -48,10 +49,30 @@ def edit_profile():
 
 				profile_obj = Profile(email=user['email'], firstName=form.firstName.data, lastName=form.lastName.data, descriptions=form.descriptions.data, gender=form.gender.data, pictureDir=filename)
 				profile_obj.insert()
-				# TODO database aggregation
-				# DB.aggregate(collection="User", query=[{"$lookup":{"from":"Profile", "localField":"email", "foreignField":"email", "as":"user_profile"}}])
-			#  else:
-				# TODO update existing profile
+			else:
+				# update existing profile
+				# DOn't really need to check if None since it is required
+				# if form.firstName.data is not None:
+				DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"firstName": form.firstName.data}})
+				# if form.lastName.data is not None:
+				DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"lastName": form.lastName.data}})
+				# if form.descriptions.data is not None:
+				DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"descriptions": form.descriptions.data}})
+				# if form.gender.data is not None:
+				DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"gender": form.gender.data}})
+				if form.pictureDir.data is not None:
+					if profile['pictureDir'] == "male.jpg" or profile['pictureDir'] == "female.jpg":
+						filename = photos.save(form.pictureDir.data, name=current_user.email + '.')
+					else:
+						# delete existing photo
+						filename = "app/static/images/" + profile['pictureDir']
+						os.remove(os.path.join(filename))
+						filename = photos.save(form.pictureDir.data, name=current_user.email + '.')
+					DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"pictureDir": filename}})
+				else:
+					if profile['pictureDir'] == "male.jpg" or profile['pictureDir'] == "female.jpg":
+						filename = form.gender.data + ".jpg"
+						DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"pictureDir": filename}})
 		return redirect(url_for('profile'))
 	return render_template('edit-profile.html', title='Edit profile', form=form)
 
