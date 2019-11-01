@@ -119,7 +119,7 @@ h1 {
             </div>
             <img src="static/images/{{friend.pictureDir}}" class="dp">
           <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">✓</a>
-          <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel"></a>
+          <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">x</a>
           <br />
        {% endfor %}
        <h5>Sent Request to:</h5>
