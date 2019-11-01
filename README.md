@@ -16,12 +16,6 @@ password: adm1n
 email: friend@hangouts
 password: friend
 ```
-## Basic idea
-```
-Login: leads to dashboard
-Register: create auth -> create profile(must upload photo)
-Logout: clear current user redirect to / or login
-```
 ## Current Progress
 <table>
   <tr/>
@@ -62,10 +56,10 @@ Logout: clear current user redirect to / or login
     <th/> -
   <tr/>
   	<th/> Edit profile & Edit photo(profile)
-    <th/> TODO
-    <th/> -
+    <th/> COMPLETED
+    <th/> WORKS
   <tr/>
-  	<th/> Edit profile & Edit photo
-    <th/> TODO
+  	<th/> Search bar
+    <th/> IN PROGRESS
     <th/> -
 </table>
