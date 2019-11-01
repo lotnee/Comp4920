@@ -13,9 +13,9 @@ def get_list(toFilterList, key, query):
 # takes a cursor object, key, subkey and query
 def get_cursor(cursor_obj, key, subkey, subkey2, query, query2):
 	i = 0
-	j = 0
 	l = []
 	while i < cursor_obj.count():
+		j = 0
 		while j < len(cursor_obj[i][key]):
 			if cursor_obj[i][key][j][subkey] == query and cursor_obj[i][key][j][subkey2] == query2:
 				l.append(cursor_obj[i])
