@@ -1,6 +1,7 @@
 from app import app
 from app.database import DB
 from app.models.profile import Profile
+from app.models.friend import Friend
 from app.controllers.forms import ProfileForm, photos
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
@@ -73,6 +74,17 @@ def edit_profile():
 					if profile['pictureDir'] == "male.jpg" or profile['pictureDir'] == "female.jpg":
 						filename = form.gender.data + ".jpg"
 						DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"pictureDir": filename}})
+				
+				# update all friend's model picture dir if changed
+				toUpdateList = DB.find(collection="Profile", query={"friend": {"$elemMatch": {"email": current_user.email}}})
+				i = 0
+				while i < toUpdateList.count():
+					j = 0
+					while j < len(toUpdateList[i]['friend']):
+						if toUpdateList[i]['friend'][j]['email'] == current_user.email:
+							friend_pic = "friends." + str(j) + ".pictureDir"
+							DB.update_one(collection="Profile", filter={"email": toUpdateList[i]['email']}, data={"$set": {friend_pic: filename}})
+
 		return redirect(url_for('profile'))
 	return render_template('edit-profile.html', title='Edit profile', form=form)
 

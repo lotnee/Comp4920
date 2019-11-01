@@ -27,8 +27,8 @@ def get_cursor(cursor_obj, key, subkey, subkey2, query, query2):
 def get_index(arrayList, key, query, key2, query2):
 	i = 0
 	while i < len(arrayList):
-		print(arrayList[i][key])
-		print(query)
+		# print(arrayList[i][key])
+		# print(query)
 		if arrayList[i][key] == query and arrayList[i][key2] == query2:
 			return i
 		i += 1

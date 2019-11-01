@@ -34,7 +34,7 @@ def send_request(email):
 	if added is not None:
 		flash('Request to %s sent!' % email)
 		return redirect(url_for('friends'))
-	friend_obj = Friend(email=friend['email'], firstName=friend['firstName'], lastName=friend['lastName'], status="pending")
+	friend_obj = Friend(email=friend['email'], firstName=friend['firstName'], lastName=friend['lastName'], status="pending", pictureDir=friend['pictureDir'])
 	friend_obj.insert(current_user.email)
 	flash('Friend request sent to ' + email + '!')
 	return redirect(url_for('friends'))
@@ -63,22 +63,22 @@ def delete_request(email):
 		myFriendList = get_list(added['friends'], "email", email)
 		theirFriendList = get_list(added2['friends'], "email", current_user.email)
 
-		friend_obj = Friend(email=myFriendList[0]['email'], firstName=myFriendList[0]['firstName'], lastName=myFriendList[0]['lastName'], status=myFriendList[0]['status'])
+		friend_obj = Friend(email=myFriendList[0]['email'], firstName=myFriendList[0]['firstName'], lastName=myFriendList[0]['lastName'], status=myFriendList[0]['status'], pictureDir=myFriendList[0]['pictureDir'])
 		friend_obj.remove(current_user.email)
-		friend_obj2 = Friend(email=theirFriendList[0]['email'], firstName=theirFriendList[0]['firstName'], lastName=theirFriendList[0]['lastName'], status=theirFriendList[0]['status'])
+		friend_obj2 = Friend(email=theirFriendList[0]['email'], firstName=theirFriendList[0]['firstName'], lastName=theirFriendList[0]['lastName'], status=theirFriendList[0]['status'], pictureDir=theirFriendList[0]['pictureDir'])
 		friend_obj2.remove(email)
 		flash('Friend request ' + email + ' deleted!')
 	elif added is not None:
 		myFriendList = get_list(added['friends'], "email", email)
 		# print(myFriendList)
 		# print(myFriendList[0]['email'])
-		friend_obj = Friend(email=myFriendList[0]['email'], firstName=myFriendList[0]['firstName'], lastName=myFriendList[0]['lastName'], status=myFriendList[0]['status'])
+		friend_obj = Friend(email=myFriendList[0]['email'], firstName=myFriendList[0]['firstName'], lastName=myFriendList[0]['lastName'], status=myFriendList[0]['status'], pictureDir=myFriendList[0]['pictureDir'])
 		friend_obj.remove(current_user.email)
 		flash('Friend request ' + email + ' cancelled!')
 	elif added2 is not None:
 		theirFriendList = get_list(added2['friends'], "email", current_user.email)
 		# print(theirFriendList)
-		friend_obj = Friend(email=theirFriendList[0]['email'], firstName=theirFriendList[0]['firstName'], lastName=theirFriendList[0]['lastName'], status=theirFriendList[0]['status'])
+		friend_obj = Friend(email=theirFriendList[0]['email'], firstName=theirFriendList[0]['firstName'], lastName=theirFriendList[0]['lastName'], status=theirFriendList[0]['status'], pictureDir=theirFriendList[0]['pictureDir'])
 		friend_obj.remove(email)
 		flash('Friend request ' + email + ' rejected!')
 	return redirect(url_for('friends'))
@@ -95,12 +95,12 @@ def accept_request(email):
 	# print(added['email'])
 	# print(added['friends'])
 	if added is not None:
-		index = get_index(arrayList=added['friends'], key="email", query=current_user.email, key2="status", query2="pending")
+		index = get_index(arrayList=friend['friends'], key="email", query=current_user.email, key2="status", query2="pending")
 		# print(index)
 		if index != -1:
 			friend_status = "friends." + str(index) + ".status"
 			DB.update_one(collection="Profile", filter={"friends.email": current_user.email}, data={"$set": {friend_status: "accepted"}})
-			friend_obj = Friend(email=friend['email'], firstName=friend['firstName'], lastName=friend['lastName'], status="accepted")
+			friend_obj = Friend(email=friend['email'], firstName=friend['firstName'], lastName=friend['lastName'], status="accepted", pictureDir=friend['pictureDir'])
 			friend_obj.insert(current_user.email)
 			flash('Accepted %s\'s friend request!' % email)
 		else:
