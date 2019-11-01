@@ -11,4 +11,8 @@ app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(absolute_path, 'static/images'
 app.config['SECRET_KEY'] = 'i-just-want-to-graduate'
 login_manager = LoginManager(app)
 
-from app.controllers import routes
+# from app.controllers import routes
+from app.controllers import userRoutes
+from app.controllers import profileRoutes
+from app.controllers import friendRoutes
+from app.controllers import eventRoutes

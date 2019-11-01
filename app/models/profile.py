@@ -9,6 +9,7 @@ class Profile(object):
 		self.gender = gender
 		self.descriptions = descriptions
 		self.pictureDir = pictureDir
+		self.friends = []
 
 	def insert(self):
 		if not DB.find_one("Profile", {"email": self.email}):
@@ -21,5 +22,6 @@ class Profile(object):
 			'lastName': self.lastName,
 			'gender': self.gender,
 			'descriptions': self.descriptions,
-			'pictureDir': self.pictureDir
+			'pictureDir': self.pictureDir,
+			'friends': self.friends
 		}

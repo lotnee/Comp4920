@@ -80,7 +80,10 @@ img.avatar {
          <h1>Welcome to Hangouts</h1>
       </div>
       <form action="/login" method="post">
-         {{ form.hidden_tag() }}
+         <div class="imgcontainer">
+            <img src="https://media.discordapp.net/attachments/629121628001009691/632471390519427104/hangouts2.png" alt="Avatar" class="avatar">
+         </div>
+        {{ form.hidden_tag() }}
          {% with messages = get_flashed_messages() %}
             {% if messages %}
                {% for message in messages %}
@@ -88,10 +91,6 @@ img.avatar {
                {% endfor %}
             {% endif %}
          {% endwith %}
-         <div class="imgcontainer">
-            <img src="https://media.discordapp.net/attachments/629121628001009691/632471390519427104/hangouts2.png" alt="Avatar" class="avatar">
-         </div>
-     
          <input type="text" class="form-control" name="email" placeholder="Email" required=""autofocus=""/></br>
          <input type="password" class="form-control" name="password" placeholder="Password" required/></br>
          <button class="button-signin" type="submit">Sign In</button>
