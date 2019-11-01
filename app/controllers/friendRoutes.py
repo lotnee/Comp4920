@@ -1,6 +1,6 @@
 from app import app
 from app.database import DB
-from app.utility import get_list, get_cursor
+from app.utility import get_list, get_cursor, get_index
 from app.models.profile import Profile
 from app.models.friend import Friend
 from flask import render_template, flash, redirect, url_for
@@ -92,11 +92,19 @@ def accept_request(email):
 		flash('User %s not found!' % email)
 		return redirect(url_for('friends'))
 	added = DB.find_one(collection="Profile", query={"friends.email": current_user.email, "friends.status": "pending"})
+	# print(added['email'])
+	# print(added['friends'])
 	if added is not None:
-		DB.update_one(collection="Profile", filter={"friends.email": current_user.email}, data={"$set": {"friends.0.status": "accepted"}})
-		friend_obj = Friend(email=friend['email'], firstName=friend['firstName'], lastName=friend['lastName'], status="accepted")
-		friend_obj.insert(current_user.email)
-		flash('Accepted %s\'s friend request!' % email)
+		index = get_index(arrayList=added['friends'], key="email", query=current_user.email, key2="status", query2="pending")
+		# print(index)
+		if index != -1:
+			friend_status = "friends." + str(index) + ".status"
+			DB.update_one(collection="Profile", filter={"friends.email": current_user.email}, data={"$set": {friend_status: "accepted"}})
+			friend_obj = Friend(email=friend['email'], firstName=friend['firstName'], lastName=friend['lastName'], status="accepted")
+			friend_obj.insert(current_user.email)
+			flash('Accepted %s\'s friend request!' % email)
+		else:
+			flash('invalid request')
 		return redirect(url_for('friends'))
 	flash('%s is already a friend' % email)
 	return redirect(url_for('friends'))
