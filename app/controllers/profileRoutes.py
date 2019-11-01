@@ -37,6 +37,7 @@ def edit_profile():
 				# file = secure_filename(form.pictureDir.data.filename)
 				# file = os.path.join(app.config['UPLOADED_PHOTOS_DEST'], file)
 				# print(file)
+				# credit: default female and male image from w3schools.com
 				if form.pictureDir.data is None:
 					if form.gender.data == "male":
 						filename = "male.jpg"
