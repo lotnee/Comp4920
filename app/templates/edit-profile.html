@@ -85,9 +85,14 @@ select[name="Gender"] {
           <input type="text" class="form-control" name="firstName" value={{profile.firstName}} required=""autofocus=""/></br>
           <input type="text" class="form-control" name="lastName" value={{profile.lastName}} required=""autofocus=""/></br>
           <input type="text" class="form-control" name="descriptions" value={{profile.descriptions}} required/></br>
-          <select class="form-control" name="gender" value={{profile.gender}} required>
-            <option value="male">Male</option>
+          <select class="form-control" name="gender" placeholder="Gender" required>
+          	{% if profile.gender == "female" %}
             <option value="female">Female</option>
+            <option value="male">Male</option>
+            {% elif profile.gender == "male" %}
+             <option value="male">Male</option>
+            <option value="female">Female</option>
+        	{% endif %}
           </select></br>
           <input class="uplbutton" type="file" class="form-control" name="pictureDir"/>
           <button class="button" type="submit">Save changes</button>
