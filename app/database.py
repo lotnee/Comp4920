@@ -9,7 +9,8 @@ class DB(object):
 
 	@staticmethod
 	def insert(collection, data):
-		DB.DATABASE[collection].insert(data)
+		hehe = DB.DATABASE[collection].insert_one(data)
+		return hehe
 
 	@staticmethod
 	def find_one(collection, query):
@@ -22,7 +23,9 @@ class DB(object):
 	@staticmethod
 	def find(collection, query):
 		return DB.DATABASE[collection].find(query)
+
 	
+
 	@staticmethod
 	def update_one(collection, filter, data):
 		DB.DATABASE[collection].find_one_and_update(filter, data)

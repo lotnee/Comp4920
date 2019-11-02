@@ -8,9 +8,22 @@ from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 import os
 
+def profileEvents(eventLists):
+	retList = []
+	for item in eventLists:
+		event = DB.find_one(collection="Events",query={'_id':item})
+		retList.append(event)
+	print(retList[0]['name'])
+	return retList
 @app.route('/dashboard')
 @login_required
 def dashboard():
+	if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
+		print("penis")
+		eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
+		print(eventList[0]['events'])
+		allEvents = profileEvents(eventList[0]['events'])
+		return render_template('dashboard.html', events = allEvents)
 	return render_template('dashboard.html')
 
 @app.route('/edit-profile', methods=['GET', 'POST'])
@@ -74,7 +87,7 @@ def edit_profile():
 					if profile['pictureDir'] == "male.jpg" or profile['pictureDir'] == "female.jpg":
 						filename = form.gender.data + ".jpg"
 						DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"pictureDir": filename}})
-				
+
 				# update all friend's model picture dir if changed
 				toUpdateList = DB.find(collection="Profile", query={"friend": {"$elemMatch": {"email": current_user.email}}})
 				i = 0

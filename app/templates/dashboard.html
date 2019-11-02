@@ -27,7 +27,7 @@
 
 .container{
 	padding:15px;
-  width:100%; 
+  width:100%;
 	color: black;
 	align-items:left;
 }
@@ -43,7 +43,7 @@
 
 <!-- Body -->
 <body class="w3-theme-15">
-<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
   <!-- The Grid -->
   <div class="w3-row">
     <!-- Left Column -->
@@ -94,7 +94,7 @@
            </div>
          </div>
           </div>
-        </div>      
+        </div>
       </div>
     <!-- End Left Column -->
     </div>
@@ -105,7 +105,7 @@
           <div class="w3-card w3-round w3-white">
             <div class="w3-container w3-padding">
               <p contenteditable="true" class="w3-border w3-padding">Status: Feeling Blue</p>
-              <button type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button> 
+              <button type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button>
             </div>
           </div>
         </div>
@@ -124,19 +124,19 @@
               <img src="/w3images/nature.jpg" style="width:100%" alt="Nature" class="w3-margin-bottom">
           </div>
         </div>
-        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button> 
-        <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button> 
+        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>
+        <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>
       </div>
-      
+
       <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
         <img src="/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
         <span class="w3-right w3-opacity">16 min</span>
         <h4>Jane Doe</h4><br>
         <hr class="w3-clear">
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button> 
-        <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button> 
-      </div>  
+        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>
+        <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>
+      </div>
     <!-- End Middle Column -->
     </div>
     <!-- Right Column -->
@@ -166,14 +166,16 @@
           </div>
         </div>
       </div>
-      <br>  
+      <br>
     <!-- End Right Column -->
     </div>
   <!-- End Grid -->
   </div>
 <!-- End Page Container -->
 </div>
-
+{%for dictionary_item in events%}
+  <p>{{dictionary_item['name']}}</p>
+{% endfor %}
 <script>
 // Accordion
 function myFunction(id) {
@@ -181,9 +183,9 @@ function myFunction(id) {
   if (x.className.indexOf("w3-show") == -1) {
     x.className += " w3-show";
     x.previousElementSibling.className += " w3-theme-d1";
-  } else { 
+  } else {
     x.className = x.className.replace("w3-show", "");
-    x.previousElementSibling.className = 
+    x.previousElementSibling.className =
     x.previousElementSibling.className.replace(" w3-theme-d1", "");
   }
 }
@@ -193,7 +195,7 @@ function openNav() {
   var x = document.getElementById("navDemo");
   if (x.className.indexOf("w3-show") == -1) {
     x.className += " w3-show";
-  } else { 
+  } else {
     x.className = x.className.replace(" w3-show", "");
   }
 }

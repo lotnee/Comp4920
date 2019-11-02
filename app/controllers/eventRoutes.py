@@ -14,12 +14,13 @@ from datetime import datetime
 @login_required
 def events():
 	form = EventForm()
-	if form.validate_on_submit():
+	if form.is_submitted():
 		print(type(form.start.data))
 		date1 = datetime((form.start.data).year,(form.start.data).month,(form.start.data).day)
-		date2 = datetime(2011, 11, 4, 0, 0)
+		date2 = datetime((form.end.data).year,(form.end.data).month,(form.end.data).day)
 		print("start date is " + date1.isoformat())
+		print("end date is" + date2.isoformat())
 		event = Event(name = form.name.data, description = form.description.data, start = date1, end = date2)
-		event.insert()
-		return "hehe"
+		event.insert(current_user.email)
+		return render_template('eventCompleted.html', title="Event Creation Completed")
 	return render_template('events.html', title = "Create Your Event", form = form)

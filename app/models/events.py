@@ -8,9 +8,11 @@ class Event(object):
         self.start = start
         self.end = end
 
-    def insert(self):
-        print(self.start)
-        DB.insert(collection='Events', data=self.json())
+    def insert(self,userEmail):
+        hehe = DB.insert(collection='Events', data=self.json())
+        DB.update_one(collection='Profile',filter={'email':userEmail}, data = {'$push': {'events':hehe.inserted_id}})
+        return hehe
+
 
     def json(self):
         return {
