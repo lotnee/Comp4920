@@ -68,6 +68,7 @@ select[name="Gender"] {
   top: 0;
   opacity: 0;
 }
+
 </style>
 <body>
    <div class="card">
@@ -81,9 +82,9 @@ select[name="Gender"] {
                 {% endfor %}
              {% endif %}
           {% endwith %}
-          <input type="text" class="form-control" name="firstName" placeholder="First Name" required=""autofocus=""/></br>
-          <input type="text" class="form-control" name="lastName" placeholder="Last Name" required=""autofocus=""/></br>
-          <input type="text" class="form-control" name="descriptions" placeholder="Descriptions" required/></br>
+          <input type="text" class="form-control" name="firstName" placeholder={{profile.firstName}} required=""autofocus=""/></br>
+          <input type="text" class="form-control" name="lastName" placeholder={{profile.lastName}} required=""autofocus=""/></br>
+          <input type="text" class="form-control" name="descriptions" placeholder={{profile.descriptions}} required/></br>
           <select class="form-control" name="gender" placeholder="Gender" required>
             <option value="male">Male</option>
             <option value="female">Female</option>

@@ -30,6 +30,7 @@ def dashboard():
 @login_required
 def edit_profile():
 	form = ProfileForm()
+	profile = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if form.validate_on_submit():
 		# print(form.pictureDir.data)
 		user = DB.find_one(collection="User", query={"email": current_user.email})
@@ -98,9 +99,9 @@ def edit_profile():
 						if toUpdateList[i]['friend'][j]['email'] == current_user.email:
 							friend_pic = "friends." + str(j) + ".pictureDir"
 							DB.update_one(collection="Profile", filter={"email": toUpdateList[i]['email']}, data={"$set": {friend_pic: filename}})
-
+		
 		return redirect(url_for('profile'))
-	return render_template('edit-profile.html', title='Edit profile', form=form)
+	return render_template('edit-profile.html', title='Edit profile', form=form, profile=profile)
 
 @app.route('/profile')
 @login_required
