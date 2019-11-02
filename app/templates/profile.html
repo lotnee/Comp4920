@@ -76,23 +76,18 @@ button:hover, a:hover {
 <body>   
    <div class="card"> 
          <img src="static/images/{{profile.pictureDir}}" class="picture"/>
-         <h2>{{ current_user.email}}'s Profile</h2>
+         <h2>{{profile.firstName}} {{profile.lastName}}'s Profile</h2>
          {% if current_user.is_authenticated %}
          <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile</button>
          {% endif %} 
          <hr>
-         <p>* edit doesn't work yet but it is use to create profile</p>
    </div>
    <div class="card2" style ="margin-top:20px;"> 
-
-          *description*
+          {{profile.descriptions}}
      </div>
         <div class="card3"> 
-
           *calender*
      </div>
-
-
 </body>
 {% endblock %}
 </html>
