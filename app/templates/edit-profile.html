@@ -82,10 +82,10 @@ select[name="Gender"] {
                 {% endfor %}
              {% endif %}
           {% endwith %}
-          <input type="text" class="form-control" name="firstName" placeholder={{profile.firstName}} required=""autofocus=""/></br>
-          <input type="text" class="form-control" name="lastName" placeholder={{profile.lastName}} required=""autofocus=""/></br>
-          <input type="text" class="form-control" name="descriptions" placeholder={{profile.descriptions}} required/></br>
-          <select class="form-control" name="gender" placeholder="Gender" required>
+          <input type="text" class="form-control" name="firstName" value={{profile.firstName}} required=""autofocus=""/></br>
+          <input type="text" class="form-control" name="lastName" value={{profile.lastName}} required=""autofocus=""/></br>
+          <input type="text" class="form-control" name="descriptions" value={{profile.descriptions}} required/></br>
+          <select class="form-control" name="gender" value={{profile.gender}} required>
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select></br>
