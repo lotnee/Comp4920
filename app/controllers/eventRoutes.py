@@ -22,5 +22,10 @@ def events():
 		print("end date is" + date2.isoformat())
 		event = Event(name = form.name.data, description = form.description.data, start = date1, end = date2)
 		event.insert(current_user.email)
-		return render_template('eventCompleted.html', title="Event Creation Completed")
+		return redirect(url_for('eventCompleted'))
 	return render_template('events.html', title = "Create Your Event", form = form)
+
+@app.route('/eventCompleted')
+@login_required
+def eventCompleted():
+	return render_template('eventCompleted.html',title="Event Creation Completed")
