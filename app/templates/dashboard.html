@@ -174,7 +174,11 @@
 <!-- End Page Container -->
 </div>
 {%for dictionary_item in events%}
-  <p>{{dictionary_item['name']}}</p><p>{{dictionary_item['description']}}</p>
+  <p><b>Event Name</b></p>
+  <p>{{dictionary_item['name']}}</p>
+  <p><b>Event Description</b></p>
+  <p>{{dictionary_item['description']}}</p>
+  <br>
 {% endfor %}
 <script>
 // Accordion
