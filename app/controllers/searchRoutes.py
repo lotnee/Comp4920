@@ -15,5 +15,5 @@ def search():
 		})
 
 	return render_template('search.html', title='Search Results',
-		users=matched_profiles,me=me,requests=matched_profiles)
+		users=matched_profiles,query=request.args['query'])
 
