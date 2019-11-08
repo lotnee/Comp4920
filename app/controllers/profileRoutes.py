@@ -22,9 +22,9 @@ def dashboard():
 	if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
 		print("penis")
 		eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
-		# print(eventList[0]['events'])
-		# allEvents = profileEvents(eventList[0]['events'])
-		# return render_template('dashboard.html', events = allEvents)
+		print(eventList[0]['events'])
+		allEvents = profileEvents(eventList[0]['events'])
+		return render_template('dashboard.html', events = allEvents)
 	return render_template('dashboard.html')
 
 @app.route('/edit-profile', methods=['GET', 'POST'])
