@@ -15,6 +15,7 @@ def profileEvents(eventLists):
 		retList.append(event)
 	print(retList[0]['name'])
 	return retList
+
 @app.route('/dashboard')
 @login_required
 def dashboard():

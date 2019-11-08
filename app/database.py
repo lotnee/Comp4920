@@ -24,8 +24,6 @@ class DB(object):
 	def find(collection, query):
 		return DB.DATABASE[collection].find(query)
 
-	
-
 	@staticmethod
 	def update_one(collection, filter, data):
 		DB.DATABASE[collection].find_one_and_update(filter, data)

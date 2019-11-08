@@ -17,3 +17,4 @@ from app.controllers import userRoutes
 from app.controllers import profileRoutes
 from app.controllers import friendRoutes
 from app.controllers import eventRoutes
+from app.controllers import searchRoutes
