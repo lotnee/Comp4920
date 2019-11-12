@@ -14,7 +14,7 @@
 	max-width:500px; 
 	text-align:left;
 	margin-top: 80px;
-  left: -10%;
+  left: 0%;
   position:relative;
   background-color: #FAFAFA;
 }
@@ -30,7 +30,7 @@
   background-color: #FAFAFA;
 }
 
-a.button {
+a.reqbutton {
    background-color: #1E90FF;
    color: white;
    cursor: pointer;
@@ -43,7 +43,7 @@ a.button {
    font-size: 10px;
 }
 
-a.cancel {
+a.viewbutton {
    background-color: grey;
    color: white;
    cursor: pointer;
@@ -51,8 +51,9 @@ a.cancel {
    border-radius: 14px;
    padding: 8px 12px;
    margin: 8px 0;
-   float: right;
-   margin-top:-30px;
+   float: left;
+   margin-top:-50px;
+   margin-left: 300px;
    font-size: 10px;
 }
 
@@ -100,7 +101,6 @@ h1 {
     <h1>Search: {{query}}</h1>
   </div>
   <div class="container" style="margin-top: 20px;">
-     <!-- testing can be use for search-->
      <h4>Matched Users</h4>
      <hr class="w3-clear">
      {% for user in users%}
@@ -110,11 +110,11 @@ h1 {
           <p><b>Name:</b> {{user.firstName}} {{user.lastName}}</p>
         </div>
           <img src="static/images/{{user.pictureDir}}" class="dp">
-           <a href="{{url_for('send_request', email=user.email)}}" class="button">Send Request</a>
+           <a href="{{url_for('send_request', email=user.email)}}" class="reqbutton">Send Request</a>
+           <a href="/" class="viewbutton">View Profile</a>
           <br/>
           <br/>
         {% else %}
-          <!-- <p>Much empty :'(</p> -->
         {% endif %}
      {% endfor %}
    </div>
