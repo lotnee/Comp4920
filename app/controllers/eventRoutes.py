@@ -10,7 +10,15 @@ from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 from datetime import datetime
 
-@app.route('/events', methods=['GET', 'POST'])
+def profileEvents(eventLists):
+	retList = []
+	for item in eventLists:
+		event = DB.find_one(collection="Events",query={'_id':item})
+		retList.append(event)
+	print(retList[0]['name'])
+	return retList
+
+@app.route('/newevent', methods=['GET', 'POST'])
 @login_required
 def events():
 	form = EventForm()
@@ -23,14 +31,24 @@ def events():
 		event = Event(name = form.name.data, description = form.description.data, start = date1, end = date2)
 		event.insert(current_user.email)
 		return redirect(url_for('eventCompleted'))
-	return render_template('events.html', title = "Create Your Event", form = form)
+	return render_template('newevent.html', title = "Create Your Event", form = form)
 
-@app.route('/eventCompleted')
+@app.route('/viewevents')
+@login_required
+def viewEvents():
+   if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
+      eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
+      print(eventList[0]['events'])
+      allEvents = profileEvents(eventList[0]['events'])
+      return render_template('events.html', events = allEvents, title='View Events')
+   return render_template('events.html',title="View Events")
+
+@app.route('/eventcompleted')
 @login_required
 def eventCompleted():
 	return render_template('eventCompleted.html',title="Event Creation Completed")
 
-@app.route('/allevents/<name>')
+@app.route('/viewevents/<name>')
 @login_required
 def displayevent(name):
 	return render_template('displayevent.html', title=name)

@@ -25,12 +25,11 @@ def dashboard():
 	incoming = DB.find(collection="Profile", query={"friends": {"$elemMatch": {"email": current_user.email, "status": "pending"}}})
 	requests = get_cursor(cursor_obj=incoming, key="friends", subkey="email", subkey2="status", query=current_user.email, query2="pending")
 	if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
-		print("penis")
 		eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
 		print(eventList[0]['events'])
 		allEvents = profileEvents(eventList[0]['events'])
-		return render_template('dashboard.html', events = allEvents, title='Friend List', users=users, me=me, requests=requests)
-	return render_template('dashboard.html', title='Friend List', users=users, me=me, requests=requests)
+		return render_template('dashboard.html', events = allEvents, title='Dashboard', users=users, me=me, requests=requests)
+	return render_template('dashboard.html', title='Dashboard', users=users, me=me, requests=requests)
 
 @app.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
@@ -38,13 +37,7 @@ def edit_profile():
 	form = ProfileForm()
 	profile = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if form.validate_on_submit():
-		# print(form.pictureDir.data)
 		user = DB.find_one(collection="User", query={"email": current_user.email})
-		# a question about the code below: shouldn't we determine whether the user managed to sign up first in the registration page, and then if
-		# user doesn't succeed, they are unable to log in to edit their profile? or am i misunderstanding it ahaha
-		# ^ hi to answer your question, i assume you are a front end dev
-		# how the registration works is if you successfully sign up, you will be automatically logged in.
-		# if failed obviously can't even edit profile
 		if user is None:
 			flash("Sign Up Failed")
 			return redirect(url_for('register'))
