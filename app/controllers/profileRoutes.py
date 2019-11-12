@@ -21,7 +21,7 @@ def profileEvents(eventLists):
 @login_required
 def dashboard():
 	users = list(DB.find_all(collection="Profile"))
-	me = DB.find_one(collection="Profile", query={"email": current_user.email}) 
+	me = DB.find_one(collection="Profile", query={"email": current_user.email})
 	incoming = DB.find(collection="Profile", query={"friends": {"$elemMatch": {"email": current_user.email, "status": "pending"}}})
 	requests = get_cursor(cursor_obj=incoming, key="friends", subkey="email", subkey2="status", query=current_user.email, query2="pending")
 	if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
@@ -37,8 +37,6 @@ def dashboard():
 def edit_profile():
 	form = ProfileForm()
 	profile = DB.find_one(collection="Profile", query={"email": current_user.email})
-	print("profile description is" + profile['descriptions'])
-	print(type(profile['descriptions']))
 	if form.validate_on_submit():
 		# print(form.pictureDir.data)
 		user = DB.find_one(collection="User", query={"email": current_user.email})
