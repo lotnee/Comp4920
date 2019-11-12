@@ -90,8 +90,11 @@ select[name="Gender"] {
             <option value="female">Female</option>
             <option value="male">Male</option>
             {% elif profile.gender == "male" %}
-             <option value="male">Male</option>
+            <option value="male">Male</option>
             <option value="female">Female</option>
+            {% else %}
+            <option value="female">Female</option>
+            <option value="male">Male</option>
         	{% endif %}
           </select></br>
           <input class="uplbutton" type="file" class="form-control" name="pictureDir"/>
