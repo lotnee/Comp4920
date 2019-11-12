@@ -2,15 +2,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+
    <!-- Bootstrap Import -->
-   <!-- Bootstrap template used https://getbootstrap.com/docs/3.4/components/#navbar --> 
+   <!-- Bootstrap template used https://getbootstrap.com/docs/3.4/components/#navbar -->
+   <title>{{title}}</title>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 
 <!-- CSS -->
-<style> 
+<style>
 ul {
    margin: 0;
    padding: 0;
@@ -26,7 +28,7 @@ li a {
    text-align: center;
    padding: 14px 16px;
    text-decoration: none;
-   font-size: 16px; 
+   font-size: 16px;
 }
 
 #header .navbar-nav li > a {
@@ -66,7 +68,7 @@ li a {
             <form class="navbar-form navbar-left" action="/search">
                <div class="input-group">
                      <input type="search" class="form-control" placeholder="Search" id="sitesearch" name="query">
-               </div> 
+               </div>
                </form>
 			   <ul class="nav navbar-nav navbar-right">
                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
@@ -75,10 +77,11 @@ li a {
 	   </nav>
    </div>
 	{% block content %}{% endblock %}
+    
 <script>
 $(document).ready(function() {
   $('li.active').removeClass('active');
-  $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
+  $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
 });
 </script>
 

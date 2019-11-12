@@ -29,3 +29,8 @@ def events():
 @login_required
 def eventCompleted():
 	return render_template('eventCompleted.html',title="Event Creation Completed")
+
+@app.route('/allevents/<name>')
+@login_required
+def displayevent(name):
+	return render_template('displayevent.html', title=name)
