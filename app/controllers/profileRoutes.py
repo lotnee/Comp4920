@@ -6,6 +6,7 @@ from app.controllers.forms import ProfileForm, photos
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
+from app.utility import get_list, get_cursor, get_index
 import os
 
 def profileEvents(eventLists):
@@ -19,13 +20,17 @@ def profileEvents(eventLists):
 @app.route('/dashboard')
 @login_required
 def dashboard():
+	users = list(DB.find_all(collection="Profile"))
+	me = DB.find_one(collection="Profile", query={"email": current_user.email}) 
+	incoming = DB.find(collection="Profile", query={"friends": {"$elemMatch": {"email": current_user.email, "status": "pending"}}})
+	requests = get_cursor(cursor_obj=incoming, key="friends", subkey="email", subkey2="status", query=current_user.email, query2="pending")
 	if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
 		print("penis")
 		eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
 		print(eventList[0]['events'])
 		allEvents = profileEvents(eventList[0]['events'])
-		return render_template('dashboard.html', events = allEvents)
-	return render_template('dashboard.html')
+		return render_template('dashboard.html', events = allEvents, title='Friend List', users=users, me=me, requests=requests)
+	return render_template('dashboard.html', title='Friend List', users=users, me=me, requests=requests)
 
 @app.route('/edit-profile', methods=['GET', 'POST'])
 @login_required

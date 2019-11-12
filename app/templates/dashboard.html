@@ -51,7 +51,40 @@ body { font-size: 15px;}
 .dp {
   width:50px;
   height:50px;
-  margin-top:-90px;
+  margin-top:-5px;
+  margin-left: 0px;
+}
+
+.detail {
+  padding-top:10px;
+  margin-left: 0px;
+  text-align: left;
+}
+
+a.cancel {
+   background-color: grey;
+   color: white;
+   cursor: pointer;
+   width: auto;
+   /*border-radius: 14px;*/
+   padding: 8px 12px;
+   margin: 8px 0;
+   float: right;
+   margin-top:10px;
+   font-size: 10px;
+}
+
+a.accept {
+   background-color: silver;
+   color: white;
+   cursor: pointer;
+   width: auto;
+   /*border-radius: 14px;*/
+   padding: 8px 11px;
+   margin: 8px 0;
+   float: right;
+   margin-top:10px;
+   font-size: 10px;
 }
 </style>
 
@@ -105,10 +138,11 @@ body { font-size: 15px;}
     <div class="w3-col m2">
       <div class="w3-card w3-round w3-white w3-center">
         <div class="w3-container">
-          <p>Upcoming Events:</p>
+          <p>Upcoming Events :</p>
+
+          
           <img src="/w3images/forest.jpg" alt="Forest" style="width:100%;">
-          <p><strong>Holiday</strong></p>
-          <p>Friday 15:00</p>
+          
           <p><button class="w3-button w3-block w3-theme-l4">Info</button></p>
         </div>
       </div>
@@ -116,16 +150,26 @@ body { font-size: 15px;}
       <div class="w3-card w3-round w3-white w3-center">
         <div class="w3-container">
           <p>Friend Request</p>
-          <img src="/w3images/avatar6.png" alt="Avatar" style="width:50%"><br>
-          <span>Jane Doe</span>
-          <div class="w3-row w3-opacity">
-            <div class="w3-half">
+          {% for friend in requests %}
+            <div class="detail">
+                <p>{{friend.firstName}} {{friend.lastName}}</p>
+            
+              <img src="static/images/{{friend.pictureDir}}" class="dp">
+            <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">
+            ✓</a>
+            <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">x</a>
+            </div>
+          {% endfor %}
+         <!--  <img src="/w3images/avatar6.png" alt="Avatar" style="width:50%"><br>
+          <span>Jane Doe</span> -->
+          <!-- <div class="w3-row w3-opacity"> -->
+<!--             <div class="w3-half">
               <button class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button>
             </div>
             <div class="w3-half">
               <button class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button>
-            </div>
-          </div>
+            </div> -->
+          <!-- </div> -->
         </div>
       </div>
       <br>
