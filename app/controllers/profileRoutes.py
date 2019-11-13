@@ -5,7 +5,7 @@ from app.models.friend import Friend
 from app.controllers.forms import ProfileForm, photos
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
-from werkzeug.utils import secure_filename
+# from werkzeug.utils import secure_filename
 from app.utility import get_list, get_cursor, get_index
 import os
 
@@ -57,8 +57,8 @@ def edit_profile():
 					else:
 						filename = "female.jpg"
 				else:
-					filename = photos.save(form.pictureDir.data, name=user['email'] + '.')
-
+					filename = photos.save(form.pictureDir.data, name= 'profile/' + user['email'] + '.')
+					firstName = filename.split('/')[1]
 				profile_obj = Profile(email=user['email'], firstName=form.firstName.data, lastName=form.lastName.data, descriptions=form.descriptions.data, gender=form.gender.data, pictureDir=filename)
 				profile_obj.insert()
 			else:
@@ -77,9 +77,10 @@ def edit_profile():
 						filename = photos.save(form.pictureDir.data, name=current_user.email + '.')
 					else:
 						# delete existing photo
-						filename = "app/static/images/profile/" + profile['pictureDir']
+						filename = "app/static/images/profile" + profile['pictureDir']
 						os.remove(os.path.join(filename))
-						filename = photos.save(form.pictureDir.data, name=current_user.email + '.')
+						filename = photos.save(form.pictureDir.data, name='profile/'+ current_user.email + '.')
+						filename = filename.split('/')[1]
 					DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"pictureDir": filename}})
 				else:
 					if profile['pictureDir'] == "male.jpg" or profile['pictureDir'] == "female.jpg":
