@@ -37,3 +37,5 @@ class EventForm(FlaskForm):
 	submit = SubmitField('Create Event')
 	start = DateField('Enter Your Start Date', format='%Y-%m-%d')
 	end = DateField('When Does The Event End', format='%Y-%m-%d')
+	#FIXME add start time and end time as string field
+	pictureDir = FileField(validators=[FileAllowed(photos, 'image only')])

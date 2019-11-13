@@ -1,5 +1,5 @@
-{% extends "base.html" %}
-{% block content %}
+<!-- {% extends "base.html" %}
+{% block content %} -->
 <!DOCTYPE html>
 
 <style>
@@ -54,8 +54,12 @@ button:hover{
 <body>
 	<div class ="container">
 		<h1>Create an event</h1>
-		<form action="{{url_for('events')}}" method = "post">
+		<form action="{{url_for('events')}}" method = "post" enctype="multipart/form-data">
 			<div class ="firstbody">
+				{% if form.errors %}
+				{{ form.errors }}
+				{% endif %}
+				{{ form.hidden_tag() }}
 		    	<text> Event Name </text></p>
 		    	{{ form.name(size=60) }}</p>
 		    	<text> Event Description</text></p>
@@ -63,10 +67,17 @@ button:hover{
 		    	{{form.start(class="datepicker")}}
 		    	<text> &mdash;</text>
 		    	{{form.end(class="datepicker")}}
+		    	<!-- TODO -->
+		    	<!-- create 2 time picker or sth else or bootstrap -->
+		    	<!-- check if it works in eventRoutes.py by print() in console -->
+		    	<!-- start time -->
+		    	<!-- end time  -->
+		    	<!-- Make it return as string -->
+		    	{{form.pictureDir}}
 		    </div>
 		    <div class ="button"><button class="button" type="submit">Submit</button></div>
 		</form>
 	</div>
-{% endblock %}
+<!-- {% endblock %} -->
 </body>
 </html>
