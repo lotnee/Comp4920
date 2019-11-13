@@ -109,7 +109,7 @@ h1 {
           <p><b>Email:</b> {{user.email}}</p>
           <p><b>Name:</b> {{user.firstName}} {{user.lastName}}</p>
         </div>
-          <img src="static/images/{{user.pictureDir}}" class="dp">
+          <img src="static/images/profile/{{user.pictureDir}}" class="dp">
            <a href="{{url_for('send_request', email=user.email)}}" class="reqbutton">Send Request</a>
            <a href="/" class="viewbutton">View Profile</a>
           <br/>

@@ -58,15 +58,12 @@ def edit_profile():
 						filename = "female.jpg"
 				else:
 					filename = photos.save(form.pictureDir.data, name=user['email'] + '.')
-				# print(filename)
-				# fileDest = photos.path(filename)
-				# print(fileDest)
 
 				profile_obj = Profile(email=user['email'], firstName=form.firstName.data, lastName=form.lastName.data, descriptions=form.descriptions.data, gender=form.gender.data, pictureDir=filename)
 				profile_obj.insert()
 			else:
 				# update existing profile
-				# DOn't really need to check if None since it is required
+				# Don't need to check if None since it is required in form
 				# if form.firstName.data is not None:
 				DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"firstName": form.firstName.data}})
 				# if form.lastName.data is not None:
@@ -80,7 +77,7 @@ def edit_profile():
 						filename = photos.save(form.pictureDir.data, name=current_user.email + '.')
 					else:
 						# delete existing photo
-						filename = "app/static/images/" + profile['pictureDir']
+						filename = "app/static/images/profile/" + profile['pictureDir']
 						os.remove(os.path.join(filename))
 						filename = photos.save(form.pictureDir.data, name=current_user.email + '.')
 					DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"pictureDir": filename}})
@@ -98,8 +95,6 @@ def edit_profile():
 						if toUpdateList[i]['friend'][j]['email'] == current_user.email:
 							friend_pic = "friends." + str(j) + ".pictureDir"
 							DB.update_one(collection="Profile", filter={"email": toUpdateList[i]['email']}, data={"$set": {friend_pic: filename}})
-
-		print('i am here')
 
 		return redirect(url_for('profile'))
 
