@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <!DOCTYPE html>
+<head>
+   <title>Edit your profile</title>
+</head>
 <html>
 <style>
 .card {
@@ -8,6 +11,7 @@
    margin: auto;
    text-align: center;
    float: center;
+   margin-top: 80px;
 }
 
 .button {
@@ -16,14 +20,15 @@
    cursor: pointer;
    width: auto;
    border: none;
+   border-radius: 14px;
    padding: 10px 15px;
    margin: 8px 0;
    float: right;
 }
 
 .uplbutton {
-   background-color: #778899;
-   color: white;
+   background-color: transparent;
+   color: black;
    cursor: pointer;
    width: auto;
    border: none;
@@ -37,6 +42,16 @@
   display: inline-block;
   border: 1px solid #ccc;
   box-sizing: border-box;
+}
+
+select[name="Gender"] {
+  padding: 5px 10px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background: white;
+  float: left;
 }
 
 .upload-btn-wrapper {
@@ -53,6 +68,7 @@
   top: 0;
   opacity: 0;
 }
+
 </style>
 <body>
    <div class="card">
@@ -66,26 +82,30 @@
                 {% endfor %}
              {% endif %}
           {% endwith %}
+          {% if profile.firstName != null and  profile.lastName != null and profile.descriptions != null %}
+          {{profile.descriptions}}
+          <input type="text" class="form-control" name="firstName" value={{profile.firstName}} required=""autofocus=""></input></br>
+          <input type="text" class="form-control" name="lastName" value={{profile.lastName}} required=""autofocus=""/></br>
+          <input type="text" class="form-control" name="descriptions" value="{{profile.descriptions}}" required/></br>
+          {% else %}
           <input type="text" class="form-control" name="firstName" placeholder="First Name" required=""autofocus=""/></br>
           <input type="text" class="form-control" name="lastName" placeholder="Last Name" required=""autofocus=""/></br>
           <input type="text" class="form-control" name="descriptions" placeholder="Descriptions" required/></br>
-          <input type="text" class="form-control" name="gender" placeholder="Gender" required/></br>
-           <!-- PLS use dropdown for gender -->
-          <p> *probs use a drop down later for the gender selection</p>
-          <!-- <div class="upload-btn-wrapper"> -->
-           <!--  <button class="uplbutton" >Upload a photo</button> -->
-            <input class="uplbutton" type="file" class="form-control" name="pictureDir"/>
-          <!-- <div class="uplbutton">
-            {{ form.pictureDir }}
-            {% for error in form.pictureDir.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-          </div> -->
+          {% endif %}
+          <select class="form-control" name="gender" placeholder="Gender" required>
+          	{% if profile.gender == "female" %}
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+            {% elif profile.gender == "male" %}
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            {% else %}
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+        	{% endif %}
+          </select></br>
+          <input class="uplbutton" type="file" class="form-control" name="pictureDir"/>
           <button class="button" type="submit">Save changes</button>
-          <!-- {{ form.pictureDir }}
-          {% for error in form.pictureDir.errors %}
-          <span style="color: red;">{{ error }}</span>
-          {% endfor %} -->
       </form>
    </div>
 </body>

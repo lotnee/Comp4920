@@ -9,10 +9,13 @@ class Profile(object):
 		self.gender = gender
 		self.descriptions = descriptions
 		self.pictureDir = pictureDir
+		self.friends = []
+		self.events = []
 
 	def insert(self):
 		if not DB.find_one("Profile", {"email": self.email}):
 			DB.insert(collection='Profile', data=self.json())
+	
 
 	def json(self):
 		return {
@@ -21,5 +24,7 @@ class Profile(object):
 			'lastName': self.lastName,
 			'gender': self.gender,
 			'descriptions': self.descriptions,
-			'pictureDir': self.pictureDir
+			'pictureDir': self.pictureDir,
+			'friends': self.friends,
+			'events':self.events
 		}

@@ -2,11 +2,12 @@ from app.database import DB
 
 class Friend(object):
 
-	def __init__(self, email, firstName, lastName, status):
+	def __init__(self, email, firstName, lastName, status, pictureDir):
 		self.email = email
 		self.firstName = firstName
 		self.lastName = lastName
 		self.status = status
+		self.pictureDir = pictureDir
 
 	def insert(self, email):
 		if DB.find_one("Profile", {"email": self.email}):
@@ -21,5 +22,6 @@ class Friend(object):
 			'email': self.email,
 			'firstName': self.firstName,
 			'lastName': self.lastName,
-			'status': self.status
+			'status': self.status,
+			'pictureDir': self.pictureDir
 		}
