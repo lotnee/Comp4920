@@ -1,16 +1,17 @@
-<!-- The base template of the website -->
+<!-- Credit: The base template of the website is from Bootstrap-->
+<!-- Bootstrap template used https://getbootstrap.com/docs/3.4/components/#navbar -->
 <!DOCTYPE html>
 <html>
 <head>
-   <!-- Bootstrap Import -->
-   <!-- Bootstrap template used https://getbootstrap.com/docs/3.4/components/#navbar --> 
+   <title>{{title}}</title>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <!-- CSS -->
-<style> 
+<style>
 ul {
    margin: 0;
    padding: 0;
@@ -26,7 +27,7 @@ li a {
    text-align: center;
    padding: 14px 16px;
    text-decoration: none;
-   font-size: 16px; 
+   font-size: 16px;
 }
 
 #header .navbar-nav li > a {
@@ -60,25 +61,27 @@ li a {
 			   <ul class="nav navbar-nav">
 				   <li class="active"><a href="/dashboard">Dashboard<span class="sr-only">(current)</span></a></li>
 				   <li ><a href="/profile">Profile</a></li>
-				   <li><a href="/events">Events</a></li>
+				   <li><a href="/viewevents">Events</a></li>
                <li><a href="/friends">Friends</a></li>
             </ul>
             <form class="navbar-form navbar-left" action="/search">
                <div class="input-group">
                      <input type="search" class="form-control" placeholder="Search" id="sitesearch" name="query">
-               </div> 
+               </div>
                </form>
 			   <ul class="nav navbar-nav navbar-right">
+               <li><a href="/newevent"><span class="fa fa-plus"></span> New Event</a></li>
                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
 		   </div>
 	   </nav>
    </div>
 	{% block content %}{% endblock %}
+    
 <script>
 $(document).ready(function() {
   $('li.active').removeClass('active');
-  $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
+  $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
 });
 </script>
 

@@ -37,6 +37,7 @@ def logout():
 def register():
 	form = RegistrationForm()
 	if form.validate_on_submit():
+		print("I am here")
 		user = DB.find_one(collection="User", query={"email": form.email.data})
 		if user is None:
 			user_obj = User(email=form.email.data, password=generate_password_hash(form.password.data))

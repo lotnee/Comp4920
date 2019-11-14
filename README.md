@@ -15,6 +15,10 @@ password: adm1n
 
 email: friend@hangouts
 password: friend
+
+* for testing
+email: testQA@hangouts
+password: 12345
 ```
 ## Current Progress
 <table>
@@ -44,15 +48,15 @@ password: friend
     <th/> -
   <tr/>
   	<th/> Upload photo(event)
-    <th/> TODO
+    <th/> IN PROGRESS
     <th/> -
   <tr/>
   	<th/> Invite & Remove friends
-    <th/> TODO
+    <th/> IN PROGRESS
     <th/> -
   <tr/>
   	<th/> Edit event & Edit photo(event)
-    <th/> TODO
+    <th/> IN PROGRESS
     <th/> -
   <tr/>
   	<th/> Edit profile & Edit photo(profile)
@@ -60,6 +64,6 @@ password: friend
     <th/> WORKS
   <tr/>
   	<th/> Search bar
-    <th/> IN PROGRESS
-    <th/> -
+    <th/> COMPLETED
+    <th/> WORKS
 </table>

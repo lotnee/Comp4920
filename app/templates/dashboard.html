@@ -1,9 +1,9 @@
+<!-- Credit: Template loosely based of a Bootstrap template -->
+<!-- Bootstrap template from w3schools https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_templates_social&stacked=h -->
 {% extends "base.html" %}
 {% block content %}
 <!DOCTYPE html>
 <head>
-   <!-- Bootstrap Import -->
-   <!-- Bootstrap template from w3schools https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_templates_social&stacked=h -->
    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
     <title>Dashboard</title>
@@ -125,7 +125,7 @@ a.accept {
     <div class="w3-col m7">
       <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
         {%for dictionary_item in events%}
-        <h4>{{dictionary_item['name']}}</h4>
+        <h4><a href="{{ url_for('displayevent', name = dictionary_item['name']) }}">{{dictionary_item['name']}}</a></h4>
         <hr class="w3-clear">
            <p><b>Event Description</b></p>
            <p>{{dictionary_item['description']}}</p>
@@ -154,7 +154,7 @@ a.accept {
             <div class="detail">
                 <p>{{friend.firstName}} {{friend.lastName}}</p>
             
-              <img src="static/images/{{friend.pictureDir}}" class="dp">
+              <img src="static/images/profile/{{friend.pictureDir}}" class="dp">
             <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">
             ✓</a>
             <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">x</a>

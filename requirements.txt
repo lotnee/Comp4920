@@ -5,3 +5,4 @@ flask_uploads
 pymongo
 dnspython
 Werkzeug
+wtforms

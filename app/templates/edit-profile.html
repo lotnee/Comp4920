@@ -82,16 +82,26 @@ select[name="Gender"] {
                 {% endfor %}
              {% endif %}
           {% endwith %}
-          <input type="text" class="form-control" name="firstName" value={{profile.firstName}} required=""autofocus=""/></br>
+          {% if profile.firstName != null and  profile.lastName != null and profile.descriptions != null %}
+          {{profile.descriptions}}
+          <input type="text" class="form-control" name="firstName" value={{profile.firstName}} required=""autofocus=""></input></br>
           <input type="text" class="form-control" name="lastName" value={{profile.lastName}} required=""autofocus=""/></br>
-          <input type="text" class="form-control" name="descriptions" value={{profile.descriptions}} required/></br>
+          <input type="text" class="form-control" name="descriptions" value="{{profile.descriptions}}" required/></br>
+          {% else %}
+          <input type="text" class="form-control" name="firstName" placeholder="First Name" required=""autofocus=""/></br>
+          <input type="text" class="form-control" name="lastName" placeholder="Last Name" required=""autofocus=""/></br>
+          <input type="text" class="form-control" name="descriptions" placeholder="Descriptions" required/></br>
+          {% endif %}
           <select class="form-control" name="gender" placeholder="Gender" required>
           	{% if profile.gender == "female" %}
             <option value="female">Female</option>
             <option value="male">Male</option>
             {% elif profile.gender == "male" %}
-             <option value="male">Male</option>
+            <option value="male">Male</option>
             <option value="female">Female</option>
+            {% else %}
+            <option value="female">Female</option>
+            <option value="male">Male</option>
         	{% endif %}
           </select></br>
           <input class="uplbutton" type="file" class="form-control" name="pictureDir"/>

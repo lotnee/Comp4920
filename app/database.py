@@ -27,6 +27,9 @@ class DB(object):
 	@staticmethod
 	def update_one(collection, filter, data):
 		DB.DATABASE[collection].find_one_and_update(filter, data)
+	@staticmethod
+	def count(collection):
+		return DB.DATABASE[collection].count_documents({})
 
 	# TODO
 	# @staticmethod
