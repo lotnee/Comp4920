@@ -9,7 +9,7 @@
 .container{
     padding:20px;
     margin-top:100px;
-    max-width:500px; 
+    max-width:500px;
     text-align:left;
     background-color: #fafafa;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -26,6 +26,7 @@
            <p><b>Event Description</b></p>
            <p>{{dictionary_item['description']}}</p>
            <br>
+           <p><a href="{{url_for('deleteEvent')}}">Delete Event</a></p>
         {% endfor %}
     </div>
 {% endblock %}
