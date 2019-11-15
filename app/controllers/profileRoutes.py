@@ -106,6 +106,7 @@ def edit_profile():
 @login_required
 def profile():
 	profile = DB.find_one(collection="Profile", query={"email": current_user.email})
+	
 	# main()
 	# exec("quickstart.py")
 	return render_template('profile.html', profile=profile)
