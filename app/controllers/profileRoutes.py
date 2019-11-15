@@ -8,6 +8,7 @@ from flask_login import current_user, login_required
 # from werkzeug.utils import secure_filename
 from app.utility import get_list, get_cursor, get_index
 import os
+from app.controllers.quickstart import main
 
 def profileEvents(eventLists):
 	retList = []
@@ -105,4 +106,6 @@ def edit_profile():
 @login_required
 def profile():
 	profile = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# main()
+	# exec("quickstart.py")
 	return render_template('profile.html', profile=profile)
