@@ -25,19 +25,17 @@ def events():
 		print(type(form.start.data))
 		date1 = datetime((form.start.data).year,(form.start.data).month,(form.start.data).day)
 		date2 = datetime((form.end.data).year,(form.end.data).month,(form.end.data).day)
-		print("start date is " + date1.isoformat())
-		print("end date is " + date2.isoformat())
-		print(f'Name : {form.name.data}')
-		print(f'Description :{form.description.data}')
-		print(f'Cover Photo :{form.pictureDir.data}')
-		# TODO
-		# print the time here
-
-		# FIXME 
-		# event = Event(name = form.name.data, description = form.description.data, start = date1, end = date2)
-		
-		# event.insert(current_user.email)
-		# return redirect(url_for('eventCompleted'))
+		# print("start date is " + date1.isoformat())
+		# print("end date is " + date2.isoformat())
+		# print(f'Name : {form.name.data}')
+		# print(f'Description :{form.description.data}')
+		# print(f'Cover Photo :{form.pictureDir.data}')
+		event = Event(name = form.name.data, description = form.description.data,
+					  start = date1, end =date2, admin = current_user.email,
+				      profileList=[current_user.email])
+		# print(event)
+		event.insert(current_user.email)
+		return redirect(url_for('eventCompleted'))
 	return render_template('newevent.html', title = "Create Your Event", form = form)
 
 @app.route('/viewevents')
@@ -45,7 +43,6 @@ def events():
 def viewEvents():
    if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
       eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
-      print(eventList[0]['events'])
       allEvents = profileEvents(eventList[0]['events'])
       return render_template('events.html', events = allEvents, title='View Events')
    return render_template('events.html',title="View Events")
@@ -59,3 +56,9 @@ def eventCompleted():
 @login_required
 def displayevent(name):
 	return render_template('displayevent.html', title=name)
+
+@app.route('/deleteEvent')
+@login_required
+def deleteEvent():
+	print("HIHIHIHI")
+	return "hi"
