@@ -1,0 +1,3 @@
+[submodule "app/app/templates/calender"]
+	path = app/app/templates/calender
+	url = https://github.com/jacoduplessis/calendar.git

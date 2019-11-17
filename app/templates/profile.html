@@ -3,10 +3,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Profile</title>
-    <meta charset="utf-8" /> 
-    <title>Calendar Widget</title> 
-    <link rel="stylesheet" href="calendar.css" /> 
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <!-- CSS -->
 <style>
@@ -74,138 +72,6 @@ button:hover, a:hover {
   opacity: 0.7;
 }
 
-#cal { 
-    -moz-box-shadow:0px 3px 3px rgba(0, 0, 0, 0.25); 
-    -webkit-box-shadow:0px 3px 3px rgba(0, 0, 0, 0.25); 
-    margin:50px auto; 
-    font: 13px/1.5 "Helvetica Neue", Helvatica, Arial, san-serif; 
-    display:table; 
-}
-#cal .header { 
-    cursor:default; 
-    background: #cd310d; 
-    background: -moz-linear-gradient(top, #b32b0c, #cd310d); 
-    background: -webkit-gradient(linear, left top, left bottom, from(#b32b0c), to(#cd310d)); 
-    height: 34px; 
-    position: relative; 
-    color:#fff; 
-    -webkit-border-top-left-radius: 5px; 
-    -webkit-border-top-right-radius: 5px; 
-    -moz-border-radius-topleft: 5px; 
-    -moz-border-radius-topright: 5px; 
-    border-top-left-radius: 5px; 
-    border-top-right-radius: 5px; 
-    font-weight:bold; 
-    text-shadow:0px -1px 0 #87260C; 
-    text-transform: uppercase; 
-} 
-#cal .header span { 
-    display:inline-block; 
-   #cal .header .hook { 
-    width: 9px; 
-    height: 28px; 
-    position: absolute; 
-    bottom:60%; 
-    border-radius:10px; 
-    -moz-border-radius:10px; 
-    -webkit-border-radius:10px; 
-    background:#ececec; 
-    background: -moz-linear-gradient(right top, #fff, #827e7d); 
-    background: -webkit-gradient(linear, right top, right bottom, from(#fff), to(#827e7d)); 
-    box-shadow:0px -1px 2px rgba(0, 0, 0, 0.65 ); 
-    -moz-box-shadow:0px -1px 2px rgba(0, 0, 0, 0.65 ); 
-    -webkit-box-shadow:0px -1px 2px rgba(0, 0, 0, 0.65 ); 
-} 
-.right.hook { 
-    right:15%; 
-} 
-.left.hook { 
-    left: 15%; 
-}
-#cal .header .button { 
-    width:24px; 
-    text-align:center; 
-    position:absolute; 
-} 
-#cal .header .left.button { 
-    left:0; 
-    -webkit-border-top-left-radius: 5px; 
-    -moz-border-radius-topleft: 5px; 
-    border-top-left-radius: 5px; 
-    border-right:1px solid #ae2a0c; 
-} 
-#cal .header .right.button { 
-    right:0; 
-    top:0; 
-    border-left:1px solid #ae2a0c; 
-    -webkit-border-top-right-radius: 5px; 
-    -moz-border-radius-topright: 5px; 
-    border-top-right-radius: 5px; 
-} 
-#cal .header .button:hover { 
-    background: -moz-linear-gradient(top, #d94215, #bb330f); 
-    background: -webkit-gradient(linear, left top, left bottom, from(#d94215), to(#bb330f)); 
-}
-#cal .header .month-year { 
-    letter-spacing: 1px; 
-    width: 100%; 
-    text-align: center; 
-}
-#cal table { 
-    background:#fff; 
-    border-collapse:collapse; 
-} 
-#cal td { 
-    color:#2b2b2b; 
-    width:30px; 
-    height:30px; 
-    line-height:30px; 
-    text-align:center; 
-    border:1px solid #e6e6e6; 
-    cursor:default; 
-} 
-#cal #days td { 
-    height:26px; 
-    line-height: 26px; 
-    text-transform:uppercase; 
-    font-size:90%; 
-    color:#9e9e9e; 
-} 
-#cal #days td:not(:last-child) { 
-    border-right:1px solid #fff; 
-}
-#cal #cal-frame td.today { 
-    background:#ededed; 
-    color:#8c8c8c; 
-    box-shadow:1px 1px 0px #fff inset; 
-    -moz-box-shadow:1px 1px 0px #fff inset; 
-    -webkit-box-shadow:1px 1px 0px #fff inset; 
-} 
-#cal #cal-frame td:not(.nil):hover { 
-    color:#fff; 
-    text-shadow: #6C1A07 0px -1px; 
-    background:#CD310D; 
-    background: -moz-linear-gradient(top, #b32b0c, #cd310d); 
-    background: -webkit-gradient(linear, left top, left bottom, from(#b32b0c), to(#cd310d)); 
-    -moz-box-shadow:0px 0px 0px; 
-    -webkit-box-shadow:0px 0px 0px; 
-}
-#cal #cal-frame td span { 
-    font-size:80%; 
-    position:relative; 
-} 
-#cal #cal-frame td span:first-child { 
-    bottom:5px; 
-} 
-#cal #cal-frame td span:last-child { 
-    top:5px; 
-}
-#cal #cal-frame table.curr { 
-    float:left;      
-} 
-#cal #cal-frame table.temp { 
-    position:absolute; 
-}
 
 </style>
 
@@ -219,52 +85,48 @@ button:hover, a:hover {
          {% endif %} 
          <hr>
    </div>
+
    <div class="card2" style ="margin-top:20px;"> 
    {{profile.descriptions}}
           
      </div>
         <div class="card3"> 
-     
-          *calender*
-          <div id="cal"> 
-    <div class="header"> 
- <span class="left button" id="prev"> &lang; </span> 
-<span class="left hook"></span> 
-<span class="month-year" id="label"> June 2010 </span> 
-<span class="right hook" id=""></span> 
-<span class="right button" id="next"> &rang; </span>
-    </div> 
-    <table id="days"> <tr>
- <td>sun</td> 
-<td>mon</td> 
-<td>tue</td> 
-<td>wed</td> 
-<td>thu</td> 
-<td>fri</td> 
-<td>sat</td></tr>
- 
-    </table> 
-    <div id="cal-frame"> 
- <table class="curr"> 
-    <tbody> 
-        <tr><td class="nil"></td><td class="nil"></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr> 
-        <tr><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td class="today">11</td><td>12</td></tr> 
-        <tr><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr> 
-        <tr><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td></tr> 
-        <tr><td>27</td><td>28</td><td>29</td><td>30</td><td class="nil"></td><td class="nil"></td><td class="nil"></td></tr> 
-    </tbody> 
-</table>
- 
-    </div> 
-</div>
-     </div>
-</body>
-<body>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"> </script>
-<script src="calendar.js"></script>
-var cal = CALENDAR(); 
- 
-  cal.init();
+   
+    </div>
+  <div id="calendar" style="max-width: 800px;margin: 2rem auto;padding: 0 5px"></div>
+  <pre id="debug"></pre>
+  <div style="text-align: center">
+  <p><a href="https://github.com/jacoduplessis/calendar/blob/master/demo/basic.html">source code</a></p>
+  </div>
+  <link rel="stylesheet" href="../dist/calendar.css">
+  <script src="../dist/calendar.js"></script>
+  <script>
+    var calendar = new Calendar({
+      target: document.querySelector("#calendar"),
+      data: {
+        escape: false,
+        view: 'calendar',
+        year: 2017,
+        month: 9,
+      }
+    })
+    calendar.set({message: 'loading...'})
+    fetch("entries.json").then(r => r.json()).then(data => {
+      var entries = calendar.get('entries')
+      entries = entries.concat(data.entries)
+      calendar.set({entries: entries, message: ''})
+    })
+
+    function debug() {
+        document.querySelector('#debug').textContent = JSON.stringify(calendar.get(), null, 4)
+      }
+  </script>
+  <style>
+    img {
+      max-width: 100%
+    }
+  </style>
+
 </body>
 
 
