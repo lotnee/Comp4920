@@ -29,9 +29,13 @@ def send_request(email):
 	if friend is None:
 		flash('User %s not found!' % email)
 		return redirect(url_for('friends'))
-	added = DB.find_one(collection="Profile", query={"$and": [{"email": current_user.email}, {"friends": {"$elemMatch": {"email": email, "status": "pending"}}}]})
+	added = DB.find_one(collection="Profile", query={"$and": [{"email": current_user.email}, {"friends": {"$elemMatch": {"email": email, "status": "accepted"}}}]})
 	# sent = get_list(added['friends'], "status", "pending")
+	sent = DB.find_one(collection="Profile", query={"$and": [{"email": current_user.email}, {"friends": {"$elemMatch": {"email": email, "status": "pending"}}}]})
 	if added is not None:
+		flash('%s has already accepted your friend request!' % email)
+		return redirect(url_for('friends'))
+	if sent is not None:
 		flash('Request to %s sent!' % email)
 		return redirect(url_for('friends'))
 	friend_obj = Friend(email=friend['email'], firstName=friend['firstName'], lastName=friend['lastName'], status="pending", pictureDir=friend['pictureDir'])
