@@ -26,6 +26,7 @@ def send_request(email):
 	# very similar to sending request to invitees
 	added = DB.find_one(collection="Profile", query={"$and": [{"email": current_user.email}, {"friends": {"$elemMatch": {"email": email, "status": "accepted"}}}]})
 	sent = DB.find_one(collection="Profile", query={"$and": [{"email": current_user.email}, {"friends": {"$elemMatch": {"email": email, "status": "pending"}}}]})
+	received = DB.find_one(collection="Profile", query={"$and": [{"email": email}, {"friends": {"$elemMatch": {"email": current_user.email, "status": "pending"}}}]})
 	# check if is already friend
 	if added is not None:
 		flash('%s has already accepted your friend request!' % email)
@@ -33,6 +34,10 @@ def send_request(email):
 	# check if alredy sent
 	if sent is not None:
 		flash('Request to %s sent!' % email)
+		return redirect(url_for('friends'))
+	# check if alredy received friend request
+	if received is not None:
+		flash('%s already sent you a friend request!' % email)
 		return redirect(url_for('friends'))
 	friend_obj = Friend(email=friend['email'], firstName=friend['firstName'], lastName=friend['lastName'], status="pending", pictureDir=friend['pictureDir'])
 	friend_obj.insert(current_user.email)
