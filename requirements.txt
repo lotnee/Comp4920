@@ -6,3 +6,5 @@ pymongo
 dnspython
 Werkzeug
 wtforms
+google-api-python-client
+google-auth-oauthlib
