@@ -78,7 +78,7 @@ def edit_profile():
 						filename = photos.save(form.pictureDir.data, name=current_user.email + '.')
 					else:
 						# delete existing photo
-						filename = "app/static/images/profile" + profile['pictureDir']
+						filename = "app/static/images/profile/" + profile['pictureDir']
 						os.remove(os.path.join(filename))
 						filename = photos.save(form.pictureDir.data, name='profile/'+ current_user.email + '.')
 						filename = filename.split('/')[1]
