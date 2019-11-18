@@ -26,7 +26,7 @@
            <p><b>Event Description</b></p>
            <p>{{dictionary_item['description']}}</p>
            <br>
-           <p><a href="{{url_for('delete_event')}}">Delete Event</a></p>
+           <p><a href="{{url_for('delete_event', id = dictionary_item['_id'])}}">Delete Event</a></p>
         {% endfor %}
     </div>
 {% endblock %}

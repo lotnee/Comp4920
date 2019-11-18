@@ -7,13 +7,13 @@ from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 from app.utility import get_list, get_cursor
 from datetime import datetime
+from bson.objectid import ObjectId
 
 def profileEvents(eventLists):
 	retList = []
 	for item in eventLists:
 		event = DB.find_one(collection="Events",query={'_id':item})
 		retList.append(event)
-	print(retList[0]['name'])
 	return retList
 
 @app.route('/create-event', methods=['GET', 'POST'])
@@ -47,7 +47,7 @@ def create_events():
 def view_events():
    if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
       eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
-      allEvents = profileEvents(eventList[0]['events'])
+      allEvents = profileEvents(eventList[0]['events']) #FIXME doesn't seem right
       return render_template('events.html', events = allEvents, title='View Events')
    return render_template('events.html',title="View Events")
 
@@ -56,13 +56,22 @@ def view_events():
 def event_completed():
 	return render_template('event-completed.html',title="Event Creation Completed")
 
-@app.route('/view-events/<name>')
+@app.route('/view-events/<path:name>')
 @login_required
 def display_event(name):
+	#get the event name or more so the ID
 	return render_template('display-event.html', title=name)
 
-@app.route('/delete-event')
+@app.route('/delete-event/<string:id>')
 @login_required
-def delete_event():
-	print("HIHIHIHI")
+def delete_event(id):
+	#delete the event from the id
+	#first go through all the users that is associated with that id
+	x = DB.find_one(collection="Events", query = {"_id":ObjectId(id)})
+	profileList = x['invitees']
+	# Delete the event from all users in profile
+	for profile in profileList:
+		DB.update_one(collection = "Profile", filter = {"email":profile}, data = {"$pull": {"events" : ObjectId(id)}})
+	#delete the actual event from the database
+	DB.remove(collection = "Events", condition = {"_id": ObjectId(id)})
 	return "hi"

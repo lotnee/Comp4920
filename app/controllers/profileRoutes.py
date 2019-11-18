@@ -15,7 +15,6 @@ def profileEvents(eventLists):
 	for item in eventLists:
 		event = DB.find_one(collection="Events",query={'_id':item})
 		retList.append(event)
-	print(retList[0]['name'])
 	return retList
 
 @app.route('/dashboard')
@@ -106,7 +105,7 @@ def edit_profile():
 @login_required
 def profile():
 	profile = DB.find_one(collection="Profile", query={"email": current_user.email})
-	
+
 	# main()
 	# exec("quickstart.py")
 	return render_template('profile.html', profile=profile)

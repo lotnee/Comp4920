@@ -31,6 +31,12 @@ class DB(object):
 	@staticmethod
 	def count(collection):
 		return DB.DATABASE[collection].count_documents({})
+	@staticmethod
+	def remove(collection, condition):
+		DB.DATABASE[collection].remove(condition)
+
+	# def find_with_projection(collection,query,projection):
+	# 	return DB.DATABASE[collection].find(query,projection)
 
 	@staticmethod
 	def createIndex(collection, query, name):
