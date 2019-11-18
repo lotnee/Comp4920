@@ -1,7 +1,6 @@
 from app import app
 from app.database import DB
 from app.utility import get_list, get_cursor, get_index
-from app.models.profile import Profile
 from app.models.friend import Friend
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
@@ -12,13 +11,8 @@ def friends():
 	users = list(DB.find_all(collection="Profile"))
 	me = DB.find_one(collection="Profile", query={"email": current_user.email}) 
 	incoming = DB.find(collection="Profile", query={"friends": {"$elemMatch": {"email": current_user.email, "status": "pending"}}})
-	# print(incoming.count())
-	# print(incoming[0]['email'])
-	# print(incoming[0]['friends'])
 	requests = get_cursor(cursor_obj=incoming, key="friends", subkey="email", subkey2="status", query=current_user.email, query2="pending")
-	# print(len(requests))
-	# print(requests[0])
-	# print(requests[1])
+
 	return render_template('friend.html', title='Friend List', users=users, me=me, requests=requests)
 
 @app.route('/send-request/<email>')
@@ -29,12 +23,14 @@ def send_request(email):
 	if friend is None:
 		flash('User %s not found!' % email)
 		return redirect(url_for('friends'))
+	# very similar to sending request to invitees
 	added = DB.find_one(collection="Profile", query={"$and": [{"email": current_user.email}, {"friends": {"$elemMatch": {"email": email, "status": "accepted"}}}]})
-	# sent = get_list(added['friends'], "status", "pending")
 	sent = DB.find_one(collection="Profile", query={"$and": [{"email": current_user.email}, {"friends": {"$elemMatch": {"email": email, "status": "pending"}}}]})
+	# check if is already friend
 	if added is not None:
 		flash('%s has already accepted your friend request!' % email)
 		return redirect(url_for('friends'))
+	# check if alredy sent
 	if sent is not None:
 		flash('Request to %s sent!' % email)
 		return redirect(url_for('friends'))
@@ -55,7 +51,7 @@ def delete_request(email):
 	# the functions below can be used for invitees
 	sent = DB.find_one(collection="Profile", query={"$and": [{"email": current_user.email}, {"friends": {"$elemMatch": {"email": email, "status": "pending"}}}]})
 	received = DB.find_one(collection="Profile", query={"$and": [{"email": email}, {"friends": {"$elemMatch": {"email": current_user.email, "status": "pending"}}}]})
-	
+
 	if sent is not None:
 		myFriendList = get_list(sent['friends'], "email", email)
 		friend_obj = Friend(email=myFriendList[0]['email'], firstName=myFriendList[0]['firstName'], lastName=myFriendList[0]['lastName'], status=myFriendList[0]['status'], pictureDir=myFriendList[0]['pictureDir'])
@@ -74,14 +70,11 @@ def accept_request(email):
 	# only can add user with a profile
 	friend = DB.find_one(collection="Profile", query={"email": email})
 	if friend is None:
-		flash('User %s not found!' % email)
+		flash('User %s not found or has not created a profile!' % email)
 		return redirect(url_for('friends'))
 	added = DB.find_one(collection="Profile", query={"friends.email": current_user.email, "friends.status": "pending"})
-	# print(added['email'])
-	# print(added['friends'])
 	if added is not None:
 		index = get_index(arrayList=friend['friends'], key="email", query=current_user.email, key2="status", query2="pending")
-		# print(index)
 		if index != -1:
 			friend_status = "friends." + str(index) + ".status"
 			DB.update_one(collection="Profile", filter={"friends.email": current_user.email}, data={"$set": {friend_status: "accepted"}})
@@ -92,6 +85,7 @@ def accept_request(email):
 			flash('invalid request')
 		return redirect(url_for('friends'))
 	flash('%s is already a friend' % email)
+	flash('pontential DB issue pls contact admin')
 	return redirect(url_for('friends'))
 
 @app.route('/delete-friend/<email>')
@@ -111,7 +105,5 @@ def delete_friend(email):
 		flash(f'Deleted {email} successful!')
 	else:
 		flash(f'Deleted {email} failed!')
-		flash(f'pontential DB issue pls contact admin')
+		flash('pontential DB issue pls contact admin')
 	return redirect(url_for('friends'))
-
-
