@@ -2,13 +2,13 @@ from app.database import DB
 
 class Event(object):
 
-    def __init__(self,name,description,start,end,admin,profileList):
+    def __init__(self,name,description,start,end,host,invitees):
         self.name = name
         self.description = description
         self.start = start
         self.end = end
-        self.admin = admin
-        self.profileList = profileList
+        self.host = host
+        self.invitees = invitees
 
     def insert(self,userEmail):
         hehe = DB.insert(collection='Events', data=self.json())
@@ -22,6 +22,6 @@ class Event(object):
         	'description': self.description,
         	'start': self.start,
         	'end': self.end,
-            'admin':self.admin,
-            'profileList':self.profileList
+            'host':self.host,
+            'invitees':self.invitees
         }

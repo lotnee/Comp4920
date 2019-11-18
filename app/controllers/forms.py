@@ -34,8 +34,9 @@ class ProfileForm(FlaskForm):
 class EventForm(FlaskForm):
 	name  = StringField('Name', validators=[DataRequired()],render_kw = {"placeholder": "Enter The Name Of Your Event"})
 	description = StringField('Description', validators=[DataRequired()], render_kw = {"placeholder": "Enter A Short Description Of Your Event"})
-	submit = SubmitField('Create Event')
 	start = DateField('Enter Your Start Date', format='%Y-%m-%d')
 	end = DateField('When Does The Event End', format='%Y-%m-%d')
 	#FIXME add start time and end time as string field
 	pictureDir = FileField(validators=[FileAllowed(photos, 'image only')])
+	eventType = StringField('Type')
+	submit = SubmitField('Create Event')

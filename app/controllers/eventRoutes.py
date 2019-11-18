@@ -16,9 +16,9 @@ def profileEvents(eventLists):
 	print(retList[0]['name'])
 	return retList
 
-@app.route('/newevent', methods=['GET', 'POST'])
+@app.route('/create-event', methods=['GET', 'POST'])
 @login_required
-def events():
+def create_events():
 	form = EventForm()
 	# if form.is_submitted():
 	if form.validate_on_submit():
@@ -30,35 +30,39 @@ def events():
 		# print(f'Name : {form.name.data}')
 		# print(f'Description :{form.description.data}')
 		# print(f'Cover Photo :{form.pictureDir.data}')
+		me = DB.find_one(collection='Profile', query={'email': current_user.email})
+		if me is None:
+			flash('You will need to first create a profile!')
+			return redirect(url_for('dashboard'))
 		event = Event(name = form.name.data, description = form.description.data,
-					  start = date1, end =date2, admin = current_user.email,
-				      profileList=[current_user.email])
+					  start = date1, end =date2, host = '{} {}'.format(me['firstName'], me['lastName']),
+				      invitees=[current_user.email])
 		# print(event)
 		event.insert(current_user.email)
-		return redirect(url_for('eventCompleted'))
-	return render_template('newevent.html', title = "Create Your Event", form = form)
+		return redirect(url_for('event_completed'))
+	return render_template('create-event.html', title = "Create Your Event", form = form)
 
-@app.route('/viewevents')
+@app.route('/view-events')
 @login_required
-def viewEvents():
+def view_events():
    if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
       eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
       allEvents = profileEvents(eventList[0]['events'])
       return render_template('events.html', events = allEvents, title='View Events')
    return render_template('events.html',title="View Events")
 
-@app.route('/eventcompleted')
+@app.route('/event-completed')
 @login_required
-def eventCompleted():
-	return render_template('eventCompleted.html',title="Event Creation Completed")
+def event_completed():
+	return render_template('event-completed.html',title="Event Creation Completed")
 
-@app.route('/viewevents/<name>')
+@app.route('/view-events/<name>')
 @login_required
-def displayevent(name):
-	return render_template('displayevent.html', title=name)
+def display_event(name):
+	return render_template('display-event.html', title=name)
 
-@app.route('/deleteEvent')
+@app.route('/delete-event')
 @login_required
-def deleteEvent():
+def delete_event():
 	print("HIHIHIHI")
 	return "hi"
