@@ -27,9 +27,16 @@ class DB(object):
 	@staticmethod
 	def update_one(collection, filter, data):
 		DB.DATABASE[collection].find_one_and_update(filter, data)
+
 	@staticmethod
 	def count(collection):
 		return DB.DATABASE[collection].count_documents({})
+	@staticmethod
+	def remove(collection, condition):
+		DB.DATABASE[collection].remove(condition)
+
+	# def find_with_projection(collection,query,projection):
+	# 	return DB.DATABASE[collection].find(query,projection)
 
 	# TODO
 	# @staticmethod

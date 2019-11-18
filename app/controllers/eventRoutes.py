@@ -7,13 +7,13 @@ from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 from app.utility import get_list, get_cursor
 from datetime import datetime
+from bson.objectid import ObjectId
 
 def profileEvents(eventLists):
 	retList = []
 	for item in eventLists:
 		event = DB.find_one(collection="Events",query={'_id':item})
 		retList.append(event)
-	print(retList[0]['name'])
 	return retList
 
 @app.route('/newevent', methods=['GET', 'POST'])
@@ -35,6 +35,7 @@ def events():
 				      profileList=[current_user.email])
 		# print(event)
 		event.insert(current_user.email)
+
 		return redirect(url_for('eventCompleted'))
 	return render_template('newevent.html', title = "Create Your Event", form = form)
 
@@ -52,13 +53,22 @@ def viewEvents():
 def eventCompleted():
 	return render_template('eventCompleted.html',title="Event Creation Completed")
 
-@app.route('/viewevents/<name>')
+@app.route('/viewevents/<path:name>')
 @login_required
 def displayevent(name):
+	#get the event name or more so the ID
 	return render_template('displayevent.html', title=name)
 
-@app.route('/deleteEvent')
+@app.route('/deleteEvent/<string:id>')
 @login_required
-def deleteEvent():
-	print("HIHIHIHI")
+def deleteEvent(id):
+	#delete the event from the id
+	#first go through all the users that is associated with that id
+	x = DB.find_one(collection="Events", query = {"_id":ObjectId(id)})
+	profileList = x['profileList']
+	# Delete the event from all users in profile
+	for profile in profileList:
+		DB.update_one(collection = "Profile", filter = {"email":profile}, data = {"$pull": {"events" : ObjectId(id)}})
+	#delete the actual event from the database
+	DB.remove(collection = "Events", condition = {"_id": ObjectId(id)})
 	return "hi"
