@@ -51,37 +51,18 @@ def delete_request(email):
 	if friend is None:
 		flash('User %s not found!' % email)
 		return redirect(url_for('friends'))
-	# friend = DB.find(collection="Profile", query={"email": email})
-	# print(friend[0])
-	# friendList = get_list(friend, 'friends')
-	# size of the cursor objects
-	# print(friend.count())
-	# size of the array in object
-	# print(len(friend[0]['friends']))
 
 	# the functions below can be used for invitees
-	added = DB.find_one(collection="Profile", query={"$and": [{"email": current_user.email}, {"friends": {"$elemMatch": {"email": email}}}]})
-	added2 = DB.find_one(collection="Profile", query={"$and": [{"email": email}, {"friends": {"$elemMatch": {"email": current_user.email}}}]})
-
-	if added and added2 is not None:
-		myFriendList = get_list(added['friends'], "email", email)
-		theirFriendList = get_list(added2['friends'], "email", current_user.email)
-
-		friend_obj = Friend(email=myFriendList[0]['email'], firstName=myFriendList[0]['firstName'], lastName=myFriendList[0]['lastName'], status=myFriendList[0]['status'], pictureDir=myFriendList[0]['pictureDir'])
-		friend_obj.remove(current_user.email)
-		friend_obj2 = Friend(email=theirFriendList[0]['email'], firstName=theirFriendList[0]['firstName'], lastName=theirFriendList[0]['lastName'], status=theirFriendList[0]['status'], pictureDir=theirFriendList[0]['pictureDir'])
-		friend_obj2.remove(email)
-		flash('Friend request ' + email + ' deleted!')
-	elif added is not None:
-		myFriendList = get_list(added['friends'], "email", email)
-		# print(myFriendList)
-		# print(myFriendList[0]['email'])
+	sent = DB.find_one(collection="Profile", query={"$and": [{"email": current_user.email}, {"friends": {"$elemMatch": {"email": email, "status": "pending"}}}]})
+	received = DB.find_one(collection="Profile", query={"$and": [{"email": email}, {"friends": {"$elemMatch": {"email": current_user.email, "status": "pending"}}}]})
+	
+	if sent is not None:
+		myFriendList = get_list(sent['friends'], "email", email)
 		friend_obj = Friend(email=myFriendList[0]['email'], firstName=myFriendList[0]['firstName'], lastName=myFriendList[0]['lastName'], status=myFriendList[0]['status'], pictureDir=myFriendList[0]['pictureDir'])
 		friend_obj.remove(current_user.email)
 		flash('Friend request ' + email + ' cancelled!')
-	elif added2 is not None:
-		theirFriendList = get_list(added2['friends'], "email", current_user.email)
-		# print(theirFriendList)
+	elif received is not None:
+		theirFriendList = get_list(received['friends'], "email", current_user.email)
 		friend_obj = Friend(email=theirFriendList[0]['email'], firstName=theirFriendList[0]['firstName'], lastName=theirFriendList[0]['lastName'], status=theirFriendList[0]['status'], pictureDir=theirFriendList[0]['pictureDir'])
 		friend_obj.remove(email)
 		flash('Friend request ' + email + ' rejected!')
@@ -112,3 +93,25 @@ def accept_request(email):
 		return redirect(url_for('friends'))
 	flash('%s is already a friend' % email)
 	return redirect(url_for('friends'))
+
+@app.route('/delete-friend/<email>')
+@login_required
+def delete_friend(email):
+	added = DB.find_one(collection="Profile", query={"$and": [{"email": current_user.email}, {"friends": {"$elemMatch": {"email": email, "status": "accepted"}}}]})
+	added2 = DB.find_one(collection="Profile", query={"$and": [{"email": email}, {"friends": {"$elemMatch": {"email": current_user.email, "status": "accepted"}}}]})
+
+	if added and added2 is not None:
+		myFriendList = get_list(added['friends'], "email", email)
+		theirFriendList = get_list(added2['friends'], "email", current_user.email)
+
+		friend_obj = Friend(email=myFriendList[0]['email'], firstName=myFriendList[0]['firstName'], lastName=myFriendList[0]['lastName'], status=myFriendList[0]['status'], pictureDir=myFriendList[0]['pictureDir'])
+		friend_obj.remove(current_user.email)
+		friend_obj2 = Friend(email=theirFriendList[0]['email'], firstName=theirFriendList[0]['firstName'], lastName=theirFriendList[0]['lastName'], status=theirFriendList[0]['status'], pictureDir=theirFriendList[0]['pictureDir'])
+		friend_obj2.remove(email)
+		flash(f'Deleted {email} successful!')
+	else:
+		flash(f'Deleted {email} failed!')
+		flash(f'pontential DB issue pls contact admin')
+	return redirect(url_for('friends'))
+
+
