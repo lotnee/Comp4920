@@ -117,6 +117,18 @@ h1 {
         {% else %}
         {% endif %}
      {% endfor %}
+     <h4>Matched Events</h4>
+     <hr class="w3-clear">
+     {% for event in events%}
+        <div class="detail">
+          <p><b>Name:</b> {{event.name}}</p>
+          <p><b>Host:</b> {{event.host}}</p>
+        </div>
+          <img src="static/images/event/{{event.pictureDir}}" class="dp">
+           <a href="/" class="viewbutton">View Event</a>
+          <br/>
+          <br/>
+     {% endfor %}
    </div>
 </body>
 {% endblock %}
