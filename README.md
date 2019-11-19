@@ -58,7 +58,7 @@ password: 12345
     <th/> WORKS
   <tr/>
   	<th/> Create & Del event
-    <th/> IN PROGRESS
+    <th/> COMPLETED
     <th/> -
   <tr/>
   	<th/> Upload photo(event)
