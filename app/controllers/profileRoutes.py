@@ -6,7 +6,7 @@ from app.controllers.forms import ProfileForm, photos
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 # from werkzeug.utils import secure_filename
-from app.utility import get_list, get_cursor, get_index
+from app.utility.utility import get_list, get_cursor, get_index
 import os
 from app.controllers.quickstart import main
 
@@ -20,6 +20,10 @@ def profileEvents(eventLists):
 @app.route('/dashboard')
 @login_required
 def dashboard():
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	users = list(DB.find_all(collection="Profile"))
 	me = DB.find_one(collection="Profile", query={"email": current_user.email})
 	incoming = DB.find(collection="Profile", query={"friends": {"$elemMatch": {"email": current_user.email, "status": "pending"}}})
@@ -104,8 +108,10 @@ def edit_profile():
 @app.route('/profile')
 @login_required
 def profile():
-	profile = DB.find_one(collection="Profile", query={"email": current_user.email})
-
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	# main()
 	# exec("quickstart.py")
-	return render_template('profile.html', profile=profile)
+	return render_template('profile.html', profile=user)

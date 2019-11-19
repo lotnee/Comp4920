@@ -40,3 +40,11 @@ class EventForm(FlaskForm):
 	pictureDir = FileField(validators=[FileAllowed(photos, 'image only')])
 	eventType = StringField('Type')
 	submit = SubmitField('Create Event')
+
+class EmailForm(FlaskForm):
+	email = StringField('Email', validators=[DataRequired()])
+	submit = SubmitField('reset password')
+
+class PasswordForm(FlaskForm):
+	password = PasswordField('Password', validators=[DataRequired()])
+	submit = SubmitField('confirm password')

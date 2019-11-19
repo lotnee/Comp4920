@@ -6,7 +6,10 @@ from flask_login import current_user, login_required
 @app.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
-
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	# me = DB.find_one(collection='Profile', query={
 	# 	'email': current_user.email})
 	# create index for text search (Profile)

@@ -8,6 +8,20 @@ pip3 install -r requirements.txt
 ```
 python3 run.py
 ```
+## HOW IT WORKS
+```
+Create new account:-
+1. register new account
+2. check console get the confirmation link
+3. login
+4. user will be forced to create profile before accessing any features
+
+Forgot password:-
+1. click forgot password link
+2. check console get the reset link
+3. login with new password
+```
+
 ## Login details
 ```
 email: adm1n@hangouts
