@@ -55,10 +55,11 @@ li a {
 		   <div class="container-fluid">
 			   <div class="navbar-header">
 				   <a class="navbar-brand" href="/">
-				      <img alt="Hangouts" src="https://cdn.discordapp.com/attachments/352464623108096002/633928057681477642/hicon.png" width="30px" height="30px">
+				      <img src="https://cdn.discordapp.com/attachments/352464623108096002/633928057681477642/hicon.png" width="30" height="30" alt=""> 
 			      </a>
-			   </div>
+            </div>
 			   <ul class="nav navbar-nav">
+               {% if current_user.is_authenticated %}
 				   <li class="active"><a href="/dashboard">Dashboard<span class="sr-only">(current)</span></a></li>
 				   <li ><a href="/profile">Profile</a></li>
 				   <li><a href="/view-events">Events</a></li>
@@ -73,6 +74,7 @@ li a {
                <li><a href="/create-event"><span class="fa fa-plus"></span> New Event</a></li>
                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
+            {% endif %}
 		   </div>
 	   </nav>
    </div>
