@@ -8,3 +8,5 @@ Werkzeug
 wtforms
 google-api-python-client
 google-auth-oauthlib
+flask_mail
+itsdangerous

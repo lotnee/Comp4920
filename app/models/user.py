@@ -4,9 +4,10 @@ from flask_login import UserMixin
 
 class User(UserMixin, object):
 
-	def __init__(self, email, password):
+	def __init__(self, email, password, confirmed):
 		self.email = email
 		self.password = password
+		self.confirmed = confirmed
 
 	def insert(self):
 		if not DB.find_one("User", {"email": self.email}):
@@ -15,7 +16,8 @@ class User(UserMixin, object):
 	def json(self):
 		return {
 			'email': self.email,
-			'password': self.password
+			'password': self.password,
+			'confirmed': self.confirmed
 		}
 
 	@staticmethod
@@ -38,4 +40,4 @@ class User(UserMixin, object):
 		user = DB.find_one("User", {"email": email})
 		if not user:
 			return None
-		return User(user['email'], user['password'])
+		return User(user['email'], user['password'], user['confirmed'])
