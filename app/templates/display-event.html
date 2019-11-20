@@ -24,13 +24,21 @@
            <li>{{dictionary_item['email']}}</li>
            {% endfor %}
        </ul>
-      <input type = "text" id = "myInput" onkeyup ="myFunction()" placeholder="Search for your friends">
+      <input type = "text" id = "myInput" onkeyup ="hi()" placeholder="Search for your friends">
       <ul id = "friends">
           <li><a href="/event-completed">asdasd</a></li>
        </ul>
    </div>
+   <script type="text/javascript" src="{{ url_for('static', filename='display-event.js') }}"></script>
+   <script>
+       function hi(){
+           var id = "{{event['_id']}}"
+           var friendlist = {{friends | safe}};
+           myFunction(friendlist,id)
+       }
+   </script>
 
-<script>
+<!-- <script>
     function myFunction() {
         var id = "{{event['_id']}}"
         var friendlist = {{friends | safe}};
@@ -50,7 +58,7 @@
         }
 
     }
-</script>
+</script> -->
 
 </body>
 
