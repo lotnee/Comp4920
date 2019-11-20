@@ -15,18 +15,31 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     padding:10px;
 }
+
+a.delete {
+   background-color: #1E90FF;
+   color: white;
+   cursor: pointer;
+   width: auto;
+   border-radius: 14px;
+   padding: 8px 12px;
+   margin: 8px 0;
+   float: right;
+   margin-top:-50px;
+   font-size: 10px;
+}
 </style>
 
 <body>
     <div class="container">
         <h1 style="text-align:center;">Events</h1></br>
         {%for dictionary_item in events%}
-        <h4><a href="{{ url_for('display_event', name = dictionary_item['name']) }}">{{dictionary_item['name']}}</a></h4>
+        <h4><a href="{{ url_for('display_event', id = dictionary_item['_id']) }}">{{dictionary_item['name']}}</a></h4>
         <hr class="w3-clear">
            <p><b>Event Description</b></p>
            <p>{{dictionary_item['description']}}</p>
            <br>
-           <p><a href="{{url_for('delete_event', id = dictionary_item['_id'])}}">Delete Event</a></p>
+           <a href="{{url_for('delete_event', id = dictionary_item['_id'])}}" class="delete">Delete Event</a></p>
         {% endfor %}
     </div>
 {% endblock %}
