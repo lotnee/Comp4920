@@ -1,0 +1,32 @@
+<h1>Create Poll</h1>
+    <form action="{{url_for('create_poll')}}" method="post">
+    {{ form.hidden_tag() }}
+          {% with messages = get_flashed_messages() %}
+             {% if messages %}
+                {% for message in messages %}
+                   <p style="color:red;">{{ message }}</p>
+                {% endfor %}
+             {% endif %}
+          {% endwith %}
+     <p>
+         {{ form.name.label }}<br>
+         {{ form.name(size=64) }}
+     </p>
+     <p>
+         {{ form.description.label }}<br>
+         {{ form.description }}
+     </p>
+     <p>
+         {{ form.option1.label }}<br>
+         {{ form.option1(class="datepicker")}}
+     </p>
+     <p>
+         {{ form.option2.label }}<br>
+         {{ form.option2(class="datepicker")}}
+     </p>
+     <p>
+         {{ form.option3.label }}<br>
+         {{ form.option3(class="datepicker")}}
+     </p>
+     <p>{{ form.submit() }}</p>
+    </form> 

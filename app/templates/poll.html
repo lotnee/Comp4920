@@ -1,0 +1,17 @@
+<h1>Poll List</h1>
+{% with messages = get_flashed_messages() %}
+ {% if messages %}
+    {% for message in messages %}
+       <p style="color:red;">{{ message }}</p>
+    {% endfor %}
+ {% endif %}
+{% endwith %}
+
+{% for poll in polls %}
+	<p><b>Poll name:</b> {{poll.name}}</p>
+    <p><b>Poll description:</b> {{poll.description}} </p>
+    <input type="checkbox" name="date1" value="{{poll.option1}}">
+    <input type="checkbox" name="date2" value="{{poll.option2}}">
+    <input type="checkbox" name="date3" value="{{poll.option3}}">
+    <a href="{{url_for('update_poll', poll=poll._id)}}">vote</a>
+{% endfor %}
