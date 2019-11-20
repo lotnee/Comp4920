@@ -1,11 +1,20 @@
 from app import app
 from app.database import DB
-from app.models.poll import Poll
+from app.models.poll import Poll, Option
 from app.controllers.forms import PollForm
-from flask import render_template, flash, redirect, url_for
+from app.utility.utility import get_index_1key
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
 from datetime import datetime
 from bson.objectid import ObjectId
+import ast
+
+def polls_in_profile(pollList):
+	polls = []
+	for poll in pollList:
+		toAdd = DB.find_one(collection='Poll', query={'_id': poll})
+		polls.append(toAdd)
+	return polls
 
 @app.route('/create-poll', methods=['GET', 'POST'])
 @login_required
@@ -21,9 +30,13 @@ def create_poll():
 		option3 = datetime((form.option3.data).year, (form.option3.data).month, (form.option3.data).day)
 		form.name.data = form.name.data.strip()
 		form.description.data = form.description.data.strip()
-		poll_obj = Poll(creator=ObjectId(user['_id']), name=form.name.data, description=form.description.data, options=[option1, option2, option3], voters=[])
+		# option_obj1 = Option(option1, [])
+		# option_obj2 = Option(option2, [])
+		# option_obj3 = Option(option3, [])
+		poll_obj = Poll(creator=ObjectId(user['_id']), name=form.name.data, description=form.description.data, options=[{'date':option1}, {'date':option2}, {'date':option3}], voters=[])
 		poll_id = poll_obj.insert()
-		DB.update_one(collection = "Profile", filter = {"email": current_user.email}, data={"$push": {"polls": ObjectId(poll_id)}})
+		# DB.update_one(collection='Poll', filter={'_id': poll_id}, data={'$push': {'options': [{'date':option1}, {'date':option2}, {'date':option3}]}})
+		# DB.update_one(collection = "Profile", filter = {"email": current_user.email}, data={"$push": {"polls": ObjectId(poll_id)}})
 		return redirect(url_for('add_voter', poll=poll_id))
 	return render_template('create-poll.html', title = 'create a poll', form=form)
 
@@ -57,6 +70,7 @@ def invite_voter(poll, email):
 		flash(f'Already added {email} as voter!')
 		return redirect(url_for('add_voter', poll=poll))
 	DB.update_one(collection="Poll", filter={'_id': ObjectId(poll)}, data={'$push':{'voters': ObjectId(friend['_id'])}})
+	DB.update_one(collection="Profile", filter={'_id': ObjectId(friend['_id'])}, data={'$push':{'polls': ObjectId(poll)}})
 	flash(f'Successfully added {email} as voter!')
 	return redirect(url_for('add_voter', poll=poll))
 
@@ -67,14 +81,12 @@ def polls():
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
-	pollList = DB.find_one(collection='Profile', query={'email': current_user.email, 'polls': {'$ne': []}})
-	if pollList is None:
-		return render_template('poll.html',title="View Polls")
-	return render_template('poll.html',title="View Polls", polls=pollList['polls'])
+	pollList = polls_in_profile(user['polls'])
+	return render_template('poll.html',title="View Polls", polls=pollList, user=user)
 
-@app.route('/update-poll/<poll>')
+@app.route('/update-vote/<poll>', methods=['GET', 'POST'])
 @login_required
-def update_poll(poll):
+def update_vote(poll):
 	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
@@ -83,11 +95,40 @@ def update_poll(poll):
 	if toUpdate is None:
 		flash('Please contact admin, DB error!')
 		return redirect(url_for('polls'))
-	if request.form.getlist('date1'):
-		print(type(request.form.getlist('date1')))
-	if request.form.getlist('date2'):
-		print(type(request.form.getlist('date2')))
-	if request.form.getlist('date3'):
-		print(type(request.form.getlist('date3')))
+	options = request.form.getlist('date')
+	# print(options)
+	# counter = 0 
+	if request.form.get('add') == 'add':
+		for dates in options:
+			dates = dates.split(' ')[0]
+			dt = datetime.strptime(dates,'%Y-%m-%d')
+			# print(dt)
+			# test = DB.find_one(collection='Poll', query={'options': dt})
+			# print(test)
+			index = get_index_1key(arrayList=toUpdate, key='options', query=dt)
+			print(index)
+			index = "options." + str(index) + ".voters"
+			check = DB.find_one(collection='Poll', query={index: user['firstName']})
+			if check is not None:
+				flash(f'You Already voted for {dt}')
+				continue
+			DB.update_one(collection='Poll', filter={'_id': ObjectId(poll)}, data={'$push': {index: user['firstName']}})
+			
+	elif request.form.get('del') == 'del':
+		for dates in options:
+			dates = dates.split(' ')[0]
+			dt = datetime.strptime(dates,'%Y-%m-%d')
+			# print(dt)
+			# test = DB.find_one(collection='Poll', query={'options': dt})
+			# print(test)
+			index = get_index_1key(arrayList=toUpdate, key='options', query=dt)
+			print(index)
+			index = "options." + str(index) + ".voters"
+			check = DB.find_one(collection='Poll', query={index: user['firstName']})
+			if check is None:
+				flash(f'You haven\'t voted for {dt}')
+				continue
+			DB.update_one(collection='Poll', filter={'_id': ObjectId(poll)}, data={'$pull': {index: user['firstName']}})
+			
 	return redirect(url_for('polls'))
-
+		

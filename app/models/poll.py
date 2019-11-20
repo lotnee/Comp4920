@@ -10,7 +10,7 @@ class Poll(object):
 		self.voters = voters
 
 	def insert(self):
-		if not DB.find_one("Profile", {"_id": self.creator}):
+		if not DB.find_one("Profile", {"polls._id": self.creator}):
 			poll = DB.insert(collection='Poll', data=self.json())
 			DB.update_one(collection='Profile', filter={'_id': self.creator}, data={'$push': {'polls': poll.inserted_id}})
 			return poll.inserted_id
@@ -23,3 +23,8 @@ class Poll(object):
 			'options': self.options,
 			'voters': self.voters
 		}
+
+class Option(object):
+	def __init__(self, option, voters):
+		self.option = option
+		self.voters = voters

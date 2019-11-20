@@ -6,7 +6,7 @@ from app.controllers.forms import ProfileForm, photos
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 # from werkzeug.utils import secure_filename
-from app.utility.utility import get_list, get_cursor, get_index
+from app.utility.utility import get_list, get_cursor
 import os
 from app.controllers.quickstart import main
 
