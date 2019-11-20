@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head> 
@@ -16,8 +18,10 @@ body {
 .form-signin {
    max-width: 500px;
    padding: 15px 35px 45px;
-   margin: 0 auto;
-   background-color: white;
+   margin: auto;
+   margin-top: 100px;
+   background-color: #fafafa;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 button {
@@ -39,7 +43,6 @@ button {
    padding: 10px 15px;
    margin: 8px 0;
    float: right;
-}
 }
 
 button:hover{
@@ -103,8 +106,10 @@ img.avatar {
       </form>
          <p class="box">Don't have an account?
          <button class="button" onclick="window.location.href = '/register';">Register now</button></p>
-         <a class ="box2" style="color: blue" href="/reset-password"> forget password?</a>
+         <a class ="box2" style="color: blue" href="/reset-password"> Forgot your password?</a>
 
    </div>
 </body>
+
+{% endblock %}
 </html>

@@ -1,7 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
-<head> 
    <!-- Bootstrap Imports -->
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
@@ -16,8 +17,11 @@ body {
 .form-reg {
    max-width: 500px;
    padding: 15px 35px 45px;
-   margin: 0 auto;
-   background-color: white;
+   margin: auto;
+   background-color: #fafafa;
+   margin-top: 80px;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+   margin-top: 80px;
 }
 
 .button-reg {
@@ -28,16 +32,7 @@ body {
    border: none;
    padding: 10px 15px;
    margin: 8px 0;
-}
-
-.button {
-   background-color: #778899;
-   color: white;
-   cursor: pointer;
-   width: 100%;
-   border: none;
-   padding: 10px 15px;
-   margin: 8px 0;
+   border-radius: 14px;
 }
 
 button:hover{
@@ -85,11 +80,11 @@ span.register {
                {% endfor %}
             {% endif %}
          {% endwith %}
-        <input type="text" class="form-control" name="email" placeholder="Email" required=""autofocus=""/></br>
+        <input type="email" class="form-control" name="email" placeholder="Email" required=""autofocus=""/></br>
         <input type="password" class="form-control" name="password" placeholder="Password" required/></br>
          <button class="button-reg" type="submit">Register Now</button>
       </form>
-        <button class="button" onclick="window.location.href = '/login';">Return</button>
    </div>
 </body>
+{% endblock %}
 </html>
