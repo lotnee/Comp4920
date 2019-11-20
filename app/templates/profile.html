@@ -5,37 +5,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="../static/calendar.css">
+  <link rel="stylesheet" href="../static/editor.css">
+  <script src="../static/editor.js"></script>
+  <script src="../static/calendar.js"></script>
 </head>
 <!-- CSS -->
 <style>
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 35%;
+  margin-left: -2%;
+  text-align: center;
+  float: center;
+  margin-top: 80px;
+  padding: 20px;
+  background-color: #FAFAFA;
+}
+.cal {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   max-width: 80%;
-  margin: auto;
+  margin-left: 35%;
   text-align: center;
   float: center;
-  margin-top: 80px;
-  padding: 20px;
-  background-color: #FAFAFA;
-}
-.card2 {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 25%;
-  margin:auto;
-  margin-left: 10%;
-  text-align: center;
-  float: center;
-  margin-top: 80px;
-  padding: 20px;
-  background-color: #FAFAFA;
-}
-.card3 {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 53%;
-  margin-left: 37%;
-  text-align: center;
-  float: center;
-  margin-top:-60px;
+  margin-top:-372px;
   padding: 20px;
   background-color: #FAFAFA;
 }
@@ -43,7 +36,7 @@
 .picture {
   margin-top: 20px;
   border-radius: 50%;
-  width: 200px;
+  width: 100px;
 }
 
 button {
@@ -72,7 +65,9 @@ button:hover, a:hover {
   opacity: 0.7;
 }
 
-
+img {
+      max-width: 100%
+    }
 </style>
 
 <!-- Body -->
@@ -84,51 +79,54 @@ button:hover, a:hover {
          <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile</button>
          {% endif %} 
          <hr>
+         <div style="text-align: center">
+            {{profile.descriptions}}
+         </div>
    </div>
-
-   <div class="card2" style ="margin-top:20px;"> 
-   {{profile.descriptions}}
-          
-     </div>
-        <div class="card3"> 
-   
-    </div>
-  <div id="calendar" style="max-width: 800px;margin: 2rem auto;padding: 0 5px"></div>
-  <pre id="debug"></pre>
-  <div style="text-align: center">
-  <p><a href="https://github.com/jacoduplessis/calendar/blob/master/demo/basic.html">source code</a></p>
-  </div>
-  <link rel="stylesheet" href="../dist/calendar.css">
-  <script src="../dist/calendar.js"></script>
-  <script>
-    var calendar = new Calendar({
-      target: document.querySelector("#calendar"),
-      data: {
-        escape: false,
-        view: 'calendar',
-        year: 2017,
-        month: 9,
-      }
-    })
-    calendar.set({message: 'loading...'})
-    fetch("entries.json").then(r => r.json()).then(data => {
-      var entries = calendar.get('entries')
-      entries = entries.concat(data.entries)
-      calendar.set({entries: entries, message: ''})
-    })
-
-    function debug() {
-        document.querySelector('#debug').textContent = JSON.stringify(calendar.get(), null, 4)
-      }
-  </script>
-  <style>
-    img {
-      max-width: 100%
-    }
-  </style>
-
+        <div class="cal"> 
+            <body style="max-width: 850px;margin: 2rem auto;padding: 0 5px">
+                <div id="editor"></div>
+                <div id="calendar"></div>
+                <!-- <div>
+                  <p>Try executing the following your browser console:</p>
+              
+                  <p>
+                    <pre>setTimeout(function() { calendar.set({message: ''})}, 3000)<br>calendar.set({message: 'loading...'})</pre>
+                  </p>
+                  <p>
+                    <pre>calendar.set({banner: 'Something went wrong and data could not be loaded.'})</pre>
+                  </p>
+                </div> -->
+                <!-- <pre id="debug" style="overflow-x:hidden"></pre>
+                <div style="text-align: center">
+                <p><a href="https://github.com/jacoduplessis/calendar/blob/master/demo/editor.html">source code</a></p> -->
+                </div>
+                <script>
+                  var calendar = new Calendar({
+                    target: document.querySelector("#calendar"),
+                    data: {
+                      showNew: true,
+                      escape: false,
+                      year: 2019,
+                      month: 10,
+                    }
+                  })
+                  fetch("entries.json").then(r => r.json()).then(data => {
+                    var entries = calendar.get('entries')
+                    entries = entries.concat(data.entries)
+                    calendar.set({ entries: entries, message: '' })
+                  })
+                  var editor = new Editor({
+                    target: document.querySelector("#editor"),
+                    data: {
+                      calendar: calendar
+                    }
+                  })
+              
+                  function debug() {
+                    document.querySelector('#debug').textContent = JSON.stringify(calendar.get(), null, 4)
+                  }
+                </script>
 </body>
-
-
 {% endblock %}
 </html>
