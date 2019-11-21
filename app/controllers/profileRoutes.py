@@ -114,18 +114,21 @@ def profile():
 		return redirect(url_for('edit_profile'))
 	# creates a json file for calender
 	print(list(user['events']))
-	path = os.path.join(absolute_path, 'static/css')
-	print(path)
+	# path = os.path.join(absolute_path, 'static/css')
+	# print(path)
 	if list(user['events']) != []:
 		eventList = []
 		for events in user['events']:
 			events = DB.find_one(collection='Events', query={'_id': events})
-			print(events)
-			eventList.append(events)
-
-		print(eventList)
-		filename = path + '/' + current_user.email + '.json'
-		print(filename)
-		with open(filename, "w+") as f:
-			f.write(dumps(eventList))
+			event_dict = {'title': events['name'], 'start': events['start'].strftime("%Y-%m-%d"), 'end': events['end'].strftime("%Y-%m-%d")}
+			# print(event_dict)
+			eventList.append(event_dict)
+		# print(eventList)
+		# filename = path + '/' + current_user.email + '.json'
+		# print(filename)
+		# with open(filename, "w+") as f:
+		# 	f.write(dumps(eventList))
+		# eventList = dumps(eventList)
+		# print(eventList)
+		return render_template('profile.html', profile=user, events=eventList)
 	return render_template('profile.html', profile=user)

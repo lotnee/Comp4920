@@ -10,6 +10,9 @@
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
   <script src = "../static/bootstrapcalendar.js"></script>
   <script>
+    // USER"S EVENT
+    var eventList = JSON.parse('{{events|tojson}}');
+    // alert(eventList[0].title);
     $(document).ready(function() {
       var date = new Date();
       var d = date.getDate();
@@ -61,85 +64,48 @@
           
           day: 'MMMM yyyy' // Tuesday, Sep 8, 2009
         },
-        allDaySlot: false,
-        selectHelper: true,
-        select: function(start, end, allDay) {
-          var title = prompt('Event Title:');
-          if (title) {
-            calendar.fullCalendar('renderEvent', {
-                title: title,
-                start: start,
-                end: end,
-                allDay: allDay
-              },
-              true // make the event "stick"
-            );
-          }
-          calendar.fullCalendar('unselect');
-        },
-        droppable: true, // this allows things to be dropped onto the calendar !!!
-        drop: function(date, allDay) { // this function is called when something is dropped
-          // retrieve the dropped element's stored Event Object
-          var originalEventObject = $(this).data('eventObject');
-          // we need to copy it, so that multiple events don't have a reference to the same object
-          var copiedEventObject = $.extend({}, originalEventObject);
-          // assign it the date that was reported
-          copiedEventObject.start = date;
-          copiedEventObject.allDay = allDay;
-          // render the event on the calendar
-          // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-          $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-          // is the "remove after drop" checkbox checked?
-          if ($('#drop-remove').is(':checked')) {
-            // if so, remove the element from the "Draggable Events" list
-            $(this).remove();
-          }
-        },
-        events: [{
-            title: 'All Day Event',
-            start: new Date(y, m, 1)
-          },
-          {
-            id: 999,
-            title: 'Repeating Event',
-            start: new Date(y, m, d - 3, 16, 0),
-            allDay: false,
-            className: 'info'
-          },
-          {
-            id: 999,
-            title: 'Repeating Event',
-            start: new Date(y, m, d + 4, 16, 0),
-            allDay: false,
-            className: 'info'
-          },
-          {
-            title: 'Meeting',
-            start: new Date(y, m, d, 10, 30),
-            allDay: false,
-            className: 'important'
-          },
-          {
-            title: 'Lunch',
-            start: new Date(y, m, d, 12, 0),
-            end: new Date(y, m, d, 14, 0),
-            allDay: false,
-            className: 'important'
-          },
-          {
-            title: 'Birthday Party',
-            start: new Date(y, m, d + 1, 19, 0),
-            end: new Date(y, m, d + 1, 22, 30),
-            allDay: false,
-          },
-          {
-            title: 'Click for Google',
-            start: new Date(y, m, 28),
-            end: new Date(y, m, 29),
-            url: 'https://ccp.cloudaccess.net/aff.php?aff=5188',
-            className: 'success'
-          }
-        ],
+        // allDaySlot: false,
+        // selectHelper: true,
+        // select: function(start, end, allDay) {
+        //   var title = prompt('Event Title:');
+        //   if (title) {
+        //     calendar.fullCalendar('renderEvent', {
+        //         title: title,
+        //         start: start,
+        //         end: end,
+        //         allDay: allDay
+        //       },
+        //       true // make the event "stick"
+        //     );
+        //   }
+        //   calendar.fullCalendar('unselect');
+        // },
+        // droppable: true, // this allows things to be dropped onto the calendar !!!
+        // drop: function(date, allDay) { // this function is called when something is dropped
+        //   // retrieve the dropped element's stored Event Object
+        //   var originalEventObject = $(this).data('eventObject');
+        //   // we need to copy it, so that multiple events don't have a reference to the same object
+        //   var copiedEventObject = $.extend({}, originalEventObject);
+        //   // assign it the date that was reported
+        //   copiedEventObject.start = date;
+        //   copiedEventObject.allDay = allDay;
+        //   // render the event on the calendar
+        //   // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+        //   $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+        //   // is the "remove after drop" checkbox checked?
+        //   if ($('#drop-remove').is(':checked')) {
+        //     // if so, remove the element from the "Draggable Events" list
+        //     $(this).remove();
+        //   }
+        // },
+        // FINALLY WOOOOTS
+        events: eventList,
+        // events: 
+        // [{
+        //     'title': 'All Event',
+        //     'start': '2019-11-1'
+        //   }, eventList,
+        // ],
       });
     });
   </script>
