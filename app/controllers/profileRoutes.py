@@ -8,6 +8,7 @@ from flask_login import current_user, login_required
 # from werkzeug.utils import secure_filename
 from app.utility.utility import get_list, get_cursor
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 import os
 
 def profileEvents(eventLists):
@@ -105,10 +106,10 @@ def edit_profile():
 
 	return render_template('edit-profile.html', title='Edit profile', form=form, profile=profile)
 
-@app.route('/profile')
+@app.route('/profile/<profile_id>')
 @login_required
-def profile():
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+def profile(profile_id):
+	user = DB.find_one(collection="Profile", query={"_id": ObjectId(profile_id)})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -132,3 +133,9 @@ def profile():
 		# print(eventList)
 		return render_template('profile.html', profile=user, events=eventList)
 	return render_template('profile.html', profile=user, events={})
+
+@app.route('/profile')
+@login_required
+def current_profile():
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	return redirect(url_for('profile',profile_id=str(user['_id'])))
