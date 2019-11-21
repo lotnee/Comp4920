@@ -14,10 +14,52 @@
 </style>
 <body>
    <div class="container">
-   
+       <h1>{{event['name'] }}</h1>
+       <br>
+       <h2>Description</h2>
+       <p>{{event['description']}}</p>
+       <h2>Invited</h2>
+       <ul>
+           {% for dictionary_item in event['invitees'] %}
+           <li>{{dictionary_item['email']}}</li>
+           {% endfor %}
+       </ul>
+      <input type = "text" id = "myInput" onkeyup ="hi()" placeholder="Search for your friends">
+      <ul id = "friends">
+          <li><a href="/event-completed">asdasd</a></li>
+       </ul>
    </div>
+   <script type="text/javascript" src="{{ url_for('static', filename='display-event.js') }}"></script>
+   <script>
+       function hi(){
+           var id = "{{event['_id']}}"
+           var friendlist = {{friends | safe}};
+           myFunction(friendlist,id)
+       }
+   </script>
 
+<!-- <script>
+    function myFunction() {
+        var id = "{{event['_id']}}"
+        var friendlist = {{friends | safe}};
+        var name = {{event['name'] | tojson}};
+        input = document.getElementById("myInput")
+        filter = input.value.toUpperCase();
+        var regex=/^[a-zA-Z]+$/;
+        document.getElementById("friends").innerHTML = "";
+        for (i = 0; i < friendlist.length; i++){
+            if (friendlist[i]['firstName'].toUpperCase().indexOf(filter) > -1 && filter.match(regex)){
+                var node = document.createElement("LI");
+                var link = "<a href = \"/add-people/" + friendlist[i]['email']+ "/" +id + "\">" + friendlist[i]['firstName'] + " " + friendlist[i]['lastName'] + "</a>"
+                console.log(link);
+                node.innerHTML = link;
+                document.getElementById("friends").appendChild(node);
+            }
+        }
 
+    }
+</script> -->
 
 </body>
+
 {% endblock %}

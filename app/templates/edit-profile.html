@@ -83,7 +83,6 @@ select[name="Gender"] {
              {% endif %}
           {% endwith %}
           {% if profile.firstName != null and  profile.lastName != null and profile.descriptions != null %}
-          {{profile.descriptions}}
           <input type="text" class="form-control" name="firstName" value={{profile.firstName}} required=""autofocus=""></input></br>
           <input type="text" class="form-control" name="lastName" value={{profile.lastName}} required=""autofocus=""/></br>
           <input type="text" class="form-control" name="descriptions" value="{{profile.descriptions}}" required/></br>

@@ -8,6 +8,8 @@ from flask_login import current_user, login_required
 from app.utility.utility import get_list, get_cursor
 from datetime import datetime
 from bson.objectid import ObjectId
+import json
+
 
 def profileEvents(eventLists):
 	retList = []
@@ -26,6 +28,7 @@ def create_events():
 	form = EventForm()
 	# if form.is_submitted():
 	if form.validate_on_submit():
+		me = DB.find_one(collection="Profile", query={"email": current_user.email})
 		print(type(form.start.data))
 		date1 = datetime((form.start.data).year,(form.start.data).month,(form.start.data).day)
 		date2 = datetime((form.end.data).year,(form.end.data).month,(form.end.data).day)
@@ -35,8 +38,8 @@ def create_events():
 		# print(f'Description :{form.description.data}')
 		# print(f'Cover Photo :{form.pictureDir.data}')
 		event = Event(name = form.name.data, description = form.description.data,
-					  start = date1, end =date2, host = '{} {}'.format(user['firstName'], user['lastName']),
-					  invitees=[current_user.email])
+					  start = date1, end =date2, host = '{} {}'.format(me['firstName'], me['lastName']),
+					  invitees=[])
 		# print(event)
 		event.insert(current_user.email)
 		return redirect(url_for('event_completed'))
@@ -52,6 +55,7 @@ def view_events():
 	if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
 		eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
 		allEvents = profileEvents(eventList[0]['events']) #FIXME doesn't seem right
+		#what doesn't seem right?
 		return render_template('events.html', events = allEvents, title='View Events')
 	return render_template('events.html',title="View Events")
 
@@ -60,11 +64,17 @@ def view_events():
 def event_completed():
 	return render_template('event-completed.html',title="Event Creation Completed")
 
-@app.route('/view-events/<path:name>')
+@app.route('/view-events/<path:id>')
 @login_required
-def display_event(name):
+def display_event(id):
 	#get the event name or more so the ID
-	return render_template('display-event.html', title=name)
+	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
+	# gets all the friends of the user
+	retDictionary = DB.find_one(collection = "Profile", query = {"email":current_user.email})
+	friends = retDictionary['friends']
+	# remember to filter out only active friends, no pending but do it later
+	print(friends)
+	return render_template('display-event.html', event = eventDetails, friends = json.dumps(friends))
 
 @app.route('/delete-event/<string:id>')
 @login_required
@@ -83,3 +93,12 @@ def delete_event(id):
 	#delete the actual event from the database
 	DB.remove(collection = "Events", condition = {"_id": ObjectId(id)})
 	return "hi"
+
+@app.route('/add-people/<email>/<id>')
+@login_required
+def addPeople(email = None,id = None):
+	#Add People To the first ( only friends i guess)
+	# need to get the users friends lel
+	print("hi")
+
+	return redirect(url_for("display_event", id = id))

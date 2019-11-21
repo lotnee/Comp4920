@@ -131,4 +131,4 @@ def profile():
 		# eventList = dumps(eventList)
 		# print(eventList)
 		return render_template('profile.html', profile=user, events=eventList)
-	return render_template('profile.html', profile=user)
+	return render_template('profile.html', profile=user, events={})

@@ -34,7 +34,7 @@ a.delete {
     <div class="container">
         <h1 style="text-align:center;">Events</h1></br>
         {%for dictionary_item in events%}
-        <h4><a href="{{ url_for('display_event', name = dictionary_item['name']) }}">{{dictionary_item['name']}}</a></h4>
+        <h4><a href="{{ url_for('display_event', id = dictionary_item['_id']) }}">{{dictionary_item['name']}}</a></h4>
         <hr class="w3-clear">
            <p><b>Event Description</b></p>
            <p>{{dictionary_item['description']}}</p>
