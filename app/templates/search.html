@@ -21,11 +21,13 @@
               <p><b>Email:</b> {{user.email}}</p>
               <p><b>Name:</b> {{user.firstName}} {{user.lastName}}</p>
             </div>
+            <a href="{{url_for('profile', profile_id=user._id)}}">
               <img src="static/images/profile/{{user.pictureDir}}" class="dp">
-              <a href="{{url_for('send_request', email=user.email)}}" class="reqbutton">Send Request</a>
-              <a href="/" class="viewbutton">View Profile</a>
-              <br/>
-              <br/>
+            </a>
+            <a href="{{url_for('send_request', email=user.email)}}" class="reqbutton">Send Request</a>
+            <a href="{{url_for('profile', profile_id=user._id)}}" class="viewbutton">View Profile</a>
+            <br/>
+            <br/>
             {% else %}
             {% endif %}
         {% endfor %}
@@ -40,8 +42,11 @@
             <p><b>Name:</b> {{event.name}}</p>
             <p><b>Host:</b> {{event.host}}</p>
           </div>
-          <img src="static/images/event/{{event.pictureDir}}" class="dp">
-          <a href="/" class="viewbutton">View Event</a>
+
+          <a href="{{url_for('display_event', id=event._id)}}">
+            <img src="static/images/event/{{event.pictureDir}}" class="dp">
+          </a>
+          <a href="{{url_for('display_event', id=event._id)}} " class="viewbutton">View Event</a>
           <br/>
           <br/>
         {% endfor %}
