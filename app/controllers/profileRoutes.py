@@ -3,13 +3,23 @@ from app.database import DB
 from app.models.profile import Profile
 from app.models.friend import Friend
 from app.controllers.forms import ProfileForm, photos
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
 # from werkzeug.utils import secure_filename
 from app.utility.utility import get_list, get_cursor
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 import os
+import datetime
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import Flow
+
+SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+
+flow = Flow.from_client_secrets_file(
+	'credentials.json',
+	scopes=SCOPES,
+	redirect_uri='http://localhost:8085/gcalendar')
 
 def profileEvents(eventLists):
 	retList = []
@@ -140,3 +150,25 @@ def profile(profile_id):
 def current_profile():
 	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	return redirect(url_for('profile',profile_id=str(user['_id'])))
+
+@app.route('/gcalendar_consent')
+def gcalendar_consent():
+	auth_url, _ = flow.authorization_url(prompt='consent',
+	access_type='offline')
+	return redirect(auth_url)
+
+@app.route('/gcalendar')
+def gcalendar():
+	_ = flow.fetch_token(code=request.args['code'])
+	creds = flow.credentials
+
+	service = build('calendar', 'v3', credentials=creds)
+
+	# Call the Calendar API
+	now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+	print('Getting the upcoming 10 events')
+	events_result = service.events().list(calendarId='primary', timeMin=now,
+					maxResults=10, singleEvents=True,
+					orderBy='startTime').execute()
+	events = events_result.get('items', [])
+	return str(events)
