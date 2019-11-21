@@ -129,7 +129,7 @@ def delete_event(id):
 		DB.update_one(collection = "Profile", filter = {"email":profile['email']}, data = {"$pull": {"events" : ObjectId(id)}})
 	#delete the actual event from the database
 	DB.remove(collection = "Events", condition = {"_id": ObjectId(id)})
-	return "hi"
+	return redirect(url_for("view_events"))
 
 @app.route('/add-people/<email>/<id>')
 @login_required
