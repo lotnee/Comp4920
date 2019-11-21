@@ -29,34 +29,43 @@ def create_poll():
 		time1 = form.option1t.data[0].split(':')
 		if form.option1t.data[1] == 'PM': 
 			time1[0] = int(time1[0]) + 12
+			if time1[0] == 24:
+				time1[0] = 0
 		time1 = time(int(time1[0]), int(time1[1]))
 
 		form.option2t.data = form.option2t.data.split(' ')
 		time2 = form.option2t.data[0].split(':')
 		if form.option2t.data[1] == 'PM': 
 			time2[0] = int(time2[0]) + 12
+			if time2[0] == 24:
+				time2[0] = 0
 		time2 = time(int(time2[0]), int(time2[1]))
 
 		form.option3t.data = form.option3t.data.split(' ')
 		time3 = form.option3t.data[0].split(':')
 		if form.option3t.data[1] == 'PM': 
 			time3[0] = int(time3[0]) + 12
+			if time3[0] == 24:
+				time3[0] = 0
 		time3 = time(int(time3[0]), int(time3[1]))
+
 		option1 = datetime((form.option1.data).year, (form.option1.data).month, (form.option1.data).day, time1.hour, time1.minute)
 		option2 = datetime((form.option2.data).year, (form.option2.data).month, (form.option2.data).day, time2.hour, time2.minute)
 		option3 = datetime((form.option3.data).year, (form.option3.data).month, (form.option3.data).day, time3.hour, time3.minute)
+		
+		# check date and time
+		if option1 < datetime.now() or option2 < datetime.now() or option3 < datetime.now():
+			flash('Options have to be today or later!')
+			return render_template('create-poll.html', title = 'create a poll', form=form)
+		elif option1 == option2 or option1 == option3 or option2 == option3:
+			flash('Options cannot be the same!')
+			return render_template('create-poll.html', title = 'create a poll', form=form)
+
 		form.name.data = form.name.data.strip()
 		form.description.data = form.description.data.strip()
-		# option_obj1 = Option(option1, [])
-		# option_obj2 = Option(option2, [])
-		# option_obj3 = Option(option3, [])
-		# print(option1)
-		# print(option2)
-		# print(option3)
+
 		poll_obj = Poll(creator=ObjectId(user['_id']), name=form.name.data, description=form.description.data, options=[{'date':option1}, {'date':option2}, {'date':option3}], voters=[])
 		poll_id = poll_obj.insert()
-		# DB.update_one(collection='Poll', filter={'_id': poll_id}, data={'$push': {'options': [{'date':option1}, {'date':option2}, {'date':option3}]}})
-		# DB.update_one(collection = "Profile", filter = {"email": current_user.email}, data={"$push": {"polls": ObjectId(poll_id)}})
 		return redirect(url_for('add_voter', poll=poll_id))
 	return render_template('create-poll.html', title = 'create a poll', form=form)
 
