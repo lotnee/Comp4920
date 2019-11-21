@@ -5,7 +5,7 @@ from app.controllers.forms import PollForm
 from app.utility.utility import get_index_1key
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
-from datetime import datetime
+from datetime import datetime, time
 from bson.objectid import ObjectId
 import ast
 
@@ -25,14 +25,34 @@ def create_poll():
 		return redirect(url_for('edit_profile'))
 	form = PollForm()
 	if form.validate_on_submit():
-		option1 = datetime((form.option1.data).year, (form.option1.data).month, (form.option1.data).day)
-		option2 = datetime((form.option2.data).year, (form.option2.data).month, (form.option2.data).day)
-		option3 = datetime((form.option3.data).year, (form.option3.data).month, (form.option3.data).day)
+		form.option1t.data = form.option1t.data.split(' ')
+		time1 = form.option1t.data[0].split(':')
+		if form.option1t.data[1] == 'PM': 
+			time1[0] = int(time1[0]) + 12
+		time1 = time(int(time1[0]), int(time1[1]))
+
+		form.option2t.data = form.option2t.data.split(' ')
+		time2 = form.option2t.data[0].split(':')
+		if form.option2t.data[1] == 'PM': 
+			time2[0] = int(time2[0]) + 12
+		time2 = time(int(time2[0]), int(time2[1]))
+
+		form.option3t.data = form.option3t.data.split(' ')
+		time3 = form.option3t.data[0].split(':')
+		if form.option3t.data[1] == 'PM': 
+			time3[0] = int(time3[0]) + 12
+		time3 = time(int(time3[0]), int(time3[1]))
+		option1 = datetime((form.option1.data).year, (form.option1.data).month, (form.option1.data).day, time1.hour, time1.minute)
+		option2 = datetime((form.option2.data).year, (form.option2.data).month, (form.option2.data).day, time2.hour, time2.minute)
+		option3 = datetime((form.option3.data).year, (form.option3.data).month, (form.option3.data).day, time3.hour, time3.minute)
 		form.name.data = form.name.data.strip()
 		form.description.data = form.description.data.strip()
 		# option_obj1 = Option(option1, [])
 		# option_obj2 = Option(option2, [])
 		# option_obj3 = Option(option3, [])
+		# print(option1)
+		# print(option2)
+		# print(option3)
 		poll_obj = Poll(creator=ObjectId(user['_id']), name=form.name.data, description=form.description.data, options=[{'date':option1}, {'date':option2}, {'date':option3}], voters=[])
 		poll_id = poll_obj.insert()
 		# DB.update_one(collection='Poll', filter={'_id': poll_id}, data={'$push': {'options': [{'date':option1}, {'date':option2}, {'date':option3}]}})
@@ -100,9 +120,9 @@ def update_vote(poll):
 	# counter = 0 
 	if request.form.get('add') == 'add':
 		for dates in options:
-			dates = dates.split(' ')[0]
-			dt = datetime.strptime(dates,'%Y-%m-%d')
-			# print(dt)
+			# dates = dates.split(' ')[0]
+			dt = datetime.strptime(dates, "%Y-%m-%d %H:%M:%S")
+			print(f'LOL {dates}')
 			# test = DB.find_one(collection='Poll', query={'options': dt})
 			# print(test)
 			index = get_index_1key(arrayList=toUpdate, key='options', query=dt)
@@ -113,11 +133,11 @@ def update_vote(poll):
 				flash(f'You Already voted for {dt}')
 				continue
 			DB.update_one(collection='Poll', filter={'_id': ObjectId(poll)}, data={'$push': {index: user['firstName']}})
-			
+			return redirect(url_for('polls'))
 	elif request.form.get('del') == 'del':
 		for dates in options:
-			dates = dates.split(' ')[0]
-			dt = datetime.strptime(dates,'%Y-%m-%d')
+			# dates = dates.split(' ')[0]
+			dt = datetime.strptime(dates, "%Y-%m-%d %H:%M:%S")
 			# print(dt)
 			# test = DB.find_one(collection='Poll', query={'options': dt})
 			# print(test)
@@ -129,6 +149,7 @@ def update_vote(poll):
 				flash(f'You haven\'t voted for {dt}')
 				continue
 			DB.update_one(collection='Poll', filter={'_id': ObjectId(poll)}, data={'$pull': {index: user['firstName']}})
-			
+			return redirect(url_for('polls'))
+	flash(f'Pick an option')	
 	return redirect(url_for('polls'))
 		

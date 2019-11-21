@@ -82,12 +82,12 @@ a.addVoter:hover {
 		<p style="text-align: center"> {{poll.description}} </p>
 		{% for dates in poll.options %}
 		<div style="display: none">{{dates.date}}</div>
-		<input type="radio" name="date" value="{{dates.date}}" style="border: 2px; background-color: white;"> {{dates.date}}
+		<input type="checkbox" name="date" value="{{dates.date}}" style="border: 2px; background-color: white;"> {{dates.date}}
 			{% if dates.votes %}
 			<p>Voters</p> 
 			{% endif %}
 			{% for votes in dates.voters %}
-			<br><i class="fa fa-chevron-circle-right" style="color:#1E90FF"></i> {{votes}}
+			<br> <i class="fa fa-chevron-circle-right" style="color:#1E90FF"></i> {{votes}}
 			{% endfor %}
 			<br>
 		
