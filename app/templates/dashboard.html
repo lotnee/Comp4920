@@ -4,194 +4,49 @@
 {% block content %}
 <!DOCTYPE html>
 <head>
-   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="../static/css/dashboard.css"> 
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
     <title>Dashboard</title>
 </head>
-
-<!-- CSS -->
-<style>
-body { font-size: 15px;}
-
-.picture {
-  margin-top: 20px;
-  border-radius: 50%;
-  width: 35%;
-}
-
-.heading {
-   text-align: center;
-   font-size: 20px;
-   font-weight: 700px;
-}
-
-.flexbox{
-	display:-webkit-box;
-	display:-moz-box;
-  display:-ms-flexbox;
-	display:-webkit-flex;
-	display:flex;
-}
-
-.container{
-	padding:15px;
-  width:100%;
-	color: black;
-	align-items:left;
-}
-.left-hold{
-	margin-right:auto;
-	align-items:center;
-}
-
-.left-hold span{margin-right:15px;}
-
-.left-hold span img{width:100px;}
-
-.dp {
-  width:50px;
-  height:50px;
-  margin-top:-5px;
-  margin-left: 0px;
-}
-
-.detail {
-  padding-top:10px;
-  margin-left: 0px;
-  text-align: left;
-}
-
-a.cancel {
-   background-color: grey;
-   color: white;
-   cursor: pointer;
-   width: auto;
-   /*border-radius: 14px;*/
-   padding: 8px 12px;
-   margin: 8px 0;
-   float: right;
-   margin-top:10px;
-   font-size: 10px;
-}
-
-a.accept {
-   background-color: silver;
-   color: white;
-   cursor: pointer;
-   width: auto;
-   /*border-radius: 14px;*/
-   padding: 8px 11px;
-   margin: 8px 0;
-   float: right;
-   margin-top:10px;
-   font-size: 10px;
-}
-</style>
-
-<!-- Body -->
-<body class="w3-theme-15">
-<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
-  <!-- The Grid -->
-  <div class="w3-row">
-    <!-- Left Column -->
-    <div class="w3-col m3">
-      <!-- Profile -->
-      <div class="w3-card w3-round w3-white">
-         <div class="w3-container">
-            <div class="container flexbox">
-               <div class="left-hold flexbox">
-                  <span><p class="w3-right"><img src="https://cdn.discordapp.com/attachments/352464623108096002/633889063283195904/hangouts2square.png" class="picture" alt="Avatar"></p></span>
-                  <span><h4><p>{{me.firstName}} {{me.lastName}}</p></h4></span>
-               </div>
-            </div>
-         </div>
-      </div>
-      <!-- Accordion -->
-      <div class="w3-card w3-round">
-        <div class="w3-white">
-          <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My Groups</button>
-          <div id="Demo1" class="w3-hide w3-container">
-            <p>Some text..</p>
-          </div>
-          <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> My Events</button>
-          <div id="Demo2" class="w3-hide w3-container">
-            <p>Some other text..</p>
-          </div>
-        </div>
-      </div>
-    <!-- End Left Column -->
-    </div>
-    <!-- Middle Column -->
-    <div class="w3-col m7">
-      <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-        {% with messages = get_flashed_messages() %}
-           {% if messages %}
-              {% for message in messages %}
-                 <p style="color:red;">{{ message }}</p>
-              {% endfor %}
-           {% endif %}
-        {% endwith %}
-        {%for dictionary_item in events%}
-        <h4><a href="{{ url_for('display_event', id = dictionary_item['_id']) }}">{{dictionary_item['name']}}</a></h4>
-        <hr class="w3-clear">
-           <p><b>Event Description</b></p>
-           <p>{{dictionary_item['description']}}</p>
-           <br>
-        {% endfor %}
-      </div>
-    <!-- End Middle Column -->
-    </div>
-    <!-- Right Column -->
-    <div class="w3-col m2">
-      <div class="w3-card w3-round w3-white w3-center">
-        <div class="w3-container">
-          {% if requests %}
-            <p>Incoming Friend Request</p>
-            {% for friend in requests %}
-              <div class="detail">
-                  <p>{{friend.firstName}} {{friend.lastName}}</p>
-
-                <img src="static/images/profile/{{friend.pictureDir}}" class="dp">
-              <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">
-              ✓</a>
-              <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">x</a>
-              </div>
-            {% endfor %}
-          {% endif %}
-        </div>
-      </div>
+<body>
+  <div class="container">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+              <p style="color:red;">{{ message }}</p>
+          {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% if events %}
+      {%for dictionary_item in events%}
+      <h4><a href="{{ url_for('display_event', id = dictionary_item['_id']) }}">{{dictionary_item['name']}}</a></h4>
+      <hr class="w3-clear">
+      <p><b>Event Description</b></p>
+      <p>{{dictionary_item['description']}}</p>
       <br>
-    <!-- End Right Column -->
-    </div>
-  <!-- End Grid -->
+      {% endfor %}
+    {% else %}
+      <h3 style="text-align: center">You are currently not involved in any events.</h3>
+      <h6 style="text-align: center"><button class="button-dash" onclick="window.location.href = '/create-event';">Create an event</button></h4>
+      <p>
+    {% endif %}
+    </br>
   </div>
-<!-- End Page Container -->
-</div>
-
-<script>
-// Accordion
-function myFunction(id) {
-  var x = document.getElementById(id);
-  if (x.className.indexOf("w3-show") == -1) {
-    x.className += " w3-show";
-    x.previousElementSibling.className += " w3-theme-d1";
-  } else {
-    x.className = x.className.replace("w3-show", "");
-    x.previousElementSibling.className =
-    x.previousElementSibling.className.replace(" w3-theme-d1", "");
-  }
-}
-
-// Used to toggle the menu on smaller screens when clicking on the menu button
-function openNav() {
-  var x = document.getElementById("navDemo");
-  if (x.className.indexOf("w3-show") == -1) {
-    x.className += " w3-show";
-  } else {
-    x.className = x.className.replace(" w3-show", "");
-  }
-}
-</script>
+  {% if requests %}
+  <div class="friendcard">
+    <p>Incoming Friend Requests</p>
+    {% for friend in requests %}
+      <div class="detail">
+        <img src="static/images/profile/{{friend.pictureDir}}" class="dp">  {{friend.firstName}} {{friend.lastName}}<br>
+        <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">
+        ✓</a>
+        <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">x</a></br>
+      </div>
+    </p>
+    {% endfor %}
+  </div>
+  {% endif %}
 </body>
 {% endblock %}
 </html>

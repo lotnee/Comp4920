@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
   <script src = "../static/css/bootstrapcalendar.js"></script>
   <script>
@@ -158,7 +159,7 @@ body {
       /*    float: right; */
       margin:auto;
       margin-left: 80px;
-      margin-top: -390px; 
+      margin-top: -70%; 
       width: 590px;
       background-color: #FFFFFF;
       border-radius: 6px;
@@ -733,8 +734,8 @@ table.fc-header {
 }
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 20%;
-  margin-left: 15%;
+  max-width: 18%;
+  margin-left: 20%;
   text-align: center;
   float: center;
   margin-top: 100px;
@@ -760,15 +761,15 @@ button {
    background-color: #1E90FF;
    color: white;
    cursor: pointer;
-   width: 100px;
+   width: auto;
    border: none;
    padding: 10px 15px;
    margin: 8px 0;
    border: none;
-   border-radius:14px;
+   border-radius: 14px;
 }
 button:hover{
-   opacity: 0.8;
+   opacity: 0.8s;
 }
 a {
   text-decoration: none;
@@ -787,9 +788,9 @@ img {
 <body>   
    <div class="card"> 
          <img src="static/images/profile/{{profile.pictureDir}}" class="picture"/>
-         <h2>{{profile.firstName}} {{profile.lastName}}'s Profile</h2>
+         <h2>{{profile.firstName}} {{profile.lastName}}</h2>
          {% if current_user.is_authenticated %}
-         <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile</button>
+         <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile <i class="fa fa-pencil"></i></button>
          {% endif %} 
          <hr>
          <div style="text-align: center">
