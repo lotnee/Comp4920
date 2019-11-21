@@ -62,7 +62,6 @@ a.addVoter:hover {
 	transition: 0.8s;
 	color: #778899;
 }
-<<<<<<< HEAD
 
 a.delPoll {
    background-color: transparent;
@@ -102,8 +101,6 @@ a.createEvent:hover {
   color: #778899;
 }
 
-=======
->>>>>>> master
 </style>
 <body>
 <div class="container">
@@ -142,7 +139,6 @@ a.createEvent:hover {
 			{% endif %}
 			</form>
 		{% endfor %}
-<<<<<<< HEAD
 		<br>
 		<button name="add" value="add" class="button-add" type="submit">Vote</button>
 		<button name="del" value="del" class="button-del" type="submit">Unvote</button>
@@ -153,16 +149,13 @@ a.createEvent:hover {
 		{% endif %}
 		</form>
 
-	{% endfor %}
-=======
 	{% else %}
 		<h4 style="text-align: center">You currently do not have any existing polls.</h4>
 		<h5 style="text-align: center"><button class="button-polls" onclick="window.location.href = '/create-poll';">Create a poll</button></h5>
 		<p>
 	{% endif %}
->>>>>>> master
 </div>
 {% endblock %}
 
 </body>
-</htm>
+</html>
