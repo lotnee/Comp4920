@@ -102,7 +102,8 @@ def edit_profile():
 							friend_pic = "friends." + str(j) + ".pictureDir"
 							DB.update_one(collection="Profile", filter={"email": toUpdateList[i]['email']}, data={"$set": {friend_pic: filename}})
 
-		return redirect(url_for('profile'))
+		profile = DB.find_one(collection="Profile", query={"email": user['email']})
+		return redirect(url_for('profile',profile_id=str(profile['_id'])))
 
 	return render_template('edit-profile.html', title='Edit profile', form=form, profile=profile)
 
