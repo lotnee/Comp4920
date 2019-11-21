@@ -6,7 +6,7 @@ from app.controllers.forms import photos,EventForm
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 from app.utility.utility import get_list, get_cursor
-from datetime import datetime
+from datetime import datetime, time
 from bson.objectid import ObjectId
 import json
 
@@ -29,18 +29,53 @@ def create_events():
 	# if form.is_submitted():
 	if form.validate_on_submit():
 		me = DB.find_one(collection="Profile", query={"email": current_user.email})
-		print(type(form.start.data))
-		date1 = datetime((form.start.data).year,(form.start.data).month,(form.start.data).day)
-		date2 = datetime((form.end.data).year,(form.end.data).month,(form.end.data).day)
-		# print("start date is " + date1.isoformat())
-		# print("end date is " + date2.isoformat())
-		# print(f'Name : {form.name.data}')
-		# print(f'Description :{form.description.data}')
-		# print(f'Cover Photo :{form.pictureDir.data}')
-		event = Event(name = form.name.data, description = form.description.data,
-					  start = date1, end =date2, host = '{} {}'.format(me['firstName'], me['lastName']),
-					  invitees=[])
-		# print(event)
+		form.starttime.data = form.starttime.data.split(' ')
+		time1 = form.starttime.data[0].split(':')
+		if form.starttime.data[1] == 'PM': 
+			time1[0] = int(time1[0]) + 12
+			if time1[0] == 24:
+				time1[0] = 0
+		time1 = time(int(time1[0]), int(time1[1]))
+
+		form.endtime.data = form.endtime.data.split(' ')
+		time2 = form.endtime.data[0].split(':')
+		if form.endtime.data[1] == 'PM': 
+			time2[0] = int(time2[0]) + 12
+			if time2[0] == 24:
+				time2[0] = 0
+		time2 = time(int(time2[0]), int(time2[1]))
+
+		date1 = datetime((form.start.data).year,(form.start.data).month,(form.start.data).day, time1.hour, time1.minute)
+		date2 = datetime((form.end.data).year,(form.end.data).month,(form.end.data).day, time2.hour, time2.minute)
+		# check date and time
+		if date1 < datetime.now():
+			flash('Start has to be today or later!')
+			return render_template('create-event.html', title = "Create Your Event", form = form)
+		elif date2 < date1:
+			flash('End cannot be earlier than Start!')
+			return render_template('create-event.html', title = "Create Your Event", form = form)
+		elif date1 == date2:
+			flash('Start and End cannot be the same!')
+			return render_template('create-event.html', title = "Create Your Event", form = form)
+		if form.pictureDir.data is None:
+			filename = "event.jpg"
+		else:
+			filename = photos.save(form.pictureDir.data, name= 'event/' + str(user['_id']) + '.')
+			filename = filename.split('/')[1]
+		# print(f'name: {form.name.data}')
+		# print(f'description: {form.description.data}')
+		# print(f'start: {date1}')
+		# print(f'end: {date2}')
+		# print(f'pictureDir: {filename}')
+		# print(f'type {form.eventType.data}')
+		if form.eventType.data == 'private':
+			event = Event(name = form.name.data, description = form.description.data,
+						  start = date1, end =date2, host = '{} {}'.format(me['firstName'], me['lastName']),
+						  invitees=[], pictureDir=filename, private=True)
+		else:
+			event = Event(name = form.name.data, description = form.description.data,
+						  start = date1, end =date2, host = '{} {}'.format(me['firstName'], me['lastName']),
+						  invitees=[], pictureDir=filename, private=False)
 		event.insert(current_user.email)
 		return redirect(url_for('event_completed'))
 	return render_template('create-event.html', title = "Create Your Event", form = form)

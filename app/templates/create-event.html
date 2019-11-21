@@ -89,18 +89,22 @@ select[name="eventType"] {
 		<h1>Create an event</h1>
 		<form action="{{url_for('create_events')}}" method = "post" enctype="multipart/form-data">
 			<div class ="firstbody">
-				{% if form.errors %}
-				{{ form.errors }}
-				{% endif %}
 				{{ form.hidden_tag() }}
+				{% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    {% for message in messages %}
+                        <p style="color:red;">{{ message }}</p>
+                    {% endfor %}
+                    {% endif %}
+                {% endwith %}
 		    	<text> Event Name </text></p>
 		    	{{ form.name(size=60) }}</p>
 		    	<text> Event Description</text></p>
 				{{form.description(size=60)}}</p>
 				Start Date/Time</p>
-		    	{{form.start(class="datepicker")}} <input type="text" id="timeStart" style="width: 100px;"/> </p>
+		    	{{form.start(class="datepicker")}} <input type="text" id="timeStart" name="starttime" style="width: 100px;"/> </p>
 		    	End Date/Time </p>
-				{{form.end(class="datepicker")}} <input type="text" id="timeEnd" style="width: 100px;"/> </p>
+				{{form.end(class="datepicker")}} <input type="text" id="timeEnd" name="endtime" style="width: 100px;"/> </p>
 				
 		    	<!-- TODO -->
 		    	<!-- create 2 time picker or sth else or bootstrap -->
