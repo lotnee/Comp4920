@@ -108,7 +108,6 @@ def display_event(id):
 	retDictionary = DB.find_one(collection = "Profile", query = {"email":current_user.email})
 	friends = retDictionary['friends']
 	# remember to filter out only active friends, no pending but do it later
-	print(friends)
 	return render_template('display-event.html', event = eventDetails, friends = json.dumps(friends))
 
 @app.route('/delete-event/<string:id>')
@@ -136,6 +135,5 @@ def delete_event(id):
 def addPeople(email = None,id = None):
 	#Add People To the first ( only friends i guess)
 	# need to get the users friends lel
-	print("hi")
 
 	return redirect(url_for("display_event", id = id))
