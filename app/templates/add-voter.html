@@ -1,20 +1,80 @@
-<h1>Friend List</h1>
-{% with messages = get_flashed_messages() %}
- {% if messages %}
-    {% for message in messages %}
-       <p style="color:red;">{{ message }}</p>
-    {% endfor %}
- {% endif %}
-{% endwith %}
+{% extends "base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 
-{% for friend in me.friends %}
-      {% if friend.status != "pending" %}
-      <img src="../static/images/profile/{{friend.pictureDir}}">
-	    <p><b>Email:</b> {{friend.email}}</p>
-	    <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
-        <a href="{{url_for('invite_voter', poll=poll, email=friend.email)}}">Add voter</a>
-        <br />
-      {% endif %}
-   {% endfor %}
+<style>
+.container{
+    padding:20px;
+    margin-top:100px;
+    max-width:500px;
+    text-align:left;
+    background-color: #fafafa;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding:10px;
+}
 
-<a href="{{url_for('polls')}}">Complete</a>
+a.addbutton {
+	color: #1E90FF;
+	cursor: pointer;
+	border: none;
+	border-radius:14px;
+	padding: 10px;
+	float:right;
+}
+
+a.completebutton {
+   font-family: Arial;
+   background-color: #1E90FF; 
+   width: 100%;
+	color: white;
+	cursor: pointer;
+	border: none;
+	padding: 10px;
+   float: right;
+   margin-top: 10px;
+   text-align: center
+}
+
+img.avatar {
+   width: 12%;
+   margin-top: 10px;
+   margin-left: 15px;
+}
+
+.detail {
+  margin-left: 90px;
+  margin-top: -50px;
+}
+
+</style>
+<body>
+   <div class="container">
+         <h1 style="text-align:center">Add User To Poll</h1>
+         {% with messages = get_flashed_messages() %}
+          {% if messages %}
+             {% for message in messages %}
+                <p style="color:red;">{{ message }}</p>
+             {% endfor %}
+          {% endif %}
+         {% endwith %}
+         
+         {% for friend in me.friends %}
+            {% if friend.status != "pending" %}
+            <img src="../static/images/profile/{{friend.pictureDir}}" class="avatar">
+            <div class="detail">
+               <b>Email:</b> {{friend.email}} <br>
+               <b>Name:</b> {{friend.firstName}} {{friend.lastName}}
+               <a href="{{url_for('invite_voter', poll=poll, email=friend.email)}}" class="addbutton"><span class="fa fa-plus"></span></a></p>
+            </div>
+               <br />
+            {% endif %}
+         {% endfor %}
+         <a href="{{url_for('polls')}}" class="completebutton"><i class="fa fa-check" aria-hidden="true"></i></a></p>
+   </div>
+
+   {% endblock %}
+</body>
+</html>
