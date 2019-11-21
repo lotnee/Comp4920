@@ -1,4 +1,4 @@
-from app import app
+from app import app, absolute_path
 from app.database import DB
 from app.models.profile import Profile
 from app.models.friend import Friend
@@ -6,9 +6,9 @@ from app.controllers.forms import ProfileForm, photos
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 # from werkzeug.utils import secure_filename
-from app.utility.utility import get_list, get_cursor, get_index
+from app.utility.utility import get_list, get_cursor
+from bson.json_util import dumps
 import os
-from app.controllers.quickstart import main
 
 def profileEvents(eventLists):
 	retList = []
@@ -112,6 +112,20 @@ def profile():
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
-	# main()
-	# exec("quickstart.py")
+	# creates a json file for calender
+	print(list(user['events']))
+	path = os.path.join(absolute_path, 'static/css')
+	print(path)
+	if list(user['events']) != []:
+		eventList = []
+		for events in user['events']:
+			events = DB.find_one(collection='Events', query={'_id': events})
+			print(events)
+			eventList.append(events)
+
+		print(eventList)
+		filename = path + '/' + current_user.email + '.json'
+		print(filename)
+		with open(filename, "w+") as f:
+			f.write(dumps(eventList))
 	return render_template('profile.html', profile=user)
