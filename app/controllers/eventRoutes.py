@@ -35,7 +35,7 @@ def create_events():
 		# print(f'Description :{form.description.data}')
 		# print(f'Cover Photo :{form.pictureDir.data}')
 		event = Event(name = form.name.data, description = form.description.data,
-					  start = date1, end =date2, host = '{} {}'.format(me['firstName'], me['lastName']),
+					  start = date1, end =date2, host = '{} {}'.format(user['firstName'], user['lastName']),
 					  invitees=[current_user.email])
 		# print(event)
 		event.insert(current_user.email)
