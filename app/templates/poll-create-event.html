@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<head>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	   
+		 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	   
+		 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>
+	   
+		 <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" />
+<script>
+		$(document).ready(function(){
+			$('#timeStart').timepicker();
+		});
+
+		$(document).ready(function(){
+			$('#timeEnd').timepicker();
+		});
+
+
+
+		</script>
+</head>
+<style>
+.container{
+	padding:20px;
+	margin-top:100px;
+	max-width:500px;
+	text-align:center;
+	background-color: #fafafa;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+}
+.firstbody{
+	text-align:left;
+	padding:10px;
+	margin-top:10px;
+}
+.secondbody{
+	width:400px;
+	margin-left:150px;
+	margin-top:-155px;
+	text-align:left;
+	padding:10px;
+	font-size: 12px;
+}
+.text{
+	text-align: center;
+	padding-top:5px;
+	padding-bottom: 30px;
+	font-size: 10px;
+}
+.button {
+	float: right;
+	margin-top:20px;
+	border-color:#333;
+}
+button {
+	background-color: #1E90FF;
+	color: white;
+	cursor: pointer;
+	width: 100%;
+	border: none;
+	border-radius:14px;
+	padding: 10px;
+	float:right;
+}
+
+button:hover{
+   opacity: 0.8;
+}
+
+select[name="eventType"] {
+  padding: 5px 10px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background: white;
+  float: left;
+  width: auto;
+}
+</style>
+<body>
+	<div class ="container">
+		<h1>Create an event</h1>
+		<form action="{{url_for('poll_create_event', poll=poll)}}" method = "post" enctype="multipart/form-data">
+			<div class ="firstbody">
+				{{ form.hidden_tag() }}
+				{% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    {% for message in messages %}
+                        <p style="color:red;">{{ message }}</p>
+                    {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {% if event.name and event.description %}
+		    	<text> Event Name </text></p>
+		    	<input type="text" class="form-control" name="name" value={{event.name}} required=""autofocus=""></input></br>
+		    	<text> Event Description</text></p>
+				<input type="text" class="form-control" name="description" value="{{event.description}}" required/></br>
+				{% else %}
+				<text> Event Name </text></p>
+		    	{{ form.name(size=60) }}</p>
+		    	<text> Event Description</text></p>
+				{{form.description(size=60)}}</p>
+				{% endif %}
+				Start Date/Time</p>
+		    	{{form.start(class="datepicker")}} <input type="text" id="timeStart" name="starttime" style="width: 100px;"/> </p>
+		    	End Date/Time </p>
+				{{form.end(class="datepicker")}} <input type="text" id="timeEnd" name="endtime" style="width: 100px;"/> </p>
+				{% if event.pictureDir == 'event.jpg' %}
+				<text> No image was uploaded! </text>
+				{% endif %}
+		    	Event Photo</p> {{form.pictureDir}}</p>
+				
+				Event Type </p>
+				<select class="form-control" name="eventType" placeholder="Event Type" required>
+					{% if event.private %}
+					<option value="private">Private</option>
+					<option value="public">Public</option>
+					{% else %}
+					<option value="public">Public</option>
+					<option value="private">Private</option>
+					{% endif %}
+				</select>
+		    </div>
+		    <div class ="button"><button class="button" type="submit">Submit</button></div>
+		</form>
+		
+			</div>
+	</div>
+
+
+{% endblock %}
+</body>
+</html>

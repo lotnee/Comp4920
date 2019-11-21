@@ -59,11 +59,11 @@ password: 12345
   <tr/>
   	<th/> Create & Del event
     <th/> COMPLETED
-    <th/> -
+    <th/> WORKS
   <tr/>
   	<th/> Upload photo(event)
-    <th/> IN PROGRESS
-    <th/> -
+    <th/> COMPLETED
+    <th/> WORKS
   <tr/>
   	<th/> Invite & Remove friends
     <th/> IN PROGRESS
@@ -79,5 +79,9 @@ password: 12345
   <tr/>
   	<th/> Search bar
     <th/> COMPLETED
+    <th/> WORKS
+  <tr/>
+    <th/> Poll create event
+    <th/> IN PROGRESS
     <th/> WORKS
 </table>
