@@ -72,11 +72,13 @@ def create_events():
 		form.description.data = form.description.data.strip()
 		if form.eventType.data == 'private':
 			event = Event(name = form.name.data, description = form.description.data,
-						  start = date1, end =date2, host = '{} {}'.format(me['firstName'], me['lastName']),
+						  start = date1, end =date2,
+						  host=me['_id'],
 						  invitees=[], pictureDir=filename, private=True)
 		else:
 			event = Event(name = form.name.data, description = form.description.data,
-						  start = date1, end =date2, host = '{} {}'.format(me['firstName'], me['lastName']),
+						  start = date1, end =date2,
+						  host=me['_id'],
 						  invitees=[], pictureDir=filename, private=False)
 		event.insert(current_user.email)
 		return redirect(url_for('event_completed'))
@@ -152,7 +154,9 @@ def poll_create_event(poll):
 				if voter == user['firstName']:
 					date1 = option['date']
 
-	event_obj = Event(name=my_poll['name'] , description = my_poll['description'], start=date1, end=None, host = '{} {}'.format(user['firstName'], user['lastName']), invitees=[], pictureDir='events.jpg', private=True).json()
+	event_obj = Event(name=my_poll['name'] , description =
+			my_poll['description'], start=date1, end=None,
+			host=user['_id'], invitees=[], pictureDir='events.jpg', private=True).json()
 	# event_id = event_obj.insert(user['email'])
 	# event = DB.find_one(collection="Events", query={"_id": ObjectId(event_id)})
 	# if event is None:
@@ -207,7 +211,8 @@ def poll_create_event(poll):
 		# 	DB.update_one(collection = "Profile", filter = {"email":profile}, data = {"$pull": {"events" : event['_id']}})
 		# DB.remove(collection = "Events", condition = {"_id": event['_id']})
 		updated_event = Event(name = form.name.data, description = form.description.data,
-						  start = date1, end =date2, host = '{} {}'.format(user['firstName'], user['lastName']),
+						  start = date1, end =date2,
+						  host=user['_id'],
 						  invitees=[], pictureDir=filename, private=event_type)
 		updated_event.insert(user['email'])
 		# DB.replace_one(collection="Events", filter={"_id": ObjectId(event_id)}, data=updated_event)
