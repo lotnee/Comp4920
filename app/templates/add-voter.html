@@ -1,0 +1,20 @@
+<h1>Friend List</h1>
+{% with messages = get_flashed_messages() %}
+ {% if messages %}
+    {% for message in messages %}
+       <p style="color:red;">{{ message }}</p>
+    {% endfor %}
+ {% endif %}
+{% endwith %}
+
+{% for friend in me.friends %}
+      {% if friend.status != "pending" %}
+      <img src="../static/images/profile/{{friend.pictureDir}}">
+	    <p><b>Email:</b> {{friend.email}}</p>
+	    <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
+        <a href="{{url_for('invite_voter', poll=poll, email=friend.email)}}">Add voter</a>
+        <br />
+      {% endif %}
+   {% endfor %}
+
+<a href="{{url_for('polls')}}">Complete</a>

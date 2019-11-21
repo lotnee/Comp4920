@@ -16,8 +16,6 @@ class LoginForm(FlaskForm):
 	submit = SubmitField('Sign In')
 
 class RegistrationForm(FlaskForm):
-	# firstName = StringField('First Name', validators=[DataRequired()])
-	# lastName = StringField('Last Name', validators=[DataRequired()])
 	email = StringField('Email', validators=[DataRequired()])
 	password = PasswordField('Password', validators=[DataRequired()])
 	submit = SubmitField('Sign Up')
@@ -48,3 +46,12 @@ class EmailForm(FlaskForm):
 class PasswordForm(FlaskForm):
 	password = PasswordField('Password', validators=[DataRequired()])
 	submit = SubmitField('confirm password')
+
+class PollForm(FlaskForm):
+	name = StringField('Poll name', validators=[DataRequired()])
+	description = StringField('Poll description', validators=[DataRequired()])
+	option1 = DateField('Option 1', format='%Y-%m-%d')
+	option2 = DateField('Option 2', format='%Y-%m-%d')
+	option3 = DateField('Option 3', format='%Y-%m-%d')
+	submit = SubmitField('confirm poll details')
+		

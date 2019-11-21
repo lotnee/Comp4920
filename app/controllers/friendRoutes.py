@@ -1,6 +1,6 @@
 from app import app
 from app.database import DB
-from app.utility.utility import get_list, get_cursor, get_index
+from app.utility.utility import get_list, get_cursor, get_index_2key
 from app.models.friend import Friend
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
@@ -95,7 +95,7 @@ def accept_request(email):
 		return redirect(url_for('friends'))
 	added = DB.find_one(collection="Profile", query={"friends.email": current_user.email, "friends.status": "pending"})
 	if added is not None:
-		index = get_index(arrayList=friend['friends'], key="email", query=current_user.email, key2="status", query2="pending")
+		index = get_index_2key(arrayList=friend['friends'], key="email", query=current_user.email, key2="status", query2="pending")
 		if index != -1:
 			friend_status = "friends." + str(index) + ".status"
 			DB.update_one(collection="Profile", filter={"friends.email": current_user.email}, data={"$set": {friend_status: "accepted"}})

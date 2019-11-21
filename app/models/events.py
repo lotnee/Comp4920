@@ -14,10 +14,11 @@ class Event(object):
     def insert(self,userEmail):
         hehe = DB.insert(collection='Events', data=self.json())
         DB.update_one(collection='Profile',filter={'email':userEmail}, data = {'$push': {'events':hehe.inserted_id}})
+        DB.update_one(collection = "Events", filter ={'_id':hehe.inserted_id}, data = {'$push': {"invitees": {"email": userEmail, "status": "going"}}})
         return hehe
 
     def addProfile(self, newProfile,eventId ):
-        DB.update_one(collection='Profile', filter = {'_id':eventId}, data = {'$push':{'profileList':newProfile}})
+        DB.update_one(collection='Profile', filter = {'_id':eventId}, data = {'$push':{'invitees':newProfile}})
         return None
 
     def json(self):

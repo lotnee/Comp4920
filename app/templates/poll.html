@@ -1,0 +1,31 @@
+<h1>Poll List</h1>
+{% with messages = get_flashed_messages() %}
+ {% if messages %}
+    {% for message in messages %}
+       <p style="color:red;">{{ message }}</p>
+    {% endfor %}
+ {% endif %}
+{% endwith %}
+
+{% for poll in polls %}
+	<form action="{{url_for('update_vote', poll=poll._id)}}" method="post">
+	<p><b>Poll name:</b> {{poll.name}}</p>
+    <p><b>Poll description:</b> {{poll.description}} </p>
+    {% for dates in poll.options %}
+    {{dates.date}}
+    <input type="checkbox" name="date" value="{{dates.date}}"> 
+    	<p>voter:-</p> 
+	    {% for votes in dates.voters %}
+	    <p>{{votes}}</p> 
+	    
+	    {% endfor %}
+	<br />
+    {% endfor %}
+    <button name="add" value="add" class="button" type="submit">vote</button>
+    <button name="del" value="del" class="button" type="submit">unvote</button>
+	</form>
+	{% if user._id == poll.creator%}
+	<a href="{{url_for('add_voter', poll=poll._id)}}">I am creator add voter</a>
+	{% endif %}
+
+{% endfor %}

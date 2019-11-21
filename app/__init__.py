@@ -30,3 +30,4 @@ from app.controllers import friendRoutes
 from app.controllers import eventRoutes
 from app.controllers import searchRoutes
 from app.controllers import emailRoutes
+from app.controllers import pollRoutes

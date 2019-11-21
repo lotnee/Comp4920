@@ -132,7 +132,7 @@ a.accept {
            {% endif %}
         {% endwith %}
         {%for dictionary_item in events%}
-        <h4><a href="{{ url_for('display_event', name = dictionary_item['name']) }}">{{dictionary_item['name']}}</a></h4>
+        <h4><a href="{{ url_for('display_event', id = dictionary_item['_id']) }}">{{dictionary_item['name']}}</a></h4>
         <hr class="w3-clear">
            <p><b>Event Description</b></p>
            <p>{{dictionary_item['description']}}</p>
@@ -147,9 +147,9 @@ a.accept {
         <div class="w3-container">
           <p>Upcoming Events :</p>
 
-          
+
           <img src="/w3images/forest.jpg" alt="Forest" style="width:100%;">
-          
+
           <p><button class="w3-button w3-block w3-theme-l4">Info</button></p>
         </div>
       </div>
@@ -160,7 +160,7 @@ a.accept {
           {% for friend in requests %}
             <div class="detail">
                 <p>{{friend.firstName}} {{friend.lastName}}</p>
-            
+
               <img src="static/images/profile/{{friend.pictureDir}}" class="dp">
             <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">
             ✓</a>
