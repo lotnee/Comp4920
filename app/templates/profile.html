@@ -787,7 +787,7 @@ img {
 <!-- Body -->
 <body>   
    <div class="card"> 
-         <img src="static/images/profile/{{profile.pictureDir}}" class="picture"/>
+         <img src="../static/images/profile/{{profile.pictureDir}}" class="picture"/>
          <h2>{{profile.firstName}} {{profile.lastName}}</h2>
          {% if current_user.is_authenticated %}
          <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile <i class="fa fa-pencil"></i></button>
