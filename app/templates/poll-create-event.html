@@ -87,7 +87,7 @@ select[name="eventType"] {
 <body>
 	<div class ="container">
 		<h1>Create an event</h1>
-		<form action="{{url_for('create_events')}}" method = "post" enctype="multipart/form-data">
+		<form action="{{url_for('poll_create_event', poll=poll)}}" method = "post" enctype="multipart/form-data">
 			<div class ="firstbody">
 				{{ form.hidden_tag() }}
 				{% with messages = get_flashed_messages() %}
@@ -97,22 +97,35 @@ select[name="eventType"] {
                     {% endfor %}
                     {% endif %}
                 {% endwith %}
-                {% if event.name and event.descriptions %}
+                {% if event.name and event.description %}
 		    	<text> Event Name </text></p>
+		    	<input type="text" class="form-control" name="name" value={{event.name}} required=""autofocus=""></input></br>
+		    	<text> Event Description</text></p>
+				<input type="text" class="form-control" name="description" value="{{event.description}}" required/></br>
+				{% else %}
+				<text> Event Name </text></p>
 		    	{{ form.name(size=60) }}</p>
 		    	<text> Event Description</text></p>
 				{{form.description(size=60)}}</p>
+				{% endif %}
 				Start Date/Time</p>
 		    	{{form.start(class="datepicker")}} <input type="text" id="timeStart" name="starttime" style="width: 100px;"/> </p>
 		    	End Date/Time </p>
 				{{form.end(class="datepicker")}} <input type="text" id="timeEnd" name="endtime" style="width: 100px;"/> </p>
-				
+				{% if event.pictureDir == 'event.jpg' %}
+				<text> No image was uploaded! </text>
+				{% endif %}
 		    	Event Photo</p> {{form.pictureDir}}</p>
 				
 				Event Type </p>
 				<select class="form-control" name="eventType" placeholder="Event Type" required>
+					{% if event.private %}
 					<option value="private">Private</option>
 					<option value="public">Public</option>
+					{% else %}
+					<option value="public">Public</option>
+					<option value="private">Private</option>
+					{% endif %}
 				</select>
 		    </div>
 		    <div class ="button"><button class="button" type="submit">Submit</button></div>

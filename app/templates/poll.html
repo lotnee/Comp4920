@@ -82,6 +82,25 @@ a.delPoll:hover {
   color: #778899;
 }
 
+a.createEvent {
+   background-color: transparent;
+   color: #1E90FF;
+   cursor: pointer;
+   border-radius: 14px;
+   padding: 8px 12px;
+   margin: 8px 0;
+   float: right;
+   margin-top:-70px;
+   margin-right: -50px;
+   font-size: 12px;
+   border-color: #1E90FF;
+}
+
+a.createEvent:hover {
+  transition: 0.8s;
+  color: #778899;
+}
+
 </style>
 <body>
 <div class="container">
@@ -118,6 +137,7 @@ a.delPoll:hover {
 		{% if user._id == poll.creator%}
 		<a href="{{url_for('add_voter', poll=poll._id)}}" class="addVoter"><span class="fa fa-plus"></span></a>
     <a href="{{url_for('delete_poll', poll=poll._id)}}" class="delPoll"><span class="fa fa-minus"></span></a>
+    <a href="{{url_for('poll_create_event', poll=poll._id)}}" class="createEvent"><span class="fa fa-chevron-circle-right"></span></a>
 		{% endif %}
 		</form>
 

@@ -163,6 +163,7 @@ def update_vote(poll):
 	return redirect(url_for('polls'))
 
 @app.route('/delete-poll/<poll>')
+@login_required
 def delete_poll(poll):
 	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
@@ -179,6 +180,6 @@ def delete_poll(poll):
 			return redirect(url_for('polls'))
 		DB.update_one(collection="Profile", filter={'_id': voter}, data={"$pull": {"polls": ObjectId(poll)}})
 	DB.update_one(collection="Profile", filter={'_id': user['_id']}, data={"$pull": {"polls": ObjectId(poll)}})
-	DB.remove(collection="Poll", condition={"_id":ObjectId(poll)})
+	DB.remove(collection="Poll", condition={"_id": ObjectId(poll)})
 	flash('Deleted Poll!')
 	return redirect(url_for('polls'))
