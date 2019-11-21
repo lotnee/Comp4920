@@ -13,9 +13,9 @@ span {
 body {
     font-family: arial;
  }
- 
+
  .container {
-    max-width: 500px;
+    max-width: 60%;
     padding: 20px;
     margin: auto;
     margin-top: 100px;
@@ -23,7 +23,7 @@ body {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     height: auto;
  }
- 
+
  .button-other {
     background-color: #778899;
     color: white;
@@ -33,7 +33,7 @@ body {
     float: right;
     border-radius: 14px;
  }
- 
+
  .button-submit {
     background-color: #1E90FF;
     color: white;
@@ -45,11 +45,11 @@ body {
     float: right;
     border: none;
  }
- 
+
  button:hover{
     opacity: 0.8;
  }
- 
+
  .input[type=text], input[type=password] {
    padding: 12px 20px;
    margin: 8px 0;
@@ -57,28 +57,28 @@ body {
    border: 1px solid #ccc;
    box-sizing: border-box;
  }
- 
+
  .imgcontainer {
    text-align: center;
    margin: 24px 0 12px 0;
  }
- 
+
  img.avatar {
    width: 40%;
    border-radius: 50%;
  }
- 
+
  .box {
    color: black;
    background: #fff;
-   height: 30px;  
+   height: 30px;
    line-height: 30px; /* Same as height  */
  }
- 
+
  .box2 {
    color: black;
    background: #fff;
-   height: 100px;  
+   height: 100px;
    line-height: 100px; /* Same as height  */
  }
 
@@ -92,11 +92,11 @@ body {
     margin: 8px 0;
     border-radius: 14px;
  }
- 
+
  button:hover{
     opacity: 0.8;
  }
- 
+
  .input[type=text], input[type=password] {
    padding: 12px 20px;
    margin: 8px 0;
@@ -105,7 +105,7 @@ body {
    box-sizing: border-box;
  }
 
- 
+
  span.register {
    float: right;
    padding-top: 16px;
@@ -116,13 +116,13 @@ body {
     border-radius: 50%;
     width: 35%;
   }
-  
+
   .heading {
      text-align: center;
      font-size: 20px;
      font-weight: 700px;
   }
-  
+
   .flexbox{
       display:-webkit-box;
       display:-moz-box;
@@ -130,7 +130,7 @@ body {
       display:-webkit-flex;
       display:flex;
   }
-  
+
   .container{
       padding:15px;
     width:100%;
@@ -141,24 +141,24 @@ body {
       margin-right:auto;
       align-items:center;
   }
-  
+
   .left-hold span{margin-right:15px;}
-  
+
   .left-hold span img{width:100px;}
-  
+
   .dp {
     width:50px;
     height:50px;
     margin-top:-5px;
     margin-left: 0px;
   }
-  
+
   .detail {
     padding-top:10px;
     margin-left: 0px;
     text-align: left;
   }
-  
+
   a.cancel {
      background-color: grey;
      color: white;
@@ -171,7 +171,7 @@ body {
      margin-top:10px;
      font-size: 10px;
   }
-  
+
   a.accept {
      background-color: silver;
      color: white;
@@ -184,5 +184,3 @@ body {
      margin-top:10px;
      font-size: 10px;
   }
-
-
