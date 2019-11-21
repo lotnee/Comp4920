@@ -161,4 +161,24 @@ def update_vote(poll):
 			return redirect(url_for('polls'))
 	flash(f'Pick an option')	
 	return redirect(url_for('polls'))
-		
+
+@app.route('/delete-poll/<poll>')
+def delete_poll(poll):
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
+	toDelete = DB.find_one(collection='Poll', query={'_id': ObjectId(poll)})
+	if toDelete is None:
+		flash('Please contact admin, DB error!')
+		return redirect(url_for('polls'))
+	for voter in toDelete['voters']:
+		toRemove = DB.find_one(collection="Profile", query={"_id": voter})
+		if toRemove is None:
+			flash('Please contact admin, DB error!')
+			return redirect(url_for('polls'))
+		DB.update_one(collection="Profile", filter={'_id': voter}, data={"$pull": {"polls": ObjectId(poll)}})
+	DB.update_one(collection="Profile", filter={'_id': user['_id']}, data={"$pull": {"polls": ObjectId(poll)}})
+	DB.remove(collection="Poll", condition={"_id":ObjectId(poll)})
+	flash('Deleted Poll!')
+	return redirect(url_for('polls'))
