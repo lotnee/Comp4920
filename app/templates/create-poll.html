@@ -1,32 +1,74 @@
-<h1>Create Poll</h1>
-    <form action="{{url_for('create_poll')}}" method="post">
-    {{ form.hidden_tag() }}
-          {% with messages = get_flashed_messages() %}
-             {% if messages %}
-                {% for message in messages %}
-                   <p style="color:red;">{{ message }}</p>
-                {% endfor %}
-             {% endif %}
-          {% endwith %}
-     <p>
-         {{ form.name.label }}<br>
-         {{ form.name(size=64) }}
-     </p>
-     <p>
-         {{ form.description.label }}<br>
-         {{ form.description }}
-     </p>
-     <p>
-         {{ form.option1.label }}<br>
-         {{ form.option1(class="datepicker")}}
-     </p>
-     <p>
-         {{ form.option2.label }}<br>
-         {{ form.option2(class="datepicker")}}
-     </p>
-     <p>
-         {{ form.option3.label }}<br>
-         {{ form.option3(class="datepicker")}}
-     </p>
-     <p>{{ form.submit() }}</p>
-    </form> 
+{% extends "base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<style>
+.container{
+    padding:20px;
+    margin-top:100px;
+    max-width:500px;
+    text-align:left;
+    background-color: #fafafa;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding:10px;
+}
+
+.button-submit {
+   background-color: #1E90FF;
+   color: white;
+   cursor: pointer;
+   width: auto;
+   border-radius: 14px;
+   padding: 10px 15px;
+   margin: 8px 0;
+   float: right;
+   border: none;
+}
+</style>
+
+<body>
+    <div class="container">
+        <h1 style="text-align: center">Create Poll</h1>
+        <form action="{{url_for('create_poll')}}" method="post">
+        {{ form.hidden_tag() }}
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    {% for message in messages %}
+                        <p style="color:red;">{{ message }}</p>
+                    {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            <p>
+                Poll Name<br>
+                {{ form.name(size=64) }}
+            </p>
+            <p>
+                Poll Description<br>
+                {{ form.description(size = 64) }}
+            </p>
+            <p>
+                {{ form.option1.label }}: 
+                    {{ form.option1(class="datepicker")}}
+            </p>
+            <p>
+                {{ form.option2.label }}: 
+                    {{ form.option2(class="datepicker")}}
+            </p>
+            <p>
+                {{ form.option3.label }}: 
+                    {{ form.option3(class="datepicker")}}
+            </p>
+            <button class="button-submit" type="submit">Create Poll</button>
+        </form> 
+
+
+
+    </div>
+
+
+    {% endblock %}
+</body>
+</html>

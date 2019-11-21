@@ -1,6 +1,29 @@
-<!-- {% extends "base.html" %}
-{% block content %} -->
+{% extends "base.html" %}
+{% block content %}
 <!DOCTYPE html>
+<head>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	   
+		 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	   
+		 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>
+	   
+		 <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" />
+<script>
+		$(document).ready(function(){
+			$('#timeStart').timepicker();
+		});
+
+		$(document).ready(function(){
+			$('#timeEnd').timepicker();
+		});
+
+
+
+		</script>
+</head>
 <style>
 .container{
 	padding:20px;
@@ -49,6 +72,17 @@ button {
 button:hover{
    opacity: 0.8;
 }
+
+select[name="eventType"] {
+  padding: 5px 10px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background: white;
+  float: left;
+  width: auto;
+}
 </style>
 <body>
 	<div class ="container">
@@ -62,22 +96,34 @@ button:hover{
 		    	<text> Event Name </text></p>
 		    	{{ form.name(size=60) }}</p>
 		    	<text> Event Description</text></p>
-		    	{{form.description(size=60)}}</p>
-		    	{{form.start(class="datepicker")}}
-		    	<text> &mdash;</text>
-		    	{{form.end(class="datepicker")}}
+				{{form.description(size=60)}}</p>
+				Start Date/Time</p>
+		    	{{form.start(class="datepicker")}} <input type="text" id="timeStart" style="width: 100px;"/> </p>
+		    	End Date/Time </p>
+				{{form.end(class="datepicker")}} <input type="text" id="timeEnd" style="width: 100px;"/> </p>
+				
 		    	<!-- TODO -->
 		    	<!-- create 2 time picker or sth else or bootstrap -->
 		    	<!-- check if it works in eventRoutes.py by print() in console -->
 		    	<!-- start time -->
 		    	<!-- end time  -->
 		    	<!-- Make it return as string -->
-		    	{{form.pictureDir}}
-		    	{{form.eventType}}
+		    	Event Photo</p> {{form.pictureDir}}</p>
+				
+				<!-- {{form.eventType}} -->
+				Event Type </p>
+				<select class="form-control" name="eventType" placeholder="Event Type" required>
+					<option value="private">Private</option>
+					<option value="public">Public</option>
+				</select>
 		    </div>
 		    <div class ="button"><button class="button" type="submit">Submit</button></div>
 		</form>
+		
+			</div>
 	</div>
-<!-- {% endblock %} -->
+
+
+{% endblock %}
 </body>
 </html>
