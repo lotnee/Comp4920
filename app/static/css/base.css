@@ -1,0 +1,32 @@
+ul {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+ }
+ 
+ li {
+    float: left;
+ }
+ 
+ li a {
+    display: block;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 16px;
+ }
+ 
+ #header .navbar-nav li > a {
+     color: ##1E90FF;
+     transition: background-color .2s, color .2s;
+     &:hover,
+     &:focus {
+         background-color: ##1E90FF;
+         color: #fff;
+     }
+ }
+ 
+ #header .navbar-nav li.active > a {
+     background-color: #1E90FF;
+     color: #fff;
+ }
