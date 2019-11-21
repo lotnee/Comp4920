@@ -62,7 +62,7 @@ def edit_profile():
 						filename = "female.jpg"
 				else:
 					filename = photos.save(form.pictureDir.data, name= 'profile/' + user['email'] + '.')
-					firstName = filename.split('/')[1]
+					filename = filename.split('/')[1]
 				profile_obj = Profile(email=user['email'], firstName=form.firstName.data, lastName=form.lastName.data, descriptions=form.descriptions.data, gender=form.gender.data, pictureDir=filename)
 				profile_obj.insert()
 			else:
