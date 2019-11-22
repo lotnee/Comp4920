@@ -113,7 +113,7 @@ def display_event(id):
 	# gets all the friends of the user
 	retDictionary = DB.find_one(collection = "Profile", query = {"email":current_user.email})
 	friends = []
-	status = 0 # this user has not  responded to the event
+	status = "invited" # this user has not  responded to the event
 	for person in retDictionary['friends']:
 		if person['status'] == "accepted":
 			friendId = DB.find_one(collection = "Profile", query = {"email":person['email']}, projection = {"_id":1})
@@ -126,7 +126,7 @@ def display_event(id):
 	# see whether the person has accepted or not to give them the option to accept your invite
 	for invitee in eventDetails["invitees"]:
 		if invitee["email"] == current_user.email and invitee['status'] != "invited":
-			status = 1 # user has already responded
+			status = invitee['status'] # user has already responded
 	return render_template('display-event.html', event = eventDetails,
 							friends = json.dumps(friends), host = host, status = status)
 
