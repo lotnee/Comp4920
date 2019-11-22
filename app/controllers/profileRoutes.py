@@ -118,28 +118,37 @@ def profile(profile_id,is_profile_owner=False):
 	print(list(user['events']))
 	# path = os.path.join(absolute_path, 'static/css')
 	# print(path)
-	if list(user['events']) != []:
-		eventList = []
-		for events in user['events']:
-			events = DB.find_one(collection='Events', query={'_id': events})
-			event_dict = {'title': events['name'], 'start': events['start'].strftime("%Y-%m-%d"), 'end': events['end'].strftime("%Y-%m-%d")}
-			# print(event_dict)
-			eventList.append(event_dict)
-		# print(eventList)
-		# filename = path + '/' + current_user.email + '.json'
-		# print(filename)
-		# with open(filename, "w+") as f:
-		# 	f.write(dumps(eventList))
-		# eventList = dumps(eventList)
-		# print(eventList)
-		return render_template('profile.html', profile=user,
-					events=eventList,
-					is_profile_owner=is_profile_owner)
-	return render_template('profile.html', profile=user, events={},
-			is_profile_owner=is_profile_owner)
+
+	me = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if is_profile_owner or any(filter(
+		lambda entry: entry['email'] == current_user.email 
+			    and entry['status'] == 'accepted',
+			    user['friends'])):
+
+		if list(user['events']) != []:
+			eventList = []
+			for events in user['events']:
+				events = DB.find_one(collection='Events', query={'_id': events})
+				event_dict = {'title': events['name'], 'start': events['start'].strftime("%Y-%m-%d"), 'end': events['end'].strftime("%Y-%m-%d")}
+				# print(event_dict)
+				eventList.append(event_dict)
+			# print(eventList)
+			# filename = path + '/' + current_user.email + '.json'
+			# print(filename)
+			# with open(filename, "w+") as f:
+			# 	f.write(dumps(eventList))
+			# eventList = dumps(eventList)
+			# print(eventList)
+			return render_template('profile.html', profile=user,
+						events=eventList,
+						is_profile_owner=is_profile_owner)
+		return render_template('profile.html', profile=user, events={},
+				is_profile_owner=is_profile_owner)
+
+	return ('Page not found', 404)
 
 @app.route('/profile')
 @login_required
-def current_profile():
+def my_profile():
 	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	return profile(str(user['_id']),is_profile_owner=True)

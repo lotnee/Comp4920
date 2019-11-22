@@ -14,10 +14,15 @@ def friends():
 		return redirect(url_for('edit_profile'))
 	users = list(DB.find_all(collection="Profile"))
 	me = DB.find_one(collection="Profile", query={"email": current_user.email})
+	friend_emails = [friend['email'] for friend in me['friends']]
+	friends = DB.find(collection="Profile", query={"email": {"$in": friend_emails}})
+	friend_ids_by_email = {entry['email'] : entry['_id'] for entry in friends}
+	
 	incoming = DB.find(collection="Profile", query={"friends": {"$elemMatch": {"email": current_user.email, "status": "pending"}}})
 	requests = get_cursor(cursor_obj=incoming, key="friends", subkey="email", subkey2="status", query=current_user.email, query2="pending")
 
-	return render_template('friend.html', title='Friend List', users=users, me=me, requests=requests)
+	return render_template('friend.html', title='Friend List', users=users,
+		me=me, friend_ids_by_email=friend_ids_by_email, requests=requests)
 
 @app.route('/send-request/<email>')
 @login_required
