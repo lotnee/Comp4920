@@ -98,7 +98,8 @@ def accept_request(email):
 		index = get_index_2key(arrayList=friend['friends'], key="email", query=current_user.email, key2="status", query2="pending")
 		if index != -1:
 			friend_status = "friends." + str(index) + ".status"
-			DB.update_one(collection="Profile", filter={"friends.email": current_user.email}, data={"$set": {friend_status: "accepted"}})
+
+			DB.update_one(collection="Profile", filter={"email": friend['email']}, data={"$set": {friend_status: "accepted"}})
 			friend_obj = Friend(email=friend['email'], firstName=friend['firstName'], lastName=friend['lastName'], status="accepted", pictureDir=friend['pictureDir'])
 			friend_obj.insert(current_user.email)
 			flash('Accepted %s\'s friend request!' % email)
