@@ -23,7 +23,6 @@ def search():
 	matched_profile_info = {profile['_id'] : (profile['firstName'], profile['lastName']) 
 				for profile in matched_profiles}
 
-	import pdb
 	DB.createIndex(collection="Events", query=[("name", "text"), ("description", "text")], name='event_search')
 	DB.createIndex(collection="Events", query=[("host", 1)], name='event_host')
 	matched_events = list(DB.find(collection='Events', query= {
