@@ -37,9 +37,19 @@
                      <input type="search" class="form-control" placeholder="Search" id="sitesearch" name="query">
                </div>
             </form>
-			   <ul class="nav navbar-nav navbar-right">
-               <li><a href="/create-poll"><span class="fa fa-plus"></span> New Poll</a></li>
-               <li><a href="/create-event"><span class="fa fa-plus"></span> New Event</a></li>
+			   <ul class="nav navbar-nav navbar-right">               
+               <div class="dropdown show">
+                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     Create +
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                     <a class="dropdown-item" href="/create-poll"> New Poll</a>
+                     <a class="dropdown-item" href="/create-event"> New Event</a>
+                  </div>
+               </div>
+
+<!--           <li><a href="/create-poll"><span class="fa fa-plus"></span> New Poll</a></li>
+               <li><a href="/create-event"><span class="fa fa-plus"></span> New Event</a></li> -->
                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
             {% endif %}
@@ -51,7 +61,7 @@
 <script>
 $(document).ready(function() {
   $('li.active').removeClass('active');
-  $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
+  $('a[href="/' + location.pathname.split('/')[1] + '"]').closest('li').addClass('active');
 });
 </script>
 

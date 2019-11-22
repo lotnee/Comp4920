@@ -13,9 +13,9 @@ def search():
 
 	# create index for text search (Profile)
 	DB.createIndex(collection="Profile", query=[("email", "text"), ("firstName", "text"), ("lastName", "text"), ("descriptions", "text")], name='profile_search')
-	matched_profiles = DB.find(collection='Profile',query={
+	matched_profiles = list(DB.find(collection='Profile',query={
 			'$text': {'$search': request.args['query']}
-		})
+		}))
 
 	# since the host of an event can change, or the name of the host can
 	# change, we need to look up event hosts by profile id instead of by
@@ -24,11 +24,10 @@ def search():
 
 	DB.createIndex(collection="Events", query=[("name", "text"), ("description", "text")], name='event_search')
 	DB.createIndex(collection="Events", query=[("host", 1)], name='event_host')
-	matched_events = DB.find(collection='Events', query= {
+	matched_events = list(DB.find(collection='Events', query= {
 		'$or':[{'$text': {'$search': request.args['query']}},
 			{'host': {'$in': matched_profile_ids}}]
-		})
+		}))
 
 	return render_template('search.html', title='Search Results',
-		users=list(matched_profiles), events=list(matched_events), query=request.args['query'])
-
+		users=matched_profiles, events=matched_events, query=request.args['query'])

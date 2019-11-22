@@ -15,20 +15,19 @@
      <h4>Matched Users</h4>
      <hr class="w3-clear">
      {% if users %}
-        {% for user in users%}
+        {% for user in users %}
             {% if user.email != current_user.email %}
-            <div class="detail">
-              <p><b>Email:</b> {{user.email}}</p>
-              <p><b>Name:</b> {{user.firstName}} {{user.lastName}}</p>
-            </div>
-            <a href="{{url_for('profile', profile_id=user._id)}}">
-              <img src="static/images/profile/{{user.pictureDir}}" class="dp">
-            </a>
-            <a href="{{url_for('send_request', email=user.email)}}" class="reqbutton">Send Request</a>
-            <a href="{{url_for('profile', profile_id=user._id)}}" class="viewbutton">View Profile</a>
-            <br/>
-            <br/>
-            {% else %}
+              <div class="detail">
+                <p><b>Email:</b> {{user.email}}</p>
+                <p><b>Name:</b> {{user.firstName}} {{user.lastName}}</p>
+              </div>
+              <a href="{{url_for('profile', profile_id=user._id)}}">
+                <img src="static/images/profile/{{user.pictureDir}}" class="dp">
+              </a>
+              <a href="{{url_for('send_request', email=user.email)}}" class="reqbutton">Send Request</a>
+              <a href="{{url_for('profile', profile_id=user._id)}}" class="viewbutton">View Profile</a>
+              <br/>
+              <br/>
             {% endif %}
         {% endfor %}
       {% else %}
