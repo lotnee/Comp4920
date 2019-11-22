@@ -131,7 +131,6 @@ def update_vote(poll):
 		for dates in options:
 			# dates = dates.split(' ')[0]
 			dt = datetime.strptime(dates, "%Y-%m-%d %H:%M:%S")
-			print(f'LOL {dates}')
 			# test = DB.find_one(collection='Poll', query={'options': dt})
 			# print(test)
 			index = get_index_1key(arrayList=toUpdate, key='options', query=dt)

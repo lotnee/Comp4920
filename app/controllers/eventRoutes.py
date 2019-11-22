@@ -227,7 +227,10 @@ def poll_create_event(poll):
 						  start = date1, end =date2,
 						  host=user['_id'],
 						  invitees=inviteesList, pictureDir=filename, private=event_type)
-		updated_event.insert(user['email'])
+		eventid = updated_event.insert(user['email'])
+
+		for invitees in inviteesList:
+			DB.update_one(collection = "Profile", filter = {"email":invitees['email']}, data = {"$push": {"events": ObjectId(eventid)}})
 
 		return redirect(url_for('delete_poll', poll=poll))
 	return render_template('poll-create-event.html', title = "Create Your Event", form=form, poll=poll, event=event_obj)
