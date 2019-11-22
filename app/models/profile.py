@@ -11,6 +11,7 @@ class Profile(object):
 		self.pictureDir = pictureDir
 		self.friends = []
 		self.events = []
+		self.polls= []
 
 	def insert(self):
 		if not DB.find_one("Profile", {"email": self.email}):
@@ -26,5 +27,6 @@ class Profile(object):
 			'descriptions': self.descriptions,
 			'pictureDir': self.pictureDir,
 			'friends': self.friends,
-			'events':self.events
+			'events': self.events,
+			'polls': self.polls
 		}

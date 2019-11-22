@@ -24,7 +24,7 @@ def get_cursor(cursor_obj, key, subkey, subkey2, query, query2):
 	return l
 		
 # return index
-def get_index(arrayList, key, query, key2, query2):
+def get_index_2key(arrayList, key, query, key2, query2):
 	i = 0
 	while i < len(arrayList):
 		# print(arrayList[i][key])
@@ -33,6 +33,19 @@ def get_index(arrayList, key, query, key2, query2):
 			return i
 		i += 1
 	return -1
+
+# return index for poll
+def get_index_1key(arrayList, key, query):
+	i = 0
+	while i < len(arrayList[key]):
+		# print(arrayList[i][key])
+		print(query)
+		print(arrayList[key][i]['date'])
+		if arrayList[key][i]['date'] == query:
+			return i
+		i += 1
+	return -1
+
 
 # --- mail utility function
 from app import app, mail
