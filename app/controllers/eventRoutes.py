@@ -113,12 +113,22 @@ def event_completed():
 @login_required
 def display_event(id):
 	#get the event name or more so the ID
+	host = 0
 	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
 	# gets all the friends of the user
 	retDictionary = DB.find_one(collection = "Profile", query = {"email":current_user.email})
-	friends = retDictionary['friends']
+	friends = []
+	for person in retDictionary['friends']:
+		if person['status'] == "accepted":
+			print("hihihihi")
+			friends.append(person)
+	print(friends)
+	# Sees whether this person has invite privleges or is a host
+	if eventDetails['host'] == retDictionary['_id']:
+		host = 1
+	# friends = retDictionary['friends']
 	# remember to filter out only active friends, no pending but do it later
-	return render_template('display-event.html', event = eventDetails, friends = json.dumps(friends))
+	return render_template('display-event.html', event = eventDetails, friends = json.dumps(friends), host = host)
 
 @app.route('/delete-event/<string:id>')
 @login_required
@@ -228,7 +238,15 @@ def poll_create_event(poll):
 @app.route('/add-people/<email>/<id>')
 @login_required
 def addPeople(email = None,id = None):
-	#Add People To the first ( only friends i guess)
-	# need to get the users friends lel
+	# we have the email and id of the user & event we want to invite,
+	# we need to update the number of people in the invitees (add the profile to it)
+	# also update the profile's thingy
+	#received = DB.find_one(collection="Profile", query={"$and": [{"email": email}, {"friends": {"$elemMatch": {"email": current_user.email, "status": "pending"}}}]})
 
+	profileEvents = DB.find_one(collection = "Profile", query ={"email" : email })
+	profileEvents = profileEvents['events']
+	if ObjectId(id) not in profileEvents:
+		print("none")
+		DB.update_one(collection = "Events", filter ={'_id':ObjectId(id)}, data = {'$push': {"invitees": {"email": email, "status": "invited"}}})
+		DB.update_one(collection = "Profile", filter = {"email":email}, data = {"$push": {"events": ObjectId(id)}})
 	return redirect(url_for("display_event", id = id))
