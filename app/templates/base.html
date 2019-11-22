@@ -31,30 +31,48 @@
 				   <li><a href="/view-events">Events</a></li>
                <li><a href="/friends">Friends</a></li>
                <li><a href="/polls">Polls</a></li>
+
             </ul>
             <form class="navbar-form navbar-left" action="/search">
                <div class="input-group">
                      <input type="search" class="form-control" placeholder="Search" id="sitesearch" name="query">
                </div>
             </form>
-			   <ul class="nav navbar-nav navbar-right">               
-               <div class="dropdown show">
-                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                     Create +
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                     <a class="dropdown-item" href="/create-poll"> New Poll</a>
-                     <a class="dropdown-item" href="/create-event"> New Event</a>
-                  </div>
-               </div>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Create +
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/create-poll"> New Poll</a>
+         <a class="dropdown-item" href="/create-event"> New Event</a>
+        </div>
+      </li>
+			   <ul class="nav navbar-nav navbar-right">
+
+
+
 
 <!--           <li><a href="/create-poll"><span class="fa fa-plus"></span> New Poll</a></li>
                <li><a href="/create-event"><span class="fa fa-plus"></span> New Event</a></li> -->
                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
+
             {% endif %}
+
 		   </div>
+         
+
+<!--                <div class="dropdown show">
+                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     Create +
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                     <a class="dropdown-item" href="/create-poll"> New Poll</a><p>
+                     <a class="dropdown-item" href="/create-event"> New Event</a>
+                  </div>
+               </div> -->
 	   </nav>
+
    </div>
 	{% block content %}{% endblock %}
 
