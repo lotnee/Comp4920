@@ -13,8 +13,8 @@ class DB(object):
 		return hehe
 
 	@staticmethod
-	def find_one(collection, query):
-		return DB.DATABASE[collection].find_one(query)
+	def find_one(collection, query, projection = None):
+		return DB.DATABASE[collection].find_one(query, projection)
 
 	@staticmethod
 	def find_all(collection):

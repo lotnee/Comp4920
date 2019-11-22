@@ -18,16 +18,14 @@
       {% endif %}
   {% endwith %} 
    <h1>Friends</h1>
-   {% for friend in me.friends %}
-      {% if friend.status != "pending" %}
+   {% for friend in myFriendList %}
         <div class="detail">
           <p><b>Email:</b> {{friend.email}}</p>
           <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
         </div>
         <img src="static/images/profile/{{friend.pictureDir}}" class="dp">
-        <a href="{{url_for('delete_friend', email=friend.email)}}"class="cancel">Delete Friend</a>
+        <a href="{{url_for('delete_friend', profile_id=friend._id)}}"class="cancel">Delete Friend</a>
         <br />
-      {% endif %}
    {% endfor %}
    <br>
 
@@ -41,22 +39,20 @@
               <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
             </div>
             <img src="static/images/profile/{{friend.pictureDir}}" class="dp">
-          <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">✓</a>
-          <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">x</a>
+          <a href="{{url_for('accept_request', profile_id=friend._id)}}"class="accept">✓</a>
+          <a href="{{url_for('delete_request', profile_id=friend._id)}}"class="cancel">x</a>
           <br />
        {% endfor %}
        <h5>Sent Request to:</h5>
-       {% for friend in me.friends %}
-          {% if friend.status == "pending" %}
+       {% for friend in mySentList %}
             <div class="detail">
               <p><b>Email:</b> {{friend.email}}</p>
               <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
             </div>
             <img src="static/images/profile/{{friend.pictureDir}}" class="dp">
-            <a href="{{url_for('delete_request', email=friend.email)}}"class="delete">
+            <a href="{{url_for('delete_request', profile_id=friend._id)}}"class="delete">
             x</a>
           <br />
-          {% endif %}
        {% endfor %}
     </div>
    </div>
@@ -73,7 +69,7 @@
       <a href="{{url_for('profile', profile_id=user._id)}}">
         <img src="static/images/profile/{{user.pictureDir}}" class="dp">
       </a>
-         <a href="{{url_for('send_request', email=user.email)}}" class="button">Send Request</a>
+         <a href="{{url_for('send_request', profile_id=user._id)}}" class="button">Send Request</a>
         <br/>
         <br/>
       {% else %}

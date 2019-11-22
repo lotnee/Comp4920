@@ -14,10 +14,10 @@ class Event(object):
         self.pictureDir = pictureDir
         self.private = private
 
-    def insert(self,userEmail):
+    def insert(self,userEmail,userId):
         event = DB.insert(collection='Events', data=self.json())
         DB.update_one(collection='Profile',filter={'email':userEmail}, data = {'$push': {'events':event.inserted_id}})
-        DB.update_one(collection = "Events", filter ={'_id':event.inserted_id}, data = {'$push': {"invitees": {"email": userEmail, "status": "going"}}})
+        DB.update_one(collection = "Events", filter ={'_id':event.inserted_id}, data = {'$push': {"invitees": {"id":userId, "email": userEmail, "status": "going"}}})
         return event.inserted_id
 
     def addProfile(self, newProfile,eventId ):

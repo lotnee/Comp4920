@@ -1,7 +1,6 @@
 from app import app, absolute_path
 from app.database import DB
 from app.models.profile import Profile
-from app.models.friend import Friend
 from app.controllers.forms import ProfileForm, photos
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
@@ -103,13 +102,13 @@ def edit_profile():
 							DB.update_one(collection="Profile", filter={"email": toUpdateList[i]['email']}, data={"$set": {friend_pic: filename}})
 
 		profile = DB.find_one(collection="Profile", query={"email": user['email']})
-		return redirect(url_for('profile',profile_id=str(profile['_id'])))
+		return redirect('/profile')
 
 	return render_template('edit-profile.html', title='Edit profile', form=form, profile=profile)
 
 @app.route('/profile/<profile_id>')
 @login_required
-def profile(profile_id):
+def profile(profile_id,is_profile_owner=False):
 	user = DB.find_one(collection="Profile", query={"_id": ObjectId(profile_id)})
 	if user is None:
 		flash('Please create your profile first!')
@@ -118,25 +117,36 @@ def profile(profile_id):
 	print(list(user['events']))
 	# path = os.path.join(absolute_path, 'static/css')
 	# print(path)
-	if list(user['events']) != []:
-		eventList = []
-		for events in user['events']:
-			events = DB.find_one(collection='Events', query={'_id': events})
-			event_dict = {'title': events['name'], 'start': events['start'].strftime("%Y-%m-%d"), 'end': events['end'].strftime("%Y-%m-%d")}
-			# print(event_dict)
-			eventList.append(event_dict)
-		# print(eventList)
-		# filename = path + '/' + current_user.email + '.json'
-		# print(filename)
-		# with open(filename, "w+") as f:
-		# 	f.write(dumps(eventList))
-		# eventList = dumps(eventList)
-		# print(eventList)
-		return render_template('profile.html', profile=user, events=eventList)
-	return render_template('profile.html', profile=user, events={})
+
+	me = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if is_profile_owner or any(filter(
+		lambda entry: entry['email'] == current_user.email 
+			    and entry['status'] == 'accepted',
+			    user['friends'])):
+
+		if list(user['events']) != []:
+			eventList = []
+			for events in user['events']:
+				events = DB.find_one(collection='Events', query={'_id': events})
+				event_dict = {'title': events['name'], 'start': events['start'].strftime("%Y-%m-%d"), 'end': events['end'].strftime("%Y-%m-%d")}
+				# print(event_dict)
+				eventList.append(event_dict)
+			# print(eventList)
+			# filename = path + '/' + current_user.email + '.json'
+			# print(filename)
+			# with open(filename, "w+") as f:
+			# 	f.write(dumps(eventList))
+			# eventList = dumps(eventList)
+			# print(eventList)
+			return render_template('profile.html', profile=user,
+						events=eventList,
+						is_profile_owner=is_profile_owner)
+
+	return render_template('profile.html', profile=user, events={},
+			is_profile_owner=is_profile_owner)
 
 @app.route('/profile')
 @login_required
-def current_profile():
+def my_profile():
 	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	return redirect(url_for('profile',profile_id=str(user['_id'])))
+	return profile(str(user['_id']),is_profile_owner=True)

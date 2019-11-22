@@ -4,49 +4,87 @@
 {% block content %}
 <!DOCTYPE html>
 <head>
-    <link rel="stylesheet" href="../static/css/dashboard.css"> 
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
-    <title>Dashboard</title>
+   <link rel="stylesheet" href="../static/css/dashboard.css">
+   <title>Dashboard</title>
 </head>
-<body>
-  <div class="container">
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          {% for message in messages %}
-              <p style="color:red;">{{ message }}</p>
-          {% endfor %}
-        {% endif %}
-    {% endwith %}
-    {% if events %}
-      {%for dictionary_item in events%}
-      <h4><a href="{{ url_for('display_event', id = dictionary_item['_id']) }}">{{dictionary_item['name']}}</a></h4>
-      <hr class="w3-clear">
-      <p><b>Event Description</b></p>
-      <p>{{dictionary_item['description']}}</p>
-      <br>
-      {% endfor %}
-    {% else %}
-      <h3 style="text-align: center">You are currently not involved in any events.</h3>
-      <h6 style="text-align: center"><button class="button-dash" onclick="window.location.href = '/create-event';">Create an event</button></h4>
-      <p>
-    {% endif %}
-    </br>
-  </div>
-  {% if requests %}
-  <div class="friendcard">
-    <p>Incoming Friend Requests</p>
-    {% for friend in requests %}
-      <div class="detail">
-        <img src="static/images/profile/{{friend.pictureDir}}" class="dp">  {{friend.firstName}} {{friend.lastName}}<br>
-        <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">
-        ✓</a>
-        <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">x</a></br>
+<!-- Body -->
+<body class="w3-theme-15">
+  <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
+    <!-- The Grid -->
+    <div class="w3-row">
+      <!-- Left Column -->
+      <div class="w3-col m3">
+        <div class="w3-card w3-round w3-white">
+          <div class="w3-container">
+            <!--Leave empty for structure purposes -->
+          </div>
+        </div>
+      <!-- End Left Column -->
       </div>
-    </p>
-    {% endfor %}
+      <!-- Middle Column -->
+      <div class="w3-col m7">
+        <div class="container"><br>
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              {% for message in messages %}
+                  <p style="color:red;">{{ message }}</p>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          {% if events %}
+            {%for dictionary_item in events%}
+              <h4><a href="{{ url_for('display_event', id = dictionary_item['_id']) }}">{{dictionary_item['name']}}</a></h4>
+              <hr class="w3-clear">
+              <p><b>Event Description</b></p>
+              <p>{{dictionary_item['description']}}</p>
+              <br>
+            {% endfor %}
+          {% else %}
+            <h3 style="text-align: center">You are currently not involved in any events.</h3>
+            <h6 style="text-align: center"><button class="button-dash" onclick="window.location.href = '/create-event';">Create an event</button></h4>
+            <p>
+          {% endif %}
+          </br>
+        </div>
+      <!-- End Middle Column -->
+      </div>
+      <!-- Right Column -->
+      <div class="w3-col m2">
+        <div class="w3-card w3-round w3-white w3-center">
+          <!-- Leave for structure purposes -->
+        </div>
+        <div class="w3-card w3-round w3-white w3-center">
+          <div class="w3-container" style="background-color: #fafafa">
+              {% if requests %}
+                <br>Friend Requests
+                {% for friend in requests %}
+                  <div class="detail">
+                    <hr>
+                    <img src="static/images/profile/{{friend.pictureDir}}" class="dp">  {{friend.firstName}} {{friend.lastName}}<br>
+                    <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">
+                    ✓</a>
+                    <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">x</a>
+                  </div>
+                </br>
+                {% endfor %}
+              {% endif %}
+          </div>
+        </div>
+        <br>
+      <!-- End Right Column -->
+      </div>
+    <!-- End Grid -->
+    </div>
+  <!-- End Page Container -->
   </div>
-  {% endif %}
+
+
+
 </body>
 {% endblock %}
 </html>
+
+  
+
