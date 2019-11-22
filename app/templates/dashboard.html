@@ -25,7 +25,7 @@
       </div>
       <!-- Middle Column -->
       <div class="w3-col m7">
-        <div class="w3-container w3-card w3-white w3-round w3-margin" style="width: 700px"><br>
+        <div class="container"><br>
           {% with messages = get_flashed_messages() %}
             {% if messages %}
               {% for message in messages %}
@@ -57,7 +57,7 @@
         </div>
         <br>
         <div class="w3-card w3-round w3-white w3-center">
-          <div class="w3-container">
+          <div class="w3-container" style="background-color: #fafafa">
               {% if requests %}
                 <br>Friend Requests
                 {% for friend in requests %}
