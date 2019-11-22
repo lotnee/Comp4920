@@ -31,16 +31,11 @@ def create_events():
 		me = DB.find_one(collection="Profile", query={"email": current_user.email})
 		form.starttime.data = form.starttime.data.split(' ')
 		time1 = form.starttime.data[0].split(':')
-		print("Time1 is ")
-		print(form.starttime)
-		print(time1[0])
 		if form.starttime.data[1] == 'PM':
 			time1[0] = int(time1[0]) + 12
 			if time1[0] == 24:
 				time1[0] = 0
 		time1 = time(int(time1[0]), int(time1[1]))
-		print("Time1 again on line 41 is ",time1)
-
 
 		form.endtime.data = form.endtime.data.split(' ')
 		time2 = form.endtime.data[0].split(':')
@@ -161,22 +156,24 @@ def poll_create_event(poll):
 	if my_poll is None:
 		flash('Please contact admin, DB issues!')
 		return redirect(url_for('polls'))
+	# FIXME 
+	date1 = None
+	largest = 0
 	for option in my_poll['options']:
-		print(option)
 		if 'voters' in option:
-			for voter in option['voters']:
-				print(voter)
-				if voter == user['firstName']:
-					date1 = option['date']
+			if len(list(option['voters'])) > largest:
+				largest = len(list(option['voters']))
+				date1 = option['date']
+
+			# for voter in option['voters']:
+			# 	if voter == user['firstName']:
+			# 		date1 = option['date']
+			# 		break;
 
 	event_obj = Event(name=my_poll['name'] , description =
 			my_poll['description'], start=date1, end=None,
 			host=user['_id'], invitees=[], pictureDir='events.jpg', private=True).json()
-	# event_id = event_obj.insert(user['email'])
-	# event = DB.find_one(collection="Events", query={"_id": ObjectId(event_id)})
-	# if event is None:
-	# 	flash('Please contact admin, event doesn\'t exist!')
-	# 	return redirect(url_for('polls'))
+
 	form = EventForm()
 	if form.validate_on_submit():
 		form.starttime.data = form.starttime.data.split(' ')
@@ -220,17 +217,18 @@ def poll_create_event(poll):
 		else:
 			event_type = False
 
-		#TODO invitees
+		inviteesList = []
+		for voter in my_poll['voters']:
+			voter_obj = DB.find_one(collection='Profile', query={'_id': voter})
+			voter_dict = {'email': voter_obj['email'], 'status': 'going'}
+			inviteesList.append(voter_dict)
 
-		# for profile in event['invitees']:
-		# 	DB.update_one(collection = "Profile", filter = {"email":profile}, data = {"$pull": {"events" : event['_id']}})
-		# DB.remove(collection = "Events", condition = {"_id": event['_id']})
 		updated_event = Event(name = form.name.data, description = form.description.data,
 						  start = date1, end =date2,
 						  host=user['_id'],
-						  invitees=[], pictureDir=filename, private=event_type)
+						  invitees=inviteesList, pictureDir=filename, private=event_type)
 		updated_event.insert(user['email'])
-		# DB.replace_one(collection="Events", filter={"_id": ObjectId(event_id)}, data=updated_event)
+
 		return redirect(url_for('delete_poll', poll=poll))
 	return render_template('poll-create-event.html', title = "Create Your Event", form=form, poll=poll, event=event_obj)
 

@@ -108,6 +108,9 @@ select[name="eventType"] {
 		    	<text> Event Description</text></p>
 				{{form.description(size=60)}}</p>
 				{% endif %}
+				{% if event.start %}
+				<p style="color:green;">Recommended Time: {{ event.start }}</p>
+				{% endif %}
 				Start Date/Time</p>
 		    	{{form.start(class="datepicker")}} <input type="text" id="timeStart" name="starttime" style="width: 100px;"/> </p>
 		    	End Date/Time </p>
