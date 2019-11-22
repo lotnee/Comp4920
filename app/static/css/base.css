@@ -17,7 +17,7 @@ ul {
  }
 
  #header .navbar-nav li > a {
-     color: ##1E90FF;
+     color: #189AB4;
      transition: background-color .2s, color .2s;
      &:hover,
      &:focus {
