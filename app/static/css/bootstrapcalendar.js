@@ -63,8 +63,8 @@ var defaults = {
 	dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
 	dayNamesShort: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
 	buttonText: {
-		prev: "<span class='fc-text-arrow'>?</span>",
-		next: "<span class='fc-text-arrow'>?</span>",
+		prev: "<span class='fc-text-arrow'>«</span>",
+		next: "<span class='fc-text-arrow'>»</span>",
 		prevYear: "<span class='fc-text-arrow'>«</span>",
 		nextYear: "<span class='fc-text-arrow'>»</span>",
 		today: 'today',
@@ -97,8 +97,8 @@ var rtlDefaults = {
 		right: 'title'
 	},
 	buttonText: {
-		prev: "<span class='fc-text-arrow'>?</span>",
-		next: "<span class='fc-text-arrow'>?</span>",
+		prev: "<span class='fc-text-arrow'>«</span>",
+		next: "<span class='fc-text-arrow'>»</span>",
 		prevYear: "<span class='fc-text-arrow'>»</span>",
 		nextYear: "<span class='fc-text-arrow'>«</span>"
 	},

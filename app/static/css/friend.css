@@ -1,9 +1,9 @@
 .container{
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-     padding:15px;
-     max-width:500px; 
-     text-align:left;
-     margin-top: 80px;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+   padding:15px;
+   max-width:500px; 
+   text-align:left;
+   margin-top: 80px;
    left: -10%;
    position:relative;
    background-color: #FAFAFA;
