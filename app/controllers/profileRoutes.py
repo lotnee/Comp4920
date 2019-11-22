@@ -161,7 +161,11 @@ def profile(profile_id,is_profile_owner=False):
 @login_required
 def my_profile():
 	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+<<<<<<< HEAD
 	return profile(str(user['_id']),is_profile_owner=True)
+=======
+	return redirect(url_for('profile',profile_id=str(user['_id'])))
+>>>>>>> 37f91463e5957073b50286713d5aef70eb776188
 
 @app.route('/gcalendar_consent')
 def gcalendar_consent():
