@@ -1,0 +1,63 @@
+.container {
+    max-width: 500px;
+    padding: 15px 35px 45px;
+    margin: auto;
+    margin-top: 100px;
+    background-color: #fafafa;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+ }
+ 
+ .button {
+    background-color: #1E90FF;
+    color: white;
+    cursor: pointer;
+    width: auto;
+    border: none;
+    border-radius: 14px;
+    padding: 10px 15px;
+    margin: 8px 0;
+    float: right;
+ }
+ 
+ .uplbutton {
+    background-color: transparent;
+    color: black;
+    cursor: pointer;
+    width: auto;
+    border: none;
+    padding: 10px 15px;
+    margin: 8px 0;
+ }
+ 
+ .input[type=text], input[type=password] {
+   padding: 12px 20px;
+   margin: 8px 0;
+   display: inline-block;
+   border: 1px solid #ccc;
+   box-sizing: border-box;
+ }
+ 
+ select[name="Gender"] {
+   padding: 5px 10px;
+   display: inline-block;
+   border: 1px solid #ccc;
+   box-sizing: border-box;
+   border-radius: 4px;
+   background: white;
+   float: left;
+ }
+ 
+ .upload-btn-wrapper {
+   position: relative;
+   overflow: hidden;
+   display: inline-block;
+   float: left;
+ }
+ 
+ .upload-btn-wrapper input[type=file] {
+   font-size: 100px;
+   position: absolute;
+   left: 0;
+   top: 0;
+   opacity: 0;
+ }

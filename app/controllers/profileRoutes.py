@@ -1,13 +1,13 @@
 from app import app, absolute_path
 from app.database import DB
 from app.models.profile import Profile
-from app.models.friend import Friend
 from app.controllers.forms import ProfileForm, photos
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 # from werkzeug.utils import secure_filename
 from app.utility.utility import get_list, get_cursor
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 import os
 
 def profileEvents(eventLists):
@@ -62,7 +62,7 @@ def edit_profile():
 						filename = "female.jpg"
 				else:
 					filename = photos.save(form.pictureDir.data, name= 'profile/' + user['email'] + '.')
-					firstName = filename.split('/')[1]
+					filename = filename.split('/')[1]
 				profile_obj = Profile(email=user['email'], firstName=form.firstName.data, lastName=form.lastName.data, descriptions=form.descriptions.data, gender=form.gender.data, pictureDir=filename)
 				profile_obj.insert()
 			else:
@@ -101,14 +101,15 @@ def edit_profile():
 							friend_pic = "friends." + str(j) + ".pictureDir"
 							DB.update_one(collection="Profile", filter={"email": toUpdateList[i]['email']}, data={"$set": {friend_pic: filename}})
 
-		return redirect(url_for('profile'))
+		profile = DB.find_one(collection="Profile", query={"email": user['email']})
+		return redirect('/profile')
 
 	return render_template('edit-profile.html', title='Edit profile', form=form, profile=profile)
 
-@app.route('/profile')
+@app.route('/profile/<profile_id>')
 @login_required
-def profile():
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+def profile(profile_id,is_profile_owner=False):
+	user = DB.find_one(collection="Profile", query={"_id": ObjectId(profile_id)})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -116,19 +117,36 @@ def profile():
 	print(list(user['events']))
 	# path = os.path.join(absolute_path, 'static/css')
 	# print(path)
-	if list(user['events']) != []:
-		eventList = []
-		for events in user['events']:
-			events = DB.find_one(collection='Events', query={'_id': events})
-			event_dict = {'title': events['name'], 'start': events['start'].strftime("%Y-%m-%d"), 'end': events['end'].strftime("%Y-%m-%d")}
-			# print(event_dict)
-			eventList.append(event_dict)
-		# print(eventList)
-		# filename = path + '/' + current_user.email + '.json'
-		# print(filename)
-		# with open(filename, "w+") as f:
-		# 	f.write(dumps(eventList))
-		# eventList = dumps(eventList)
-		# print(eventList)
-		return render_template('profile.html', profile=user, events=eventList)
-	return render_template('profile.html', profile=user, events={})
+
+	me = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if is_profile_owner or any(filter(
+		lambda entry: entry['email'] == current_user.email 
+			    and entry['status'] == 'accepted',
+			    user['friends'])):
+
+		if list(user['events']) != []:
+			eventList = []
+			for events in user['events']:
+				events = DB.find_one(collection='Events', query={'_id': events})
+				event_dict = {'title': events['name'], 'start': events['start'].strftime("%Y-%m-%d"), 'end': events['end'].strftime("%Y-%m-%d")}
+				# print(event_dict)
+				eventList.append(event_dict)
+			# print(eventList)
+			# filename = path + '/' + current_user.email + '.json'
+			# print(filename)
+			# with open(filename, "w+") as f:
+			# 	f.write(dumps(eventList))
+			# eventList = dumps(eventList)
+			# print(eventList)
+			return render_template('profile.html', profile=user,
+						events=eventList,
+						is_profile_owner=is_profile_owner)
+
+	return render_template('profile.html', profile=user, events={},
+			is_profile_owner=is_profile_owner)
+
+@app.route('/profile')
+@login_required
+def my_profile():
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	return profile(str(user['_id']),is_profile_owner=True)

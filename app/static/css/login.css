@@ -1,0 +1,70 @@
+ .form-signin {
+    max-width: 500px;
+    padding: 15px 35px 45px;
+    margin: auto;
+    margin-top: 100px;
+    background-color: #fafafa;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+ }
+ 
+ .button-register {
+    background-color: #fafafafa;
+    color: #1E90FF;
+    cursor: pointer;
+    width: auto;
+    border: 1px solid #1E90FF;
+    float: right;
+    border-radius: 14px;
+ }
+ 
+ .button-signin {
+    background-color: #1E90FF;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 14px;
+    padding: 10px 15px;
+    margin: 8px 0;
+    float: right;
+    border: none;
+ }
+ 
+ .button-signin:hover{
+    opacity: 0.8;
+ }
+ 
+ .button-register:hover{
+    opacity: 0.8;
+ }
+
+ .input[type=text], input[type=password] {
+   padding: 12px 20px;
+   margin: 8px 0;
+   display: inline-block;
+   border: 1px solid #ccc;
+   box-sizing: border-box;
+ }
+ 
+ .imgcontainer {
+   text-align: center;
+   margin: 24px 0 12px 0;
+ }
+ 
+ img.avatar {
+   width: 40%;
+   border-radius: 50%;
+ }
+ 
+ .box {
+   color: black;
+   background: #fff;
+   height: 30px;  
+   line-height: 30px; /* Same as height  */
+ }
+ 
+ .box2 {
+   color: black;
+   background: #fff;
+   height: 100px;  
+   line-height: 100px; /* Same as height  */
+ }

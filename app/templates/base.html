@@ -1,50 +1,16 @@
-<!-- Credit: The base template of the website is from Bootstrap-->
+<!-- Credit: The base template of NAV BAR is from Bootstrap-->
 <!-- Bootstrap template used https://getbootstrap.com/docs/3.4/components/#navbar -->
 <!DOCTYPE html>
 <html>
 <head>
-   <title>{{title}}</title>
+      <link rel="stylesheet" href="../static/css/base.css">
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-   {% block style %}{% endblock %}
+   {% block style %}{% endblock%}
 </head>
-
-<!-- CSS -->
 <style>
-ul {
-   margin: 0;
-   padding: 0;
-   overflow: hidden;
-}
-
-li {
-   float: left;
-}
-
-li a {
-   display: block;
-   text-align: center;
-   padding: 14px 16px;
-   text-decoration: none;
-   font-size: 16px;
-}
-
-#header .navbar-nav li > a {
-	color: ##1E90FF;
-	transition: background-color .2s, color .2s;
-	&:hover,
-	&:focus {
-		background-color: ##1E90FF;
-		color: #fff;
-	}
-}
-
-#header .navbar-nav li.active > a {
-	background-color: #1E90FF;
-	color: #fff;
-}
 
 </style>
 
@@ -56,12 +22,12 @@ li a {
 		   <div class="container-fluid">
 			   <div class="navbar-header">
 				   <a class="navbar-brand" href="/">
-				      <img src="https://cdn.discordapp.com/attachments/352464623108096002/633928057681477642/hicon.png" width="30" height="30" alt="">
+				      <img src="../static/images/hangouts2square.png" width="30" height="30" style="margin-top: -5px;">
 			      </a>
             </div>
 			   <ul class="nav navbar-nav">
                {% if current_user.is_authenticated %}
-				   <li class="active"><a href="/dashboard">Dashboard<span class="sr-only">(current)</span></a></li>
+				   <li ><a href="/dashboard">Dashboard<span class="sr-only">(current)</span></a></li>
 				   <li ><a href="/profile">Profile</a></li>
 				   <li><a href="/view-events">Events</a></li>
                <li><a href="/friends">Friends</a></li>
@@ -71,7 +37,7 @@ li a {
                <div class="input-group">
                      <input type="search" class="form-control" placeholder="Search" id="sitesearch" name="query">
                </div>
-               </form>
+            </form>
 			   <ul class="nav navbar-nav navbar-right">
                <li><a href="/create-poll"><span class="fa fa-plus"></span> New Poll</a></li>
                <li><a href="/create-event"><span class="fa fa-plus"></span> New Event</a></li>

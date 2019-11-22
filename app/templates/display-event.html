@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% block style%}
+<link rel="stylesheet" href="/static/css/display-event.css">
+{% endblock%}
+
 {% block content %}
 <style>
 .container{
@@ -18,18 +22,34 @@
        <br>
        <h2>Description</h2>
        <p>{{event['description']}}</p>
-       <h2>Invited</h2>
+       <div class="inviteField">
+           <h2>Invitation Status</h2>
+           {% if status == "invited" %}
+           <p>You have been invited! Please confirm your attendance</p>
+           <button class="btn btn-success"><a class="attendance" href="{{url_for('acceptInvite', eventId = event['_id'],acceptance = "going")}}">Accept</a></button>
+           <button class="btn btn-warning"><a class="attendance" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "maybe")}}">Maybe</a></button>
+           <button class="btn btn-danger"><a class="attendance" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "decline")}}">Decline</a></button>
+           {% else %}
+           <p>{{status}}</p>
+           {% endif %}
+           <h2>Invited Guests</h2>
+
+        </div>
        <ul>
+
+
            {% for dictionary_item in event['invitees'] %}
-           <li>{{dictionary_item['email']}}</li>
+           <a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}">{{dictionary_item['email']}}  </a>
+           <br>
            {% endfor %}
        </ul>
+    {% if host == 1 %}
       <input type = "text" id = "myInput" onkeyup ="hi()" placeholder="Search for your friends">
       <ul id = "friends">
-          <li><a href="/event-completed">asdasd</a></li>
        </ul>
    </div>
-   <script type="text/javascript" src="{{ url_for('static', filename='display-event.js') }}"></script>
+
+   <script type="text/javascript" src="{{ url_for('static', filename='js/display-event.js') }}"></script>
    <script>
        function hi(){
            var id = "{{event['_id']}}"
@@ -37,28 +57,8 @@
            myFunction(friendlist,id)
        }
    </script>
-
-<!-- <script>
-    function myFunction() {
-        var id = "{{event['_id']}}"
-        var friendlist = {{friends | safe}};
-        var name = {{event['name'] | tojson}};
-        input = document.getElementById("myInput")
-        filter = input.value.toUpperCase();
-        var regex=/^[a-zA-Z]+$/;
-        document.getElementById("friends").innerHTML = "";
-        for (i = 0; i < friendlist.length; i++){
-            if (friendlist[i]['firstName'].toUpperCase().indexOf(filter) > -1 && filter.match(regex)){
-                var node = document.createElement("LI");
-                var link = "<a href = \"/add-people/" + friendlist[i]['email']+ "/" +id + "\">" + friendlist[i]['firstName'] + " " + friendlist[i]['lastName'] + "</a>"
-                console.log(link);
-                node.innerHTML = link;
-                document.getElementById("friends").appendChild(node);
-            }
-        }
-
-    }
-</script> -->
+   {% else %}
+   {% endif %}
 
 </body>
 

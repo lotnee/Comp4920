@@ -13,8 +13,8 @@ class DB(object):
 		return hehe
 
 	@staticmethod
-	def find_one(collection, query):
-		return DB.DATABASE[collection].find_one(query)
+	def find_one(collection, query, projection = None):
+		return DB.DATABASE[collection].find_one(query, projection)
 
 	@staticmethod
 	def find_all(collection):
@@ -31,18 +31,16 @@ class DB(object):
 	@staticmethod
 	def count(collection):
 		return DB.DATABASE[collection].count_documents({})
+
 	@staticmethod
 	def remove(collection, condition):
 		DB.DATABASE[collection].remove(condition)
-
-	# def find_with_projection(collection,query,projection):
-	# 	return DB.DATABASE[collection].find(query,projection)
 
 	@staticmethod
 	def createIndex(collection, query, name):
 		return DB.DATABASE[collection].create_index(query, name=name)
 
-	# TODO
-	# @staticmethod
-	# def aggregate(collection, query):
-	#     DB.DATABASE[collection].aggregate(query)
+	# might need to retry this one
+	@staticmethod
+	def replace_one(collection, filter, data):
+		DB.DATABASE[collection].update(filter, data)

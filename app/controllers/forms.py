@@ -35,6 +35,8 @@ class EventForm(FlaskForm):
 	start = DateField('Enter Your Start Date', format='%Y-%m-%d')
 	end = DateField('When Does The Event End', format='%Y-%m-%d')
 	#FIXME add start time and end time as string field
+	starttime = StringField('')
+	endtime = StringField('') 
 	pictureDir = FileField(validators=[FileAllowed(photos, 'image only')])
 	eventType = StringField('Type')
 	submit = SubmitField('Create Event')
@@ -53,5 +55,8 @@ class PollForm(FlaskForm):
 	option1 = DateField('Option 1', format='%Y-%m-%d')
 	option2 = DateField('Option 2', format='%Y-%m-%d')
 	option3 = DateField('Option 3', format='%Y-%m-%d')
+	option1t = StringField('')
+	option2t = StringField('')
+	option3t = StringField(' ')
 	submit = SubmitField('confirm poll details')
 		

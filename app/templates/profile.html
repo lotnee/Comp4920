@@ -20,9 +20,9 @@
       var m = date.getMonth();
       var y = date.getFullYear();
       /*  className colors
-    
+
       className: default(transparent), important(red), chill(pink), success(green), info(blue)
-    
+
       */
       /* initialize the external events
       -----------------------------------------------------------------*/
@@ -56,13 +56,13 @@
         axisFormat: 'h:mm',
         columnFormat: {
           month: 'ddd', // Mon
-          
+
           day: 'dddd M/d', // Monday 9/7
           agendaDay: 'dddd d'
         },
         titleFormat: {
           month: 'MMMM yyyy', // September 2009
-          
+
           day: 'MMMM yyyy' // Tuesday, Sep 8, 2009
         },
         // allDaySlot: false,
@@ -101,7 +101,7 @@
         // },
         // FINALLY WOOOOTS
         events: eventList,
-        // events: 
+        // events:
         // [{
         //     'title': 'All Event',
         //     'start': '2019-11-1'
@@ -166,7 +166,7 @@ body {
       background-color: #fafafa;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     }
-    
+
     @import url("https://fonts.googleapis.com/css?family=Montserrat:400,600|Open+Sans:400,600,700");
 td.fc-day {
   background: #fff !important;
@@ -249,7 +249,7 @@ span.fc-button {
   font-weight: 600;
   border-bottom: 3px solid #137abb;
 }
-  
+
 .fc .fc-header-space {
   padding-left: 10px;
 }
@@ -332,7 +332,7 @@ span.fc-button {
   width: auto;
 }
 /*
-  Our default prev/next buttons use HTML entities like ? ? Â« Â»
+  Our default prev/next buttons use HTML entities like ? ? « »
   and we'll try to make them look good cross-browser.
 */
 .fc-text-arrow {
@@ -734,7 +734,7 @@ table.fc-header {
 .container{
    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
    padding:15px;
-   max-width:250px; 
+   max-width:250px;
    text-align:left;
    margin-top: 80px;
    left: -25%;
@@ -742,7 +742,7 @@ table.fc-header {
    background-color: #FAFAFA;
    text-align: center;
  }
-  
+
 .picture {
   margin-top: 20px;
   border-radius: 50%;
@@ -776,23 +776,23 @@ img {
 </style>
 
 <!-- Body -->
-<body>   
+<body>
   <div class="container">
       <img src="../static/images/profile/{{profile.pictureDir}}" class="picture"/>
       <h2>{{profile.firstName}} {{profile.lastName}}</h2>
-      {% if current_user.is_authenticated %}
+      {% if current_user.is_authenticated and is_profile_owner %}
       <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile <i class="fa fa-pencil"></i></button>
-      {% endif %} 
+      {% endif %}
       <hr>
       <div style="text-align: center">
         {{profile.descriptions}}
       </div>
   </div>
-  
+
   <div id='wrap'>
-    <div id='calendar'></div>
-    <div style='clear:both'></div>  
-  </div>      
+      <div id='calendar'></div>
+      <div style='clear:both'></div>
+  </div>
 </body>
 {% endblock %}
 </html>

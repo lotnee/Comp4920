@@ -4,98 +4,9 @@
 <!DOCTYPE html>
 <head>
    <title>Friends</title>
+   <link rel="stylesheet" href="../static/css/friend.css">
 </head>
 <html>
-
-<style>
-.container{
-   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-	padding:15px;
-	max-width:500px; 
-	text-align:left;
-	margin-top: 80px;
-  left: -10%;
-  position:relative;
-  background-color: #FAFAFA;
-}
-
-.container2{
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  padding:15px;
-  margin-top:60px;
-  width:300px; 
-  text-align:left;
-  top:-20%;
-  position:absolute;
-  left:104%;
-  background-color: #FAFAFA;
-}
-
-a.button {
-   background-color: #1E90FF;
-   color: white;
-   cursor: pointer;
-   width: auto;
-   border-radius: 14px;
-   padding: 8px 12px;
-   margin: 8px 0;
-   float: right;
-   margin-top:-50px;
-   font-size: 10px;
-}
-
-a.cancel {
-   background-color: grey;
-   color: white;
-   cursor: pointer;
-   width: auto;
-   border-radius: 14px;
-   padding: 8px 12px;
-   margin: 8px 0;
-   float: right;
-   margin-top:-30px;
-   font-size: 10px;
-}
-
-a.delete {
-   background-color: grey;
-   color: white;
-   cursor: pointer;
-   width: auto;
-   border-radius: 14px;
-   padding: 8px 12px;
-   margin: 8px 0;
-   float: right;
-   margin-top:-50px;
-   font-size: 10px;
-}
-
-a.accept {
-   background-color: silver;
-   color: white;
-   cursor: pointer;
-   width: auto;
-   border-radius: 14px;
-   padding: 8px 11px;
-   margin: 8px 0;
-   float: right;
-   margin-top:-68px;
-   font-size: 10px;
-}
-
-h1 {
-   text-align: center;
-}
-
-.dp {
-  width:50px;
-  height:50px;
-  margin-top:-90px;
-}
-.detail {
-  margin-left: 60px;
-}
-</style>
 <body>  
   <!-- can be use to display friend list in dashboard -->
   <div class="container">
@@ -107,16 +18,14 @@ h1 {
       {% endif %}
   {% endwith %} 
    <h1>Friends</h1>
-   {% for friend in me.friends %}
-      {% if friend.status != "pending" %}
+   {% for friend in myFriendList %}
         <div class="detail">
           <p><b>Email:</b> {{friend.email}}</p>
           <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
         </div>
         <img src="static/images/profile/{{friend.pictureDir}}" class="dp">
-        <a href="{{url_for('delete_friend', email=friend.email)}}"class="cancel">Delete Friend</a>
+        <a href="{{url_for('delete_friend', profile_id=friend._id)}}"class="cancel">Delete Friend</a>
         <br />
-      {% endif %}
    {% endfor %}
    <br>
 
@@ -130,22 +39,20 @@ h1 {
               <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
             </div>
             <img src="static/images/profile/{{friend.pictureDir}}" class="dp">
-          <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">✓</a>
-          <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">x</a>
+          <a href="{{url_for('accept_request', profile_id=friend._id)}}"class="accept">✓</a>
+          <a href="{{url_for('delete_request', profile_id=friend._id)}}"class="cancel">x</a>
           <br />
        {% endfor %}
        <h5>Sent Request to:</h5>
-       {% for friend in me.friends %}
-          {% if friend.status == "pending" %}
+       {% for friend in mySentList %}
             <div class="detail">
               <p><b>Email:</b> {{friend.email}}</p>
               <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
             </div>
             <img src="static/images/profile/{{friend.pictureDir}}" class="dp">
-            <a href="{{url_for('delete_request', email=friend.email)}}"class="delete">
+            <a href="{{url_for('delete_request', profile_id=friend._id)}}"class="delete">
             x</a>
           <br />
-          {% endif %}
        {% endfor %}
     </div>
    </div>
@@ -159,8 +66,10 @@ h1 {
         <p><b>Email:</b> {{user.email}}</p>
         <p><b>Name:</b> {{user.firstName}} {{user.lastName}}</p>
       </div>
+      <a href="{{url_for('profile', profile_id=user._id)}}">
         <img src="static/images/profile/{{user.pictureDir}}" class="dp">
-         <a href="{{url_for('send_request', email=user.email)}}" class="button">Send Request</a>
+      </a>
+         <a href="{{url_for('send_request', profile_id=user._id)}}" class="button">Send Request</a>
         <br/>
         <br/>
       {% else %}

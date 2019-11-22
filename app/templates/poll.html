@@ -2,9 +2,9 @@
 {% block content %}
 <!DOCTYPE html>
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../static/css/poll.css">
 </head>
-
 <style>
 .container{
     padding:20px;
@@ -63,10 +63,48 @@ a.addVoter:hover {
 	color: #778899;
 }
 
+a.delPoll {
+   background-color: transparent;
+   color: #1E90FF;
+   cursor: pointer;
+   border-radius: 14px;
+   padding: 8px 12px;
+   margin: 8px 0;
+   float: right;
+   margin-top:-50px;
+   margin-right: -70px;
+   font-size: 12px;
+   border-color: #1E90FF;
+}
+
+a.delPoll:hover {
+  transition: 0.8s;
+  color: #778899;
+}
+
+a.createEvent {
+   background-color: transparent;
+   color: #1E90FF;
+   cursor: pointer;
+   border-radius: 14px;
+   padding: 8px 12px;
+   margin: 8px 0;
+   float: right;
+   margin-top:-70px;
+   margin-right: -50px;
+   font-size: 12px;
+   border-color: #1E90FF;
+}
+
+a.createEvent:hover {
+  transition: 0.8s;
+  color: #778899;
+}
+
 </style>
 <body>
 <div class="container">
-	<h1 style="text-align:center">Poll List</h1>
+	<h1 style="text-align:center">Poll List</h1><hr>
 	{% with messages = get_flashed_messages() %}
 		{% if messages %}
 			{% for message in messages %}
@@ -74,36 +112,42 @@ a.addVoter:hover {
 			{% endfor %}
 		{% endif %}
 	{% endwith %}
-
-	{% for poll in polls %}
-		<form action="{{url_for('update_vote', poll=poll._id)}}" method="post">
-		<hr>
-		<p><h4><b>{{poll.name}}</b></p></h4>
-		<p style="text-align: center"> {{poll.description}} </p>
-		{% for dates in poll.options %}
-		<div style="display: none">{{dates.date}}</div>
-		<input type="radio" name="date" value="{{dates.date}}" style="border: 2px; background-color: white;"> {{dates.date}}
-			{% if dates.votes %}
-			<p>Voters</p> 
-			{% endif %}
-			{% for votes in dates.voters %}
-			<br><i class="fa fa-chevron-circle-right" style="color:#1E90FF"></i> {{votes}}
+	{% if polls %}
+		{% for poll in polls %}
+			<form action="{{url_for('update_vote', poll=poll._id)}}" method="post">
+			<hr>
+			<p><h4><b>{{poll.name}}</b></p></h4>
+			<p style="text-align: center"> {{poll.description}} </p>
+			{% for dates in poll.options %}
+			<div style="display: none">{{dates.date}}</div>
+			<input type="radio" name="date" value="{{dates.date}}" style="border: 2px; background-color: white;"> {{dates.date}}
+				{% if dates.votes %}
+				<p>Voters</p> 
+				{% endif %}
+				{% for votes in dates.voters %}
+				<br> <i class="fa fa-chevron-circle-right" style="color:#1E90FF"></i> {{votes}}
+				{% endfor %}
+				<br>
+			
+			<br />
 			{% endfor %}
 			<br>
-		
-		<br />
+			<button name="add" value="add" class="button-add" type="submit">Vote</button>
+			<button name="del" value="del" class="button-del" type="submit">Unvote</button>
+			{% if user._id == poll.creator %}
+			  <a href="{{url_for('add_voter', poll=poll._id)}}" class="addVoter"><span class="fa fa-plus"></span></a>
+			  <a href="{{url_for('delete_poll', poll=poll._id)}}" class="delPoll"><span class="fa fa-minus"></span></a>
+			  <a href="{{url_for('poll_create_event', poll=poll._id)}}" class="createEvent"><span class="fa fa-chevron-circle-right"></span></a>
+			{% endif %}
+			</form>
 		{% endfor %}
-		<br>
-		<button name="add" value="add" class="button-add" type="submit">Vote</button>
-		<button name="del" value="del" class="button-del" type="submit">Unvote</button>
-		{% if user._id == poll.creator%}
-		<a href="{{url_for('add_voter', poll=poll._id)}}" class="addVoter"><span class="fa fa-plus"></span></a>
-		{% endif %}
-		</form>
-
-	{% endfor %}
+	{% else %}
+		<h4 style="text-align: center">You currently do not have any existing polls.</h4>
+		<h5 style="text-align: center"><button class="button-polls" onclick="window.location.href = '/create-poll';">Create a poll</button></h5>
+		<p>
+	{% endif %}
 </div>
 {% endblock %}
 
 </body>
-</htm>
+</html>
