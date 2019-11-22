@@ -790,8 +790,10 @@ img {
   </div>
 
   <div id='wrap'>
-    <div id='calendar'></div>
-    <div style='clear:both'></div>
+    {% if events %}
+      <div id='calendar'></div>
+      <div style='clear:both'></div>
+    {% endif %}
   </div>
 </body>
 {% endblock %}

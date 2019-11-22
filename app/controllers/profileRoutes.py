@@ -142,10 +142,9 @@ def profile(profile_id,is_profile_owner=False):
 			return render_template('profile.html', profile=user,
 						events=eventList,
 						is_profile_owner=is_profile_owner)
-		return render_template('profile.html', profile=user, events={},
-				is_profile_owner=is_profile_owner)
 
-	return redirect(url_for('dashboard'))
+	return render_template('profile.html', profile=user, events={},
+			is_profile_owner=is_profile_owner)
 
 @app.route('/profile')
 @login_required
