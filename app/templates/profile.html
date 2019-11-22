@@ -113,7 +113,7 @@
 </head>
 <!-- CSS -->
 <style>
-<!-- Calendar CSS -->
+/* Calendar CSS */
 body {
       margin-bottom: 40px;
       margin-top: 40px;
@@ -124,7 +124,7 @@ body {
     }
     #wrap {
       width: 500px;
-      margin: 0 auto;
+      margin: auto;
     }
     #external-events {
       float: left;
@@ -157,16 +157,14 @@ body {
     }
     #calendar {
       /*    float: right; */
-      margin:auto;
-      margin-left: 80px;
-      margin-top: -70%; 
-      width: 590px;
-      background-color: #FFFFFF;
-      border-radius: 6px;
-      box-shadow: 0 1px 2px #C3C3C3;
-      -webkit-box-shadow: 0px 0px 21px 2px rgba(0, 0, 0, 0.18);
-      -moz-box-shadow: 0px 0px 21px 2px rgba(0, 0, 0, 0.18);
-      box-shadow: 0px 0px 21px 2px rgba(0, 0, 0, 0.18);
+      width: 610px;
+      padding:20px;
+      margin-top:-70%;
+      margin-left: 10%;
+      text-align:left;
+      padding:10px;
+      background-color: #fafafa;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     }
     
     @import url("https://fonts.googleapis.com/css?family=Montserrat:400,600|Open+Sans:400,600,700");
@@ -732,26 +730,19 @@ table.fc-header {
 .fc-event .ui-resizable-handle {
   display: none !important;
 }
-.card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 18%;
-  margin-left: 20%;
-  text-align: center;
-  float: center;
-  margin-top: 100px;
-  padding: 20px;
-  background-color: #FAFAFA;
-}
-.cal {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 50%;
-  margin-left: 38%;
-  text-align: center;
-  float: center;
-  padding: 20px;
-  background-color: #FAFAFA;
-  margin-top: -400px;
-}
+
+.container{
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+   padding:15px;
+   max-width:250px; 
+   text-align:left;
+   margin-top: 80px;
+   left: -25%;
+   position:relative;
+   background-color: #FAFAFA;
+   text-align: center;
+ }
+  
 .picture {
   margin-top: 20px;
   border-radius: 50%;
@@ -781,32 +772,27 @@ button:hover, a:hover {
 }
 img {
       max-width: 100%
-    }
+}
 </style>
 
 <!-- Body -->
 <body>   
-   <div class="card"> 
-         <img src="../static/images/profile/{{profile.pictureDir}}" class="picture"/>
-         <h2>{{profile.firstName}} {{profile.lastName}}</h2>
-         {% if current_user.is_authenticated %}
-         <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile <i class="fa fa-pencil"></i></button>
-         {% endif %} 
-         <hr>
-         <div style="text-align: center">
-            {{profile.descriptions}}
-         </div>
-   </div>
-
+  <div class="container">
+      <img src="../static/images/profile/{{profile.pictureDir}}" class="picture"/>
+      <h2>{{profile.firstName}} {{profile.lastName}}</h2>
+      {% if current_user.is_authenticated %}
+      <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile <i class="fa fa-pencil"></i></button>
+      {% endif %} 
+      <hr>
+      <div style="text-align: center">
+        {{profile.descriptions}}
+      </div>
+  </div>
   
-       <div id='wrap'>
-
+  <div id='wrap'>
     <div id='calendar'></div>
-
-    <div style='clear:both'></div>
- 
-            
-    </div>      
+    <div style='clear:both'></div>  
+  </div>      
 </body>
 {% endblock %}
 </html>
