@@ -9,6 +9,7 @@ class Event(object):
         self.start = start
         self.end = end
         self.host = host
+        self.invitePrivleges = []
         self.invitees = invitees
         self.pictureDir = pictureDir
         self.private = private
@@ -30,7 +31,9 @@ class Event(object):
         	'start': self.start,
         	'end': self.end,
             'host':self.host,
+            'invitePrivleges': self.invitePrivleges,
             'invitees':self.invitees,
             'pictureDir': self.pictureDir,
             'private': self.private
+
         }
