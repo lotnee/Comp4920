@@ -107,6 +107,10 @@ def event_completed():
 @login_required
 def display_event(id):
 	#get the event name or more so the ID
+	invited = 0
+	going = 0
+	maybe = 0
+	declined = 0
 	host = 0
 	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
 	# gets all the friends of the user
@@ -124,10 +128,21 @@ def display_event(id):
 		host = 1
 	# see whether the person has accepted or not to give them the option to accept your invite
 	for invitee in eventDetails["invitees"]:
+		if invitee['status'] == "going":
+			going = going + 1
+		elif invitee['status'] == "declined":
+			declined = declined + 1
+		elif invitee['status'] == "maybe":
+			maybe = maybe + 1
+		else:
+			invited = invited + 1
 		if invitee["email"] == current_user.email and invitee['status'] != "invited":
 			status = invitee['status'] # user has already responded
+
 	return render_template('display-event.html', event = eventDetails,
-							friends = json.dumps(friends), host = host, status = status)
+							friends = json.dumps(friends), host = host, status = status,
+							noInvited = invited, noDeclined = declined, noMaybe = maybe,
+							noGoing = going)
 
 @app.route('/delete-event/<string:id>')
 @login_required
