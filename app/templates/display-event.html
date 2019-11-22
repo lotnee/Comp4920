@@ -18,13 +18,14 @@
        <br>
        <h2>Description</h2>
        <p>{{event['description']}}</p>
-       <h2>Invited</h2>
+       <h2>Invited Guests</h2>
        <div class="inviteField">
-
+           <button><a href="{{url_for('acceptInvite', eventId = event['_id'],acceptance = "going")}}">Accept</a></button> <button>Maybe</button> <button>Decline</button>
         </div>
        <ul>
            {% for dictionary_item in event['invitees'] %}
            <li>{{dictionary_item['email']}}</li>
+           <br>
            {% endfor %}
        </ul>
     {% if host == 1 %}
