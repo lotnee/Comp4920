@@ -14,6 +14,7 @@ def friends():
 		return redirect(url_for('edit_profile'))
 	users = list(DB.find_all(collection="Profile"))
 	me = DB.find_one(collection="Profile", query={"email": current_user.email})
+
 	myFriendList = []
 	mySentList = []
 	for f in me['friends']:

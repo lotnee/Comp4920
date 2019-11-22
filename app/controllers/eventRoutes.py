@@ -113,6 +113,7 @@ def display_event(id):
 	# gets all the friends of the user
 	retDictionary = DB.find_one(collection = "Profile", query = {"email":current_user.email})
 	friends = []
+	status = "invited" # this user has not  responded to the event
 	for person in retDictionary['friends']:
 		if person['status'] == "accepted":
 			friendId = DB.find_one(collection = "Profile", query = {"email":person['email']}, projection = {"_id":1})
@@ -122,9 +123,12 @@ def display_event(id):
 	# Sees whether this person has invite privleges or is a host
 	if eventDetails['host'] == retDictionary['_id']:
 		host = 1
-	# friends = retDictionary['friends']
-	# remember to filter out only active friends, no pending but do it later
-	return render_template('display-event.html', event = eventDetails, friends = json.dumps(friends), host = host)
+	# see whether the person has accepted or not to give them the option to accept your invite
+	for invitee in eventDetails["invitees"]:
+		if invitee["email"] == current_user.email and invitee['status'] != "invited":
+			status = invitee['status'] # user has already responded
+	return render_template('display-event.html', event = eventDetails,
+							friends = json.dumps(friends), host = host, status = status)
 
 @app.route('/delete-event/<string:id>')
 @login_required
@@ -156,7 +160,7 @@ def poll_create_event(poll):
 	if my_poll is None:
 		flash('Please contact admin, DB issues!')
 		return redirect(url_for('polls'))
-	# FIXME 
+	# FIXME
 	date1 = None
 	largest = 0
 	for option in my_poll['options']:
@@ -250,3 +254,14 @@ def addPeople(userId = None,id = None):
 		DB.update_one(collection = "Events", filter ={'_id':ObjectId(id)}, data = {'$push': {"invitees": {"email": email, "status": "invited"}}})
 		DB.update_one(collection = "Profile", filter = {"email":email}, data = {"$push": {"events": ObjectId(id)}})
 	return redirect(url_for("display_event", id = id))
+
+
+@app.route('/accept-invite/<eventId>/<acceptance>')
+@login_required
+def acceptInvite(eventId, acceptance):
+	#need to change the user to accepting that event id
+	print(acceptance)
+	print(current_user.email)
+	DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId), "invitees":{"$elemMatch": {"email" : current_user.email} } }, data = {'$set': {"invitees.$.status":acceptance}}  )
+
+	return "HI"

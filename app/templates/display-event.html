@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% block style%}
+<link rel="stylesheet" href="/static/css/display-event.css">
+{% endblock%}
+
 {% block content %}
 <style>
 .container{
@@ -18,13 +22,23 @@
        <br>
        <h2>Description</h2>
        <p>{{event['description']}}</p>
-       <h2>Invited</h2>
        <div class="inviteField">
+           <h2>Invitation Status</h2>
+           {% if status == "invited" %}
+           <p>You have been invited! Please confirm your attendance</p>
+           <button class="btn btn-success"><a class="attendance" href="{{url_for('acceptInvite', eventId = event['_id'],acceptance = "going")}}">Accept</a></button>
+           <button class="btn btn-warning"><a class="attendance" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "maybe")}}">Maybe</a></button>
+           <button class="btn btn-danger"><a class="attendance" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "decline")}}">Decline</a></button>
+           {% else %}
+           <p>{{status}}</p>
+           {% endif %}
+           <h2>Invited Guests</h2>
 
         </div>
        <ul>
            {% for dictionary_item in event['invitees'] %}
            <li>{{dictionary_item['email']}}</li>
+           <br>
            {% endfor %}
        </ul>
     {% if host == 1 %}
