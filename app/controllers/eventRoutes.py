@@ -96,7 +96,7 @@ def view_events():
 		eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
 		allEvents = profileEvents(eventList[0]['events']) #FIXME doesn't seem right
 		#what doesn't seem right?
-		return render_template('events.html', events = allEvents, title='View Events')
+		return render_template('events.html', events = allEvents, title='View Events', me=user)
 	return render_template('events.html',title="View Events")
 
 @app.route('/event-completed')
