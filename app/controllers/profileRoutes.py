@@ -103,7 +103,7 @@ def edit_profile():
 							DB.update_one(collection="Profile", filter={"email": toUpdateList[i]['email']}, data={"$set": {friend_pic: filename}})
 
 		profile = DB.find_one(collection="Profile", query={"email": user['email']})
-		return redirect(url_for('profile',profile_id=str(profile['_id'])))
+		return redirect('/profile')
 
 	return render_template('edit-profile.html', title='Edit profile', form=form, profile=profile)
 
@@ -145,7 +145,7 @@ def profile(profile_id,is_profile_owner=False):
 		return render_template('profile.html', profile=user, events={},
 				is_profile_owner=is_profile_owner)
 
-	return ('Page not found', 404)
+	return redirect(url_for('dashboard'))
 
 @app.route('/profile')
 @login_required
