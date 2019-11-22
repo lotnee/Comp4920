@@ -15,6 +15,20 @@
     text-align:left;
     padding:10px;
 }
+.modal{
+    position:fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background:white;
+}
+.fade{
+    opacity:1;
+}
+
+.nav .nav-tabs > .active {
+     background:grey;
+}
 </style>
 <body>
    <div class="container">
@@ -43,6 +57,29 @@
            <br>
            {% endfor %}
        </ul>
+       <!-- Parts of this code was from https://getbootstrap.com/docs/4.0/components/navs/ -->
+       <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends">See All</button>
+       <div class="modal fade" id = "DisplayFriends" role="dialog">
+           <ul class="nav nav-tabs">
+               <li class="active">
+                   <a data-toggle = "tab" href="#going">Going</a>
+               </li>
+               <li >
+                   <a data-toggle = "tab" href="#maybe">Maybe</a>
+               </li>
+               <li>
+                   <a data-toggle = "tab" href="#declined">Declined</a>
+               </li>
+               <li>
+                   <a data-toggle = "tab" href="#invited">Invited</a>
+               </li>
+            </ul>
+           </div>
+
+          <div class="content-for-tabs">
+              
+             </div>
+           <!-- End code from https://getbootstrap.com/docs/4.0/components/navs/ -->
     {% if host == 1 %}
       <input type = "text" id = "myInput" onkeyup ="hi()" placeholder="Search for your friends">
       <ul id = "friends">
