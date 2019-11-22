@@ -1,7 +1,6 @@
 from app import app, absolute_path
 from app.database import DB
 from app.models.profile import Profile
-from app.models.friend import Friend
 from app.controllers.forms import ProfileForm, photos
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
