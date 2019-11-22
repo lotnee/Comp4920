@@ -19,6 +19,9 @@
        <h2>Description</h2>
        <p>{{event['description']}}</p>
        <h2>Invited</h2>
+       <div class="inviteField">
+
+        </div>
        <ul>
            {% for dictionary_item in event['invitees'] %}
            <li>{{dictionary_item['email']}}</li>
@@ -27,7 +30,6 @@
     {% if host == 1 %}
       <input type = "text" id = "myInput" onkeyup ="hi()" placeholder="Search for your friends">
       <ul id = "friends">
-          <li><a href="/event-completed">asdasd</a></li>
        </ul>
    </div>
 
