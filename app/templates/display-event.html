@@ -36,8 +36,10 @@
 
         </div>
        <ul>
+
+
            {% for dictionary_item in event['invitees'] %}
-           <li>{{dictionary_item['email']}}</li>
+           <a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}">{{dictionary_item['email']}}  </a>
            <br>
            {% endfor %}
        </ul>

@@ -1,7 +1,6 @@
 from app import app
 from app.database import DB
 from app.models.events import Event
-from app.models.friend import Friend
 from app.controllers.forms import photos,EventForm
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
@@ -81,7 +80,7 @@ def create_events():
 						  start = date1, end =date2,
 						  host=me['_id'],
 						  invitees=[], pictureDir=filename, private=False)
-		event.insert(current_user.email)
+		event.insert(current_user.email, me['_id'])
 		return redirect(url_for('event_completed'))
 	return render_template('create-event.html', title = "Create Your Event", form = form)
 
@@ -116,9 +115,9 @@ def display_event(id):
 	status = "invited" # this user has not  responded to the event
 	for person in retDictionary['friends']:
 		if person['status'] == "accepted":
-			friendId = DB.find_one(collection = "Profile", query = {"email":person['email']}, projection = {"_id":1})
-			friendId = str(friendId['_id'])
-			element = {"id":friendId, "firstName":person['firstName'], "lastName": person['lastName']}
+			friendId = str(person['friend_id'])
+			friendDetails = DB.find_one(collection = "Profile", query ={"_id":person['friend_id']})
+			element = {"id":friendId, "firstName":friendDetails['firstName'], "lastName": friendDetails['lastName']}
 			friends.append(element)
 	# Sees whether this person has invite privleges or is a host
 	if eventDetails['host'] == retDictionary['_id']:
@@ -251,7 +250,7 @@ def addPeople(userId = None,id = None):
 	email = profileEvents['email']
 	profileEvents = profileEvents['events']
 	if ObjectId(id) not in profileEvents:
-		DB.update_one(collection = "Events", filter ={'_id':ObjectId(id)}, data = {'$push': {"invitees": {"email": email, "status": "invited"}}})
+		DB.update_one(collection = "Events", filter ={'_id':ObjectId(id)}, data = {'$push': {"invitees": {"id":ObjectId(userId),"email": email, "status": "invited"}}})
 		DB.update_one(collection = "Profile", filter = {"email":email}, data = {"$push": {"events": ObjectId(id)}})
 	return redirect(url_for("display_event", id = id))
 
@@ -264,4 +263,17 @@ def acceptInvite(eventId, acceptance):
 	print(current_user.email)
 	DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId), "invitees":{"$elemMatch": {"email" : current_user.email} } }, data = {'$set': {"invitees.$.status":acceptance}}  )
 
-	return "HI"
+	return  redirect(url_for("display_event", id = eventId))
+
+@app.route('/delete-invite/<eventId>/<userId>')
+@login_required
+def deleteInvite(eventId,userId):
+	# Delete user from the Event model from invitees
+	# Get the list of invitees from Event model
+	userEmail = DB.find_one(collection = "Profile", query  = {"_id":ObjectId(userId)}, projection = {"email":1})
+	DB.update_one(collection = "Events", filter = {"_id": ObjectId(eventId)}, data = {'$pull': {"invitees": {"id": ObjectId(userId)}}})
+	DB.update_one(collection = "Profile", filter = {"_id":ObjectId(userId)}, data = {'$pull': {"events":ObjectId(eventId)}})
+
+	# Delete event from User events list
+
+	return redirect(url_for("display_event", id = eventId))

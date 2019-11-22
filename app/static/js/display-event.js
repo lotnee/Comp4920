@@ -8,7 +8,7 @@ function myFunction(friendlist,id) {
         if (friendlist[i]['firstName'].toUpperCase().indexOf(filter) > -1 && filter.match(regex)){
             var node = document.createElement("LI");
             console.log(friendlist[i]['id'])
-            var link = "<a href = \"/add-people/" + friendlist[i]['id']+ "/" +id + "\">" + friendlist[i]['firstName'] + " " + friendlist[i]['lastName'] + "</a>"
+            var link = "<a class = \"friends\" href = \"/add-people/" + friendlist[i]['id']+ "/" +id + "\">" + friendlist[i]['firstName'] + " " + friendlist[i]['lastName'] + "</a>"
             console.log(link);
             node.innerHTML = link;
             document.getElementById("friends").appendChild(node);
