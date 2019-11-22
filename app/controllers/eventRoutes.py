@@ -120,9 +120,10 @@ def display_event(id):
 	friends = []
 	for person in retDictionary['friends']:
 		if person['status'] == "accepted":
-			print("hihihihi")
-			friends.append(person)
-	print(friends)
+			friendId = DB.find_one(collection = "Profile", query = {"email":person['email']}, projection = {"_id":1})
+			friendId = str(friendId['_id'])
+			element = {"id":friendId, "firstName":person['firstName'], "lastName": person['lastName']}
+			friends.append(element)
 	# Sees whether this person has invite privleges or is a host
 	if eventDetails['host'] == retDictionary['_id']:
 		host = 1
@@ -140,9 +141,7 @@ def delete_event(id):
 	#delete the event from the id
 	#first go through all the users that is associated with that id
 	x = DB.find_one(collection="Events", query = {"_id":ObjectId(id)})
-	print(x)
 	profileList = x['invitees']
-	print(profileList)
 	# Delete the event from all users in profile
 	for profile in profileList:
 		DB.update_one(collection = "Profile", filter = {"email":profile['email']}, data = {"$pull": {"events" : ObjectId(id)}})
@@ -235,18 +234,18 @@ def poll_create_event(poll):
 		return redirect(url_for('delete_poll', poll=poll))
 	return render_template('poll-create-event.html', title = "Create Your Event", form=form, poll=poll, event=event_obj)
 
-@app.route('/add-people/<email>/<id>')
+@app.route('/add-people/<userId>/<id>')
 @login_required
-def addPeople(email = None,id = None):
+def addPeople(userId = None,id = None):
 	# we have the email and id of the user & event we want to invite,
 	# we need to update the number of people in the invitees (add the profile to it)
 	# also update the profile's thingy
 	#received = DB.find_one(collection="Profile", query={"$and": [{"email": email}, {"friends": {"$elemMatch": {"email": current_user.email, "status": "pending"}}}]})
 
-	profileEvents = DB.find_one(collection = "Profile", query ={"email" : email })
+	profileEvents = DB.find_one(collection = "Profile", query ={"_id" : ObjectId(userId) })
+	email = profileEvents['email']
 	profileEvents = profileEvents['events']
 	if ObjectId(id) not in profileEvents:
-		print("none")
 		DB.update_one(collection = "Events", filter ={'_id':ObjectId(id)}, data = {'$push': {"invitees": {"email": email, "status": "invited"}}})
 		DB.update_one(collection = "Profile", filter = {"email":email}, data = {"$push": {"events": ObjectId(id)}})
 	return redirect(url_for("display_event", id = id))
