@@ -1,132 +1,315 @@
-{% extends "base.html" %}
-{% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="../static/calendar.css">
-  <link rel="stylesheet" href="../static/editor.css">
-  <script src="../static/editor.js"></script>
-  <script src="../static/calendar.js"></script>
-</head>
-<!-- CSS -->
-<style>
-.card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 35%;
-  margin-left: -2%;
-  text-align: center;
-  float: center;
-  margin-top: 80px;
-  padding: 20px;
-  background-color: #FAFAFA;
-}
-.cal {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 80%;
-  margin-left: 35%;
-  text-align: center;
-  float: center;
-  margin-top:-372px;
-  padding: 20px;
-  background-color: #FAFAFA;
-}
+<Modal show="{{show}}"
+       on:modalClose="set({show:false})"
+       on:modalOpen="set({show:true})"
+       title="{{ mode === 'create' ? newTitleText : editTitleText }}">
 
-.picture {
-  margin-top: 20px;
-  border-radius: 50%;
-  width: 100px;
-}
+  <div class="field">
+    <label>Entry Title</label>
+    <input id="entry-title" placeholder="beep beep Enter a short but descriptive title" bind:value="entry.title">
+  </div>
+  <div class="field">
+    <label>All Day</label>
+    <input type="checkbox" bind:checked="entry.all_day">
+  </div>
+  <div class="field-group">
+    <div class="field">
+      <label>Start</label>
+      <input type="text" bind:value="start_date" placeholder="YYYY-MM-DD">
 
-button {
-   background-color: #1E90FF;
-   color: white;
-   cursor: pointer;
-   width: 100px;
-   border: none;
-   padding: 10px 15px;
-   margin: 8px 0;
-   border: none;
-     border-radius:14px;
-}
+    </div>
+    {{#if !entry.all_day }}
+    <div class="field">
+      <label>Time From</label>
+      <input type="text" placeholder="optional" bind:value="start_time">
+    </div>
+    {{/if}}
 
-button:hover{
-   opacity: 0.8;
-}
+  </div>
+  <p class="feedback">{{ entry.all_day ? _start.toDateString() : _start.toString() }}</p>
+  <div class="field-group">
+    <div class="field">
+      <label>End</label>
+      <input type="text" bind:value="end_date" placeholder="YYYY-MM-DD">
+    </div>
+    {{#if !entry.all_day }}
+    <div class="field">
+      <label>Time To</label>
+      <input type="text" placeholder="optional" bind:value="end_time">
+    </div>
+    {{/if}}
+  </div>
+  <p class="feedback">{{ entry.all_day ? _end.toDateString() : _end.toString() }}</p>
 
-a {
-  text-decoration: none;
-  font-size: 22px;
-  color: black;
-}
+  <div class="field">
+    <label>Content</label>
+    <textarea bind:value="entry.content"></textarea>
+  </div>
+  <button class="button" on:click="submit()" ref:submitButton>Submit</button>
+</Modal>
 
-button:hover, a:hover {
-  opacity: 0.7;
-}
+<script>
 
-img {
-      max-width: 100%
+  import Modal from './Modal.html'
+  import {setDeep} from './extras'
+  import {offset, localDate, localTime} from './utils'
+
+  export default {
+    components: {Modal},
+    oncreate: function () {
+
+      const calendar = this.get('calendar')
+
+      this.set({
+        monthNames: calendar.get('monthNames'),
+      })
+
+      this.reset()
+
+      calendar.on('newClicked', event => {
+        var date = event.day.date
+        var placeholder = date.toISOString().substr(0, 10)
+        date.setHours(10)
+        this.set({
+          show: true,
+          mode: 'create',
+          start_date: placeholder,
+          end_date: placeholder,
+          start_time: "12:00",
+          end_time: "12:00",
+          entry: {
+            title: '',
+            all_day: false,
+            content: '',
+          }
+        })
+      })
+
+      calendar.on('editClicked', event => {
+        const entry = Object.assign({}, event.entry)
+        calendar.set({showModal: false})
+        const start_date = localDate(entry._start)
+        const start_time = localTime(entry._start)
+        const end_date = localDate(entry._end)
+        const end_time = localTime(entry._end)
+        this.set({
+          entry,
+          start_date,
+          start_time,
+          end_date,
+          end_time,
+          show: true,
+          mode: 'edit',
+        })
+      })
+
+      calendar.on('deleteClicked', event => {
+        const entry = event.entry
+        if (confirm("Really delete? There is no undo.")) {
+          this.delete(entry)
+          calendar.set({showModal: false})
+        }
+      })
+
+      calendar.on('entryClicked', event => {
+        const entry = event.entry
+        this.set({entry: entry})
+        calendar.set({
+          modalButtons: [
+            {text: 'Edit', id: 'editClicked'},
+            {text: 'Delete', id: 'deleteClicked'}
+          ]
+        })
+      })
+    },
+    data: function () {
+      return {
+        calendar: null,
+        show: false,
+        mode: 'create', // or 'edit'
+        entry: {},
+        monthNames: [],
+        newTitleText: 'Add New Entry',
+        editTitleText: 'Edit Entry',
+        start_date: '',
+        start_time: '',
+        end_date: '',
+        end_time: '',
+      }
+    },
+    computed: {
+      _start: function (start_date, start_time) {
+        return new Date(start_date + 'T' + (start_time || '12:00') + offset())
+      },
+      _end: function (end_date, end_time) {
+        return new Date(end_date + 'T' + (end_time || '12:00') + offset())
+      }
+    },
+    methods: {
+      setDeep,
+      reset: function () {
+        this.set({
+          start_date: '',
+          start_time: '12:00',
+          end_date: '',
+          end_time: '12:00',
+          entry: {
+            title: '',
+            content: ''
+          }
+        })
+      },
+      submit: function () {
+        var mode = this.get('mode')
+        if (mode === 'create') this.create()
+        if (mode === 'edit') this.update()
+      },
+      update: function () {
+        var calendar = this.get('calendar')
+        var entry = this.get('entry')
+        if (!entry.id) return false
+        var entries = calendar.get('entries')
+        var index = entries.findIndex(e => e.id === entry.id)
+        if (index < 0) return false
+        entry.start = this.get('_start').toISOString()
+        entry.end = this.get('_end').toISOString()
+        entries.splice(index, 1, entry)
+        calendar.set({entries: entries})
+        this.set({show: false})
+        this.reset()
+        this.fire('entryUpdated', {entry: entry})
+      },
+      create: function () {
+        const calendar = this.get('calendar')
+        const entry = this.get('entry')
+        entry.start = this.get('_start').toISOString()
+        entry.end = this.get('_end').toISOString()
+        entry.id = Math.random().toString(36).substr(2) // temp id
+        const entries = calendar.get('entries')
+        entries.push(entry)
+        calendar.set({entries: entries})
+        this.set({show: false})
+        this.fire('entryCreated', {entry: entry})
+      },
+      delete: function (entry) {
+        const calendar = this.get('calendar')
+        if (!entry.id) return false
+        const entries = calendar.get('entries')
+        const index = entries.findIndex(e => e.id === entry.id)
+        if (index < 0) return false
+        entries.splice(index, 1)
+        calendar.set({entries: entries})
+        this.reset()
+        this.set({show: false})
+        this.fire('entryDeleted', {entry: entry})
+      }
     }
-</style>
+  }
+</script>
 
-<!-- Body -->
-<body>   
-   <div class="card"> 
-         <img src="static/images/profile/{{profile.pictureDir}}" class="picture"/>
-         <h2>{{profile.firstName}} {{profile.lastName}}'s Profile</h2>
-         {% if current_user.is_authenticated %}
-         <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile</button>
-         {% endif %} 
-         <hr>
-         <div style="text-align: center">
-            {{profile.descriptions}}
-         </div>
-   </div>
-        <div class="cal"> 
-            <body style="max-width: 850px;margin: 2rem auto;padding: 0 5px">
-                <div id="editor"></div>
-                <div id="calendar"></div>
-                <!-- <div>
-                  <p>Try executing the following your browser console:</p>
-              
-                  <p>
-                    <pre>setTimeout(function() { calendar.set({message: ''})}, 3000)<br>calendar.set({message: 'loading...'})</pre>
-                  </p>
-                  <p>
-                    <pre>calendar.set({banner: 'Something went wrong and data could not be loaded.'})</pre>
-                  </p>
-                </div> -->
-                <!-- <pre id="debug" style="overflow-x:hidden"></pre>
-                <div style="text-align: center">
-                <p><a href="https://github.com/jacoduplessis/calendar/blob/master/demo/editor.html">source code</a></p> -->
-                </div>
-                <script>
-                  var calendar = new Calendar({
-                    target: document.querySelector("#calendar"),
-                    data: {
-                      showNew: true,
-                      escape: false,
-                      year: 2019,
-                      month: 10,
-                    }
-                  })
-                  fetch("entries.json").then(r => r.json()).then(data => {
-                    var entries = calendar.get('entries')
-                    entries = entries.concat(data.entries)
-                    calendar.set({ entries: entries, message: '' })
-                  })
-                  var editor = new Editor({
-                    target: document.querySelector("#editor"),
-                    data: {
-                      calendar: calendar
-                    }
-                  })
-              
-                  function debug() {
-                    document.querySelector('#debug').textContent = JSON.stringify(calendar.get(), null, 4)
-                  }
-                </script>
-</body>
-{% endblock %}
-</html>
+<style>
+  * {
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    font-size: 14px;
+  }
+
+  input,
+  textarea {
+    border: 1px solid #ccc;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+    margin-right: 0.1rem;
+    padding: 0.4rem 0.6rem;
+    font-family: monospace;
+    font-size: 14px;
+    color: black;
+    background-color: white;
+    width: 100%;
+  }
+
+  textarea {
+    min-height: 100px;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .feedback {
+    margin-top: 0.4rem;
+    margin-bottom: 1rem;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: #333;
+  }
+
+  .help {
+    margin: 0.4rem 0;
+    font-size: 0.9rem;
+    color: #333;
+    font-style: italic;
+  }
+
+  .button-bar {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  input[type="checkbox"] {
+    width: auto;
+  }
+
+  .color {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    border: 1px solid black;
+    margin: 5px;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .color.selected {
+    box-shadow: 2px 2px 3px black;
+  }
+
+  button {
+    font-family: Arial, Helvetica, sans-serif;
+    border: 1px solid #333;
+    border-radius: 3px;
+    padding: 0.3rem 0.6rem;
+    background: white;
+    color: black;
+  }
+
+  button:hover {
+    cursor: pointer;
+    background: #ddd;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    align-items: flex-start;
+  }
+
+  .field label {
+    margin-bottom: 0.2rem;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .field-group {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .field-group .field {
+    width: 49%;
+    margin-bottom: 0;
+  }
+
+</style>
