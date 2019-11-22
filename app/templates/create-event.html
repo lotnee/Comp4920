@@ -24,7 +24,7 @@
 		<form action="{{url_for('create_events')}}" method = "post" enctype="multipart/form-data">
 			<div class ="firstbody">
 				{{ form.hidden_tag() }}
-				{% with messages = get_flashed_messages() %}=
+				{% with messages = get_flashed_messages() %}
                {% if messages %}
                   {% for message in messages %}
                      <p style="color:red;">{{ message }}</p>
