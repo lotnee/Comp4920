@@ -780,7 +780,7 @@ img {
   <div class="container">
       <img src="../static/images/profile/{{profile.pictureDir}}" class="picture"/>
       <h2>{{profile.firstName}} {{profile.lastName}}</h2>
-      {% if current_user.is_authenticated %}
+      {% if current_user.is_authenticated and is_profile_owner %}
       <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile <i class="fa fa-pencil"></i></button>
       {% endif %}
       <hr>

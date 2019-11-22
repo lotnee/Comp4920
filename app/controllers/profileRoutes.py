@@ -109,7 +109,7 @@ def edit_profile():
 
 @app.route('/profile/<profile_id>')
 @login_required
-def profile(profile_id):
+def profile(profile_id,is_profile_owner=False):
 	user = DB.find_one(collection="Profile", query={"_id": ObjectId(profile_id)})
 	if user is None:
 		flash('Please create your profile first!')
@@ -132,11 +132,14 @@ def profile(profile_id):
 		# 	f.write(dumps(eventList))
 		# eventList = dumps(eventList)
 		# print(eventList)
-		return render_template('profile.html', profile=user, events=eventList)
-	return render_template('profile.html', profile=user, events={})
+		return render_template('profile.html', profile=user,
+					events=eventList,
+					is_profile_owner=is_profile_owner)
+	return render_template('profile.html', profile=user, events={},
+			is_profile_owner=is_profile_owner)
 
 @app.route('/profile')
 @login_required
 def current_profile():
 	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	return redirect(url_for('profile',profile_id=str(user['_id'])))
+	return profile(str(user['_id']),is_profile_owner=True)
