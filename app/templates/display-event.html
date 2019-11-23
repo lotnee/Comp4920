@@ -4,92 +4,6 @@
 {% endblock%}
 
 {% block content %}
-<style>
-.container{
-    padding:20px;
-    margin-top:100px;
-    max-width:500px;
-    text-align:center;
-    background-color: #fafafa;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    text-align:left;
-    padding:10px;
-/*
-    border: 10px #fafafa solid;*/
-}
-.detail {
-  background-color: white;
-  padding:10px;
-  margin-bottom: 10px;
-}
-.modal{
-    position:fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background:white;
-    padding: 20px;
-    padding: 10px;
-    width: auto;
-}
-.fade{
-    opacity:1;
-}
-
-.nav .nav-tabs > .active {
-     background:grey;
-}
-
-a.button-accept {
-    background-color: #5cb85c;
-    color: white;
-    cursor: pointer;
-    width: auto;
-    border-radius: 5px;
-    border: none;
-    padding: 10px 15px;
-}
-
-a.button-accept:hover {
-    transition: 0.8s;
-    opacity: 0.8;
-}
-
-a.button-maybe {
-    background-color: #f0ad4e;;
-    color: white;
-    cursor: pointer;
-    width: auto;
-    border-radius: 5px;
-    border: none;
-    padding: 10px 15px;
-}
-
-a.button-maybe:hover {
-    transition: 0.8s;
-    opacity: 0.8;
-}
-
-a.button-decline {
-    background-color: #d9534f;
-    color: white;
-    cursor: pointer;
-    width: auto;
-    border-radius: 5px;
-    border: none;
-    padding: 10px 15px;
-}
-
-a.button-decline:hover {
-    transition: 0.8s;
-    opacity: 0.8;
-}
-
-.dp {
-    width: 50px;
-    height: 50px;
-}
-</style>
 <body>
    <div class="container">
     <div class="detail">
@@ -113,26 +27,45 @@ a.button-decline:hover {
            <div style="text-align:center">
                 <a class="button-accept" href="{{url_for('acceptInvite', eventId = event['_id'],acceptance = "going")}}"><i class="fa fa-calendar-check-o"></i> Accept</a>
                 <a class="button-maybe" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "maybe")}}"><i class="fa fa-calendar-minus-o"></i> Maybe</a></button>
-                <a class="button-decline" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "decline")}}"><i class="fa fa-calendar-times-o"></i> Decline</a></button>
+                <a class="button-decline" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "decline")}}"><i class="fa fa-calendar-times-o"></i>Decline</a></button>
             <hr>
             </div>
            {% else %}
-            <p>{{status}}</p>
+           <select class="form-control" name="statusType" placeholder="Invite status" required>
+                <option value="going">Going</option>
+                <option value="maybe">Maybe</option>
+                <option value="decline">Can't Go</option>
+            </select>
 
-           <h2>Co-Hosts
+           <h2>Co-hosts
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCohosts" style="float:right">View All</button></h2>
-           {% endif %}
+                {% for item in cohosts %}
+                    {% if loop.index <= 3 %}
+                        <img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
+                        {{item['name']}}<hr>
+                    {% else %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
 
            <p><h2>Invited Guests <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends" style="float:right">View All</button></h2>
         </div>
+        {% if host == 1 %}
+        <input type = "text" id = "myInput" onkeyup ="hi('friends','myInput')" placeholder="Search for your friends" style="float:right">
+        <ul id = "friends"></ul>
+        {% else %}
+        {% endif %}<br>
         <ul>
            {% for dictionary_item in event['invitees'] %}
-                <p><a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}">
-                    {% if (host ==1 or canInvite == 1) and loop.index != 1 %}
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                    {% else %}
-                    {% endif %}
-                </a>  {{dictionary_item['email']}}</p>
+            <p><a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}">
+            {% if (host ==1 or canInvite == 1) and loop.index != 1 %}
+                <i class="fa fa-times" aria-hidden="true"></i>
+            {% else %}
+            {% endif %}
+            {% if loop.index <= 3 %}
+                 </a>{{dictionary_item['email']}}</p>
+                 {% else %}
+            {% endif %}   
            {% endfor %}
         </ul>
         <!-- Parts of this code was from https://getbootstrap.com/docs/4.0/components/navs/ -->
@@ -160,8 +93,8 @@ a.button-decline:hover {
                         <ul>
                             {% if going %}
                                 {% for item in going%}
-                                    <p><img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
-                                    {{item['name']}}<br><br>
+                                    <img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
+                                    {{item['name']}}<hr>
                                 {% endfor%}
                             {% else %}
                                 <h4 style="text-align:center">No responses yet</h4>
@@ -173,7 +106,7 @@ a.button-decline:hover {
                             {% if maybe %}
                                 {% for item in maybe%}
                                     <p><img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
-                                    {{item['name']}}<br><br>
+                                    {{item['name']}}<hr>
                                 {% endfor%}
                             {% else %}
                                 <h4 style="text-align:center">No responses yet</h4>
@@ -185,7 +118,7 @@ a.button-decline:hover {
                             {% if declined %}
                                 {% for item in declined%}
                                     <p><img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
-                                    {{item['name']}}<br><br>
+                                    {{item['name']}}<hr>
                                 {% endfor%}
                             {% else %}
                                 <h4 style="text-align:center">No responses yet</h4>
@@ -201,11 +134,11 @@ a.button-decline:hover {
                             {% else %}
                                 {% if invited %}
                                     {% for item in invited %}
-                                    <p><img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
-                                    {{item['name']}}
-                                    {% endfor%}
-                                {% else %}
-                                <h4 style="text-align:center">No invitees yet</h4>
+                                        <p><img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
+                                        {{item['name']}}<hr>
+                                        {% endfor%}
+                                { % else %}
+                                    <h4 style="text-align:center">No invitees yet</h4>
                                 {% endif%}
                             {% endif %}
                         </ul>
@@ -214,32 +147,27 @@ a.button-decline:hover {
               </div>
 
            <!-- End code from https://getbootstrap.com/docs/4.0/components/navs/ -->
-    {% if host == 1 %}
-        <input type = "text" id = "myInput" onkeyup ="hi('friends','myInput')" placeholder="Search for your friends">
-        <ul id = "friends"></ul>
-        {% else %}
-    {% endif %}
       </div>
    </div>
+
    <div class="modal fade" id = "addCohosts" role="dialog">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
         </button>
-       <h3>Other Admins</h3><hr>
-       {% for item in cohosts %}
-       <div class="cohost-list row">
-
-            <img class="col-lg-1 col-sm-2 img-responsive" src = "/static/images/profile/{{item['pictureDir']}}"/>
-            <p> {{item['name']}}</p>
-       </div>
-       {% endfor %}
+       <h3>Other Co-hosts</h3><hr>
        <!-- all the cohosts are here -->
        {% if host == 1 or canInvite == 1%}
-       <br>
-       <input type = "text" id = "coHostInput" onkeyup ="hi('coHosts','coHostInput')" placeholder="Add more event admins">
-       <ul id = "coHosts"></ul>
+        <input type = "text" id = "coHostInput" onkeyup ="hi('coHosts','coHostInput')" placeholder="Add more event admins" style="float:right">
+        <ul id = "coHosts"></ul>
+       {% for item in cohosts %}
+        <div class="cohost-list row" style="padding-left:20px">
+            <img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
+            {{item['name']}}<hr>
+        </div>
+       {% endfor %}
    </div>
 
+   
    <script type="text/javascript" src="{{ url_for('static', filename='js/display-event.js') }}"></script>
    <script>
        function hi(whichModal,whichInput){
