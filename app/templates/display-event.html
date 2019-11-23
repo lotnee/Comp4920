@@ -109,7 +109,12 @@ a.button-decline:hover {
         </div>
         <ul>
            {% for dictionary_item in event['invitees'] %}
-                <p><a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}"><i class="fa fa-times" aria-hidden="true"></i></a>  {{dictionary_item['email']}}</p>
+                <p><a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}">
+                    {% if (host ==1 or canInvite == 1) and loop.index != 1 %}
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    {% else %}
+                    {% endif %}
+                </a>  {{dictionary_item['email']}}</p>
            {% endfor %}
         </ul>
         <!-- Parts of this code was from https://getbootstrap.com/docs/4.0/components/navs/ -->
@@ -131,7 +136,7 @@ a.button-decline:hover {
                     </li>
                 </ul>
                 <div class="tab-content">
-                    
+
                     <div id = "going" class="tab-pane fade in active"><p>
                         <ul>
                             {% if going %}
@@ -172,7 +177,7 @@ a.button-decline:hover {
                         <ul>
                             {%if host == 1 %}
                                 {% for item in invited%}
-                                  <li> {{item['name']}}  </li> <img src="/static/images/profile/{{item['pictureDir']}}" class="dp"> 
+                                  <li> {{item['name']}}  </li> <img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
                                 {% endfor%}
                             {% else %}
                                 {% if invited %}
@@ -193,9 +198,13 @@ a.button-decline:hover {
     {% if host == 1 %}
         <input type = "text" id = "myInput" onkeyup ="hi('friends','myInput')" placeholder="Search for your friends">
         <ul id = "friends"></ul>
+        {% else %}
+    {% endif %}
    </div>
 
+
    <div class="modal fade" id = "addCohosts" role="dialog">
+       {% if host == 1 or canInvite == 1%}
        <input type = "text" id = "coHostInput" onkeyup ="hi('coHosts','coHostInput')" placeholder="Search for your friends">
        <ul id = "coHosts"></ul>
    </div>
@@ -210,8 +219,9 @@ a.button-decline:hover {
            myFunction(friendlist,id,whichModal,whichInput)
        }
    </script>
-   {% else %}
-   {% endif %}
+    {% else %}
+    </div>
+    {%endif%}
 
 </body>
 

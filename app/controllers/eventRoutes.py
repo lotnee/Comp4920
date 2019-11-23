@@ -155,7 +155,7 @@ def display_event(id):
 			status = invitee['status'] # user has already responded
 
 	return render_template('display-event.html', event = eventDetails,
-							friends = json.dumps(friends), host = host, status = status, invited = invited,maybe = maybe, going = going, declined = declined)
+							friends = json.dumps(friends), host = host, status = status, invited = invited,maybe = maybe, going = going, declined = declined, canInvite = invitePrivleges)
 
 @app.route('/delete-event/<string:id>')
 @login_required
