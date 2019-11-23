@@ -2,54 +2,9 @@
 {% block content %}
 <!DOCTYPE html>
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <link rel="stylesheet" href="/static/css/add-voter.css">
 </head>
-
-<style>
-.container{
-    padding:20px;
-    margin-top:100px;
-    max-width:500px;
-    text-align:left;
-    background-color: #fafafa;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    padding:10px;
-}
-
-a.addbutton {
-	color: #1E90FF;
-	cursor: pointer;
-	border: none;
-	border-radius:14px;
-	padding: 10px;
-	float:right;
-}
-
-a.completebutton {
-   font-family: Arial;
-   background-color: #1E90FF; 
-   width: 100%;
-	color: white;
-	cursor: pointer;
-	border: none;
-	padding: 10px;
-   float: right;
-   margin-top: 10px;
-   text-align: center
-}
-
-img.avatar {
-   width: 12%;
-   margin-top: 10px;
-   margin-left: 15px;
-}
-
-.detail {
-  margin-left: 90px;
-  margin-top: -50px;
-}
-
-</style>
 <body>
    <div class="container">
          <h1 style="text-align:center">Add User To Poll</h1>
@@ -70,7 +25,7 @@ img.avatar {
             </div>
                <br />
          {% endfor %}
-         <a href="{{url_for('polls')}}" class="completebutton"><i class="fa fa-check" aria-hidden="true"></i></a></p>
+         <a href="{{url_for('polls')}}" class="completebutton" title="Done"><i class="fa fa-check" aria-hidden="true"></i></a></p>
    </div>
 
    {% endblock %}
