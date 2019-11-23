@@ -34,7 +34,7 @@ def dashboard():
 	users = list(DB.find_all(collection="Profile"))
 	# me = DB.find_one(collection="Profile", query={"email": current_user.email})
 	incoming = DB.find(collection="Profile", query={"friends": {"$elemMatch": {"email": current_user.email, "status": "pending"}}})
-	requests = get_cursor(cursor_obj=incoming, key="friends", subkey="email", subkey2="status", query=current_user.email, query2="pending")
+	requests = get_cursor(cursor_obj=incoming, key="friends", subkey="friend_id", subkey2="status", query=user['_id'], query2="pending")
 	
 	allEvents = []
 	allPolls = []
