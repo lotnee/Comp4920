@@ -87,6 +87,10 @@ a.button-decline:hover {
    <div class="container">
        <h1>{{event['name'] }}</h1>
        <hr>
+       {% set datetime1 = (event.start|string).split(' ') %}
+        <h6>Start Date: {{datetime1[0]}} Time: {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
+        {% set datetime2 = (event.end|string).split(' ') %}
+        <h6>End Date: {{datetime2[0]}} Time: {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
        <h2>Description</h2>
        <p>{{event['description']}}</p>
        <div class="inviteField">
