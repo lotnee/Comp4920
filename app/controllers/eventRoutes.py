@@ -113,6 +113,7 @@ def display_event(id):
 	declined = []
 	status = "invited" # this user has not  responded to the event
 	host = 0 # whether this person is the host of the event being displayed
+	invitePrivleges = 0
 	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
 	# gets all the friends of the user
 	retDictionary = DB.find_one(collection = "Profile", query = {"email":current_user.email})
@@ -126,6 +127,14 @@ def display_event(id):
 	# Sees whether this person has invite privleges or is a host
 	if eventDetails['host'] == retDictionary['_id']:
 		host = 1
+	else:
+		print('hji')
+		for cohost in eventDetails['invitePrivleges']:
+			if(cohost['email'] == current_user.email):
+				invitePrivleges = 1
+				break
+	print("invitePrivleges is ",invitePrivleges)
+
 	# see whether the person has accepted or not to give them the option to accept your invite
 	for invitee in eventDetails["invitees"]:
 		details = DB.find_one(collection = "Profile", query = {"email":invitee['email']}, projection = {"firstName": 1, "lastName" : 1, "pictureDir":1})
