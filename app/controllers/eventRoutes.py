@@ -128,17 +128,20 @@ def display_event(id):
 		host = 1
 	# see whether the person has accepted or not to give them the option to accept your invite
 	for invitee in eventDetails["invitees"]:
-		name = get_name(invitee['email'])
-		fullName = name['firstName'] + " " +name['lastName']
+		details = DB.find_one(collection = "Profile", query = {"email":invitee['email']}, projection = {"firstName": 1, "lastName" : 1, "pictureDir":1})
+		#get pictureDir
+		fullName = details['firstName'] + " " +details['lastName']
+		pictureDir = details['pictureDir']
+		dictionaryItem = {"name":fullName, "pictureDir": pictureDir}
 		if invitee['status'] == "going":
-			going.append(fullName)
+			going.append(dictionaryItem)
 			print(going)
 		elif invitee['status'] == "declined":
-			declined.append(fullName)
+			declined.append(dictionaryItem)
 		elif invitee['status'] == "maybe":
-			maybe.append(fullName)
+			maybe.append(dictionaryItem)
 		else:
-			invited.append(fullName)
+			invited.append(dictionaryItem)
 		if invitee["email"] == current_user.email and invitee['status'] != "invited":
 			status = invitee['status'] # user has already responded
 

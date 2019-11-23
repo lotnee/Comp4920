@@ -52,10 +52,9 @@
         </div>
        <ul>
 
-
+           
            {% for dictionary_item in event['invitees'] %}
-           <a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}">{{dictionary_item['email']}}  </a>
-           <br>
+            <p>{{dictionary_item['email']}} <a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}">X</a></p>
            {% endfor %}
        </ul>
        <!-- Parts of this code was from https://getbootstrap.com/docs/4.0/components/navs/ -->
@@ -81,7 +80,7 @@
                         <h3>Going</h3>
                         <ul>
                             {% for item in going%}
-                              <li>{{item}}</li>
+                              <li> {{item['name']}} </li>
                             {% endfor%}
                         </ul>
                     </div>
@@ -89,7 +88,7 @@
                         <h3>maybe</h3>
                         <ul>
                             {% for item in maybe%}
-                              <li>{{item}}</li>
+                              <li> {{item['name']}}  </li>
                             {% endfor%}
                         </ul>
                     </div>
@@ -97,16 +96,22 @@
                         <h3>Declined</h3>
                         <ul>
                             {% for item in declined%}
-                              <li>{{item}}</li>
+                              <li> {{item['name']}}  </li>
                             {% endfor%}
                         </ul>
                     </div>
                     <div id = "invited" class="tab-pane fade in">
                         <h3>Invited</h3>
                         <ul>
-                            {% for item in invited%}
-                              <li>{{item}}</li>
-                            {% endfor%}
+                            {%if host == 1 %}
+                                {% for item in invited%}
+                                  <li> {{item['name']}}  </li> <img src="/static/images/profile/{{item['pictureDir']}}" class="dp"> <a href="#">X</a>
+                                {% endfor%}
+                            {% else %}
+                                {% for item in invited %}
+                                  <li> {{item['name']}}  </li> <img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
+                                {% endfor%}
+                            {% endif %}
                         </ul>
                     </div>
                    </div>
