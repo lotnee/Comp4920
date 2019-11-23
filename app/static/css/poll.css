@@ -1,67 +1,108 @@
 .container{
-    padding:20px;
-    margin-top:100px;
-    max-width:500px;
-    text-align:left;
-    background-color: #fafafa;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    padding:10px;
+   padding:20px;
+   margin-top:100px;
+   max-width:500px;
+   text-align:left;
+   background-color: #fafafa;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+   padding:10px;
 }
 
 .button-add {
-   background-color: #1E90FF;
-   color: white;
-   cursor: pointer;
-   width: auto;
-   border-radius: 14px;
-   padding: 8px 12px;
-   margin: 8px 0;
-   float: right;
-   margin-top:-50px;
-   margin-right: 70px;
-   font-size: 12px;
-   border: none;
-}
-.button-del {
-   background-color: #778899;
-   color: white;
-   cursor: pointer;
-   width: auto;
-   border-radius: 14px;
-   padding: 8px 12px;
-   margin: 8px 0;
-   float: right;
-   margin-top:-50px;
-   font-size: 12px;
-   border: none;
+  background-color: #1E90FF;
+  color: white;
+  cursor: pointer;
+  width: auto;
+  border-radius: 14px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  float: right;
+  margin-top:-50px;
+  margin-right: 70px;
+  font-size: 12px;
+  border: none;
 }
 
-.button-polls {
-   background-color: #1E90FF;
-   color: white;
-   cursor: pointer;
-   width: auto;
-   border-radius: 14px;
-   padding: 8px 12px;
-   margin: 8px 0;
-   border: none;
+.button-add:hover {
+  transition: 0.5s;
+  opacity: 0.8;
+}
+
+.button-del {
+  background-color: #778899;
+  color: white;
+  cursor: pointer;
+  width: auto;
+  border-radius: 14px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  float: right;
+  margin-top:-50px;
+  font-size: 12px;
+  border: none;
+}
+
+.button-del:hover {
+  transition: 0.3s;
+  opacity: 0.8;
 }
 
 a.addVoter {
-   background-color: transparent;
-   color: #1E90FF;
-   cursor: pointer;
-   border-radius: 14px;
-   padding: 8px 12px;
-   margin: 8px 0;
-   float: right;
-   margin-top:-50px;
-   margin-right: -50px;
-   font-size: 12px;
-   border-color: #1E90FF;
+  background-color: transparent;
+  color: #1E90FF;
+  cursor: pointer;
+  border-radius: 14px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  float: right;
+  font-size: 12px;
+  border-color: #1E90FF;
 }
 
 a.addVoter:hover {
-	transition: 0.8s;
-	color: #778899;
+  transition: 0.8s;
+  color: #778899;
+}
+
+.detail {
+   background-color: white;
+   border: 1px #f0f0f0 solid;
+   padding: 10px;
+   margin-top: 10px;
+ }
+ 
+a.delPoll {
+  background-color: transparent;
+  color: #1E90FF;
+  cursor: pointer;
+  border-radius: 14px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  float: right;
+  font-size: 12px;
+  border-color: #1E90FF;
+}
+
+a.delPoll:hover {
+ transition: 0.8s;
+ color: #778899;
+}
+
+a.createEvent {
+  background-color: transparent;
+  color: #1E90FF;
+  cursor: pointer;
+  border-radius: 14px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  float: right;
+  margin-top:-70px;
+  margin-right: -50px;
+  font-size: 12px;
+  border-color: #1E90FF;
+}
+
+a.createEvent:hover {
+ transition: 0.8s;
+ color: #778899;
 }
