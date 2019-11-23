@@ -78,12 +78,13 @@ def edit_profile():
 				DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"gender": form.gender.data}})
 				if form.pictureDir.data is not None:
 					if profile['pictureDir'] == "male.jpg" or profile['pictureDir'] == "female.jpg":
-						filename = photos.save(form.pictureDir.data, name=current_user.email + '.')
+						filename = photos.save(form.pictureDir.data, name='profile/' + current_user.email + '.')
+						filename = filename.split('/')[1]
 					else:
 						# delete existing photo
 						filename = "app/static/images/profile/" + profile['pictureDir']
 						os.remove(os.path.join(filename))
-						filename = photos.save(form.pictureDir.data, name='profile/'+ current_user.email + '.')
+						filename = photos.save(form.pictureDir.data, name='profile/' + current_user.email + '.')
 						filename = filename.split('/')[1]
 					DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"pictureDir": filename}})
 				else:
@@ -92,17 +93,17 @@ def edit_profile():
 						DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"pictureDir": filename}})
 
 				# update all friend's model picture dir if changed
-				toUpdateList = DB.find(collection="Profile", query={"friend": {"$elemMatch": {"email": current_user.email}}})
-				i = 0
-				while i < toUpdateList.count():
-					j = 0
-					while j < len(toUpdateList[i]['friend']):
-						if toUpdateList[i]['friend'][j]['email'] == current_user.email:
-							friend_pic = "friends." + str(j) + ".pictureDir"
-							DB.update_one(collection="Profile", filter={"email": toUpdateList[i]['email']}, data={"$set": {friend_pic: filename}})
+				# toUpdateList = DB.find(collection="Profile", query={"friend": {"$elemMatch": {"email": current_user.email}}})
+				# i = 0
+				# while i < toUpdateList.count():
+				# 	j = 0
+				# 	while j < len(toUpdateList[i]['friend']):
+				# 		if toUpdateList[i]['friend'][j]['email'] == current_user.email:
+				# 			friend_pic = "friends." + str(j) + ".pictureDir"
+				# 			DB.update_one(collection="Profile", filter={"email": toUpdateList[i]['email']}, data={"$set": {friend_pic: filename}})
 
-		profile = DB.find_one(collection="Profile", query={"email": user['email']})
-		return redirect('/profile')
+		# profile = DB.find_one(collection="Profile", query={"email": user['email']})
+		return redirect(url_for('/profile', profile_id=profile['_id']))
 
 	return render_template('edit-profile.html', title='Edit profile', form=form, profile=profile)
 
