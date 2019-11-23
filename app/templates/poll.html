@@ -108,6 +108,13 @@ a.createEvent:hover {
   color: #778899;
 }
 
+.detail {
+  background-color: white;
+  border: 1px #f0f0f0 solid;
+  padding: 10px;
+  margin-top: 10px;
+}
+
 </style>
 <body>
 <div class="container">
@@ -121,15 +128,16 @@ a.createEvent:hover {
 	{% endwith %}
 	{% if polls %}
 		{% for poll in polls %}
+    <div class="detail">
 			<form action="{{url_for('update_vote', poll=poll._id)}}" method="post">
-         <hr>
+         <!-- <hr> -->
             <p><h4><b>{{poll.name}}</b>
                {% if user._id == poll.creator %}
                   <a href="{{url_for('add_voter', poll=poll._id)}}" class="addVoter" title="Add a voter"><span class="fa fa-plus"></span></a>
                   <a href="{{url_for('delete_poll', poll=poll._id)}}" class="delPoll" title="Delete poll"><span class="fa fa-minus"></span></a>
                {% endif %}   
             </p></h4>
-			<p style="text-align: center"> {{poll.description}} </p>
+			<p style="text-align: center"> {{poll.description}} </p><hr>
 			{% for dates in poll.options %}
       {% set datetime = (dates.date|string).split(' ') %}
 			<input type="radio" name="date" value="{{dates.date}}" style="border: 2px; background-color: white;"> 
@@ -139,6 +147,7 @@ a.createEvent:hover {
 				{% endif %}
 				{% for votes in dates.voters %}
 				<br> <i class="fa fa-user" style="color:#1E90FF"></i> {{votes}}
+      
 				{% endfor %}
 				<br>
 			
@@ -151,6 +160,7 @@ a.createEvent:hover {
 			  <a href="{{url_for('poll_create_event', poll=poll._id)}}" class="createEvent" title="Create an event"><span class="fa fa-calendar"></span></a>
 			{% endif %}
 			</form>
+      </div>
 		{% endfor %}
 	{% else %}
 		<h4 style="text-align: center">You currently do not have any existing polls.</h4>
