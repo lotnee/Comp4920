@@ -109,34 +109,31 @@ def profile(profile_id,is_profile_owner=False):
 	# print(path)
 
 	me = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if is_profile_owner or any(filter(
-		lambda entry: entry['email'] == current_user.email 
-			    and entry['status'] == 'accepted',
-			    user['friends'])):
 
-		if list(user['events']) != []:
-			eventList = []
-			for events in user['events']:
-				events = DB.find_one(collection='Events', query={'_id': events})
-				event_dict = {'title': events['name'], 'start': events['start'].strftime("%Y-%m-%d"), 'end': events['end'].strftime("%Y-%m-%d")}
-				# print(event_dict)
-				eventList.append(event_dict)
-			# print(eventList)
-			# filename = path + '/' + current_user.email + '.json'
-			# print(filename)
-			# with open(filename, "w+") as f:
-			# 	f.write(dumps(eventList))
-			# eventList = dumps(eventList)
-			# print(eventList)
-			return render_template('profile.html', profile=user,
-						events=eventList,
-						is_profile_owner=is_profile_owner)
+	def are_we_friends(entry):
+		return (entry['friend_id'] == me['_id'] 
+				and entry['status'] == 'accepted')
+	is_friend = any(filter(are_we_friends, user['friends']))
 
-	return render_template('profile.html', profile=user, events={},
-			is_profile_owner=is_profile_owner)
+	eventList = []
+	for events in user['events']:
+		events = DB.find_one(collection='Events', query={'_id': events})
+		if not events:
+			continue
+		event_dict = {'title': events['name'], 
+				'start': events['start'].strftime("%Y-%m-%d"), 
+				'end': events['end'].strftime("%Y-%m-%d")}
+		eventList.append(event_dict)
+	if not eventList:
+		eventList = {}
+
+	return render_template('profile.html', profile=user,
+				events=eventList,
+				is_profile_owner=is_profile_owner,
+				is_friend=is_friend)
 
 @app.route('/profile')
 @login_required
 def my_profile():
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	return profile(str(user['_id']),is_profile_owner=True)
+	me = DB.find_one(collection="Profile", query={"email": current_user.email})
+	return profile(str(me['_id']),is_profile_owner=True)
