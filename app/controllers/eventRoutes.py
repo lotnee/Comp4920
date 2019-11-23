@@ -4,7 +4,7 @@ from app.models.events import Event
 from app.controllers.forms import photos,EventForm
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
-from app.utility.utility import get_list, get_cursor
+from app.utility.utility import get_list, get_cursor,get_name
 from datetime import datetime, time
 from bson.objectid import ObjectId
 import json
@@ -107,16 +107,16 @@ def event_completed():
 @login_required
 def display_event(id):
 	#get the event name or more so the ID
-	invited = 0
-	going = 0
-	maybe = 0
-	declined = 0
-	host = 0
+	invited = []
+	going = []
+	maybe = []
+	declined = []
+	status = "invited" # this user has not  responded to the event
+	host = 0 # whether this person is the host of the event being displayed
 	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
 	# gets all the friends of the user
 	retDictionary = DB.find_one(collection = "Profile", query = {"email":current_user.email})
 	friends = []
-	status = "invited" # this user has not  responded to the event
 	for person in retDictionary['friends']:
 		if person['status'] == "accepted":
 			friendId = str(person['friend_id'])
@@ -128,21 +128,22 @@ def display_event(id):
 		host = 1
 	# see whether the person has accepted or not to give them the option to accept your invite
 	for invitee in eventDetails["invitees"]:
+		name = get_name(invitee['email'])
+		fullName = name['firstName'] + " " +name['lastName']
 		if invitee['status'] == "going":
-			going = going + 1
+			going.append(fullName)
+			print(going)
 		elif invitee['status'] == "declined":
-			declined = declined + 1
+			declined.append(fullName)
 		elif invitee['status'] == "maybe":
-			maybe = maybe + 1
+			maybe.append(fullName)
 		else:
-			invited = invited + 1
+			invited.append(fullName)
 		if invitee["email"] == current_user.email and invitee['status'] != "invited":
 			status = invitee['status'] # user has already responded
 
 	return render_template('display-event.html', event = eventDetails,
-							friends = json.dumps(friends), host = host, status = status,
-							noInvited = invited, noDeclined = declined, noMaybe = maybe,
-							noGoing = going)
+							friends = json.dumps(friends), host = host, status = status, invited = invited,maybe = maybe, going = going, declined = declined)
 
 @app.route('/delete-event/<string:id>')
 @login_required

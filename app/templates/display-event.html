@@ -44,6 +44,7 @@
            <button class="btn btn-warning"><a class="attendance" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "maybe")}}">Maybe</a></button>
            <button class="btn btn-danger"><a class="attendance" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "decline")}}">Decline</a></button>
            {% else %}
+           <h2>Co-Hosts</h2>
            <p>{{status}}</p>
            {% endif %}
            <h2>Invited Guests</h2>
@@ -59,26 +60,58 @@
        </ul>
        <!-- Parts of this code was from https://getbootstrap.com/docs/4.0/components/navs/ -->
        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends">See All</button>
-       <div class="modal fade" id = "DisplayFriends" role="dialog">
-           <ul class="nav nav-tabs">
-               <li class="active">
-                   <a data-toggle = "tab" href="#going">Going</a>
-               </li>
-               <li >
-                   <a data-toggle = "tab" href="#maybe">Maybe</a>
-               </li>
-               <li>
-                   <a data-toggle = "tab" href="#declined">Declined</a>
-               </li>
-               <li>
-                   <a data-toggle = "tab" href="#invited">Invited</a>
-               </li>
-            </ul>
-           </div>
 
-          <div class="content-for-tabs">
-              
-             </div>
+           <div class="modal fade" id = "DisplayFriends" role="dialog">
+               <ul class="nav nav-tabs">
+                   <li class="active">
+                       <a data-toggle = "tab" href="#going">Going</a>
+                   </li>
+                   <li >
+                       <a data-toggle = "tab" href="#maybe">Maybe</a>
+                   </li>
+                   <li>
+                       <a data-toggle = "tab" href="#declined">Declined</a>
+                   </li>
+                   <li>
+                       <a data-toggle = "tab" href="#invited">Invited</a>
+                   </li>
+                </ul>
+                <div class="tab-content">
+                    <div id = "going" class="tab-pane fade in active">
+                        <h3>Going</h3>
+                        <ul>
+                            {% for item in going%}
+                              <li>{{item}}</li>
+                            {% endfor%}
+                        </ul>
+                    </div>
+                    <div id = "maybe" class="tab-pane fade in">
+                        <h3>maybe</h3>
+                        <ul>
+                            {% for item in maybe%}
+                              <li>{{item}}</li>
+                            {% endfor%}
+                        </ul>
+                    </div>
+                    <div id = "declined" class="tab-pane fade in">
+                        <h3>Declined</h3>
+                        <ul>
+                            {% for item in declined%}
+                              <li>{{item}}</li>
+                            {% endfor%}
+                        </ul>
+                    </div>
+                    <div id = "invited" class="tab-pane fade in">
+                        <h3>Invited</h3>
+                        <ul>
+                            {% for item in invited%}
+                              <li>{{item}}</li>
+                            {% endfor%}
+                        </ul>
+                    </div>
+                   </div>
+              </div>
+
            <!-- End code from https://getbootstrap.com/docs/4.0/components/navs/ -->
     {% if host == 1 %}
       <input type = "text" id = "myInput" onkeyup ="hi()" placeholder="Search for your friends">
