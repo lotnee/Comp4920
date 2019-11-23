@@ -748,6 +748,12 @@ table.fc-header {
   border-radius: 50%;
   width: 100px;
 }
+.detail {
+  text-align: center;
+  background-color: white;
+  padding:5px;
+  border: 1px #f0f0f0 solid;
+}
 button {
    background-color: #1E90FF;
    color: white;
@@ -786,7 +792,7 @@ img {
       <button class="button" onclick="window.location.href = '/edit-profile';">Edit profile <i class="fa fa-pencil"></i></button>
       {% endif %}
       <hr>
-      <div style="text-align: center">
+      <div class="detail">
         {{profile.descriptions}}
       </div>
   </div>
