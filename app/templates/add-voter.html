@@ -21,7 +21,7 @@
             <div class="detail">
                <b>Email:</b> {{friend.email}} <br>
                <b>Name:</b> {{friend.firstName}} {{friend.lastName}}
-               <a href="{{url_for('invite_voter', poll=poll, email=friend.email)}}" class="addbutton"><span class="fa fa-plus"></span></a></p>
+               <a href="{{url_for('invite_voter', poll=poll, email=friend.email)}}" title="Add user as voter" class="addbutton"><span class="fa fa-plus"></span></a></p>
             </div>
                <br />
          {% endfor %}

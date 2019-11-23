@@ -221,10 +221,11 @@ a.button-decline:hover {
     {% endif %}
       </div>
    </div>
-
-
    <div class="modal fade" id = "addCohosts" role="dialog">
-       <h3>Other Admins</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+        </button>
+       <h3>Other Admins</h3><hr>
        {% for item in cohosts %}
        <div class="cohost-list row">
 
