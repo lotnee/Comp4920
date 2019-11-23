@@ -46,7 +46,6 @@ def create_events():
 
 		date1 = datetime((form.start.data).year,(form.start.data).month,(form.start.data).day, time1.hour, time1.minute)
 		date2 = datetime((form.end.data).year,(form.end.data).month,(form.end.data).day, time2.hour, time2.minute)
-		print(date1)
 		# check date and time
 		if date1 < datetime.now():
 			flash('Start has to be today or later!')
@@ -62,12 +61,7 @@ def create_events():
 		else:
 			filename = photos.save(form.pictureDir.data, name= 'event/' + str(user['_id']) + '.')
 			filename = filename.split('/')[1]
-		# print(f'name: {form.name.data}')
-		# print(f'description: {form.description.data}')
-		# print(f'start: {date1}')
-		# print(f'end: {date2}')
-		# print(f'pictureDir: {filename}')
-		# print(f'type {form.eventType.data}')
+
 		form.name.data = form.name.data.strip()
 		form.description.data = form.description.data.strip()
 		if form.eventType.data == 'private':
@@ -113,6 +107,7 @@ def display_event(id):
 	declined = []
 	status = "invited" # this user has not  responded to the event
 	host = 0 # whether this person is the host of the event being displayed
+	cohosts = []
 	invitePrivleges = 0
 	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
 	# gets all the friends of the user
@@ -128,13 +123,11 @@ def display_event(id):
 	if eventDetails['host'] == retDictionary['_id']:
 		host = 1
 	else:
-		print('hji')
 		for cohost in eventDetails['invitePrivleges']:
 			if(cohost['email'] == current_user.email):
 				invitePrivleges = 1
 				break
-	print("invitePrivleges is ",invitePrivleges)
-
+	cohosts = eventDetails['invitePrivleges']
 	# see whether the person has accepted or not to give them the option to accept your invite
 	for invitee in eventDetails["invitees"]:
 		details = DB.find_one(collection = "Profile", query = {"email":invitee['email']}, projection = {"firstName": 1, "lastName" : 1, "pictureDir":1})
@@ -144,7 +137,6 @@ def display_event(id):
 		dictionaryItem = {"name":fullName, "pictureDir": pictureDir}
 		if invitee['status'] == "going":
 			going.append(dictionaryItem)
-			print(going)
 		elif invitee['status'] == "declined":
 			declined.append(dictionaryItem)
 		elif invitee['status'] == "maybe":
@@ -155,7 +147,10 @@ def display_event(id):
 			status = invitee['status'] # user has already responded
 
 	return render_template('display-event.html', event = eventDetails,
-							friends = json.dumps(friends), host = host, status = status, invited = invited,maybe = maybe, going = going, declined = declined)
+							friends = json.dumps(friends), host = host, status = status,
+							invited = invited,maybe = maybe, going = going,
+							declined = declined, canInvite = invitePrivleges,
+							cohosts = cohosts)
 
 @app.route('/delete-event/<string:id>')
 @login_required
@@ -195,11 +190,6 @@ def poll_create_event(poll):
 			if len(list(option['voters'])) > largest:
 				largest = len(list(option['voters']))
 				date1 = option['date']
-
-			# for voter in option['voters']:
-			# 	if voter == user['firstName']:
-			# 		date1 = option['date']
-			# 		break;
 
 	event_obj = Event(name=my_poll['name'] , description =
 			my_poll['description'], start=date1, end=None,
@@ -272,8 +262,6 @@ def addPeople(userId = None,id = None):
 	# we have the email and id of the user & event we want to invite,
 	# we need to update the number of people in the invitees (add the profile to it)
 	# also update the profile's thingy
-	#received = DB.find_one(collection="Profile", query={"$and": [{"email": email}, {"friends": {"$elemMatch": {"email": current_user.email, "status": "pending"}}}]})
-
 	profileEvents = DB.find_one(collection = "Profile", query ={"_id" : ObjectId(userId) })
 	email = profileEvents['email']
 	profileEvents = profileEvents['events']
@@ -287,8 +275,6 @@ def addPeople(userId = None,id = None):
 @login_required
 def acceptInvite(eventId, acceptance):
 	#need to change the user to accepting that event id
-	print(acceptance)
-	print(current_user.email)
 	DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId), "invitees":{"$elemMatch": {"email" : current_user.email} } }, data = {'$set': {"invitees.$.status":acceptance}}  )
 
 	return  redirect(url_for("display_event", id = eventId))
@@ -303,8 +289,6 @@ def deleteInvite(eventId,userId):
 	DB.update_one(collection = "Profile", filter = {"_id":ObjectId(userId)}, data = {"$pull": {"events":ObjectId(eventId)}})
 
 	# also remove the person from the invitePrivleges
-
-
 	return redirect(url_for("display_event", id = eventId))
 
 @app.route('/edit-event/<eventId>', methods=['GET', 'POST'])
@@ -320,23 +304,6 @@ def edit_event(eventId):
 		return redirect(url_for('view_events'))
 	form = EventForm()
 	if form.validate_on_submit():
-		# time1 = form.starttime.data[0].split(':')
-		# if form.starttime.data[1] == 'PM':
-		# 	time1[0] = int(time1[0]) + 12
-		# 	if time1[0] == 24:
-		# 		time1[0] = 0
-		# time1 = time(int(time1[0]), int(time1[1]))
-
-		# form.endtime.data = form.endtime.data.split(' ')
-		# time2 = form.endtime.data[0].split(':')
-		# if form.endtime.data[1] == 'PM':
-		# 	time2[0] = int(time2[0]) + 12
-		# 	if time2[0] == 24:
-		# 		time2[0] = 0
-		# time2 = time(int(time2[0]), int(time2[1]))
-
-		# date1 = datetime((form.start.data).year,(form.start.data).month,(form.start.data).day, time1.hour, time1.minute)
-		# date2 = datetime((form.end.data).year,(form.end.data).month,(form.end.data).day, time2.hour, time2.minute)
 		if form.pictureDir.data is not None:
 			if event['pictureDir'] == 'event.jpg':
 				filename = photos.save(form.pictureDir.data, name='event/' + str(event['_id']) + '.')
@@ -356,23 +323,27 @@ def edit_event(eventId):
 		DB.update_one(collection="Events", filter={"_id": event['_id']}, data={"$set": {"name": form.name.data.strip()}})
 		DB.update_one(collection="Events", filter={"_id": event['_id']}, data={"$set": {"description": form.description.data.strip()}})
 		DB.update_one(collection="Events", filter={"_id": event['_id']}, data={"$set": {"private": event_type}})
-
-		# print('name: {} , old -> {}'.format(form.name.data, event['name']))
-		# print(f'description: {form.description.data}')
-		# # print(f'start: {date1}')
-		# # print(f'end: {date2}')
-		# print(f'pictureDir: {form.pictureDir.data}')
-		# print(f'type {form.eventType.data}')
 		return redirect(url_for('view_events'))
 	return render_template('edit-event.html', title = "Edit Event Details", form=form, event=event)
+
+
 # In this case when we write userId it is really the profile Id
 @app.route('/add-coHost/<userId>/<eventId>')
 @login_required
 def add_cohost(userId, eventId):
 	# Add the userId to the event invitePrivleges
-	userDetails = DB.find_one(collection = "Profile", query = {"_id":ObjectId(userId)}, projection = {"email": 1})
-	DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$push": {"invitePrivleges": {"cohostId":ObjectId(userId), "email":userDetails['email']}}})
+	person = DB.find_one(collection = "Events", query = {"_id":ObjectId(eventId), "invitePrivleges": {"$elemMatch": {"cohostId": ObjectId(userId)}}})
+	if person is None:
+		userDetails = DB.find_one(collection = "Profile", query = {"_id":ObjectId(userId)}, projection = {"email":1, "firstName":1,"lastName":1, "pictureDir": 1})
+		DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data =
+														{"$push": {"invitePrivleges":
+														{"email":userDetails['email'],
+														"cohostId":ObjectId(userId),
+														"pictureDir":userDetails['pictureDir'],
+														"name": userDetails['firstName'] + " " + userDetails['lastName']
+														}}})
 	return redirect(url_for('display_event', id = eventId))
+
 
 @app.route('/delete-coHost/<userId>/<eventId>')
 @login_required

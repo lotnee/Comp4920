@@ -1,3 +1,85 @@
 .friends a {
     color: azure;
 }
+.cohost-list {
+    padding-bottom: 100px;
+    background: black;
+}
+
+.container{
+    padding:20px;
+    margin-top:100px;
+    max-width:500px;
+    text-align:center;
+    background-color: #fafafa;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    text-align:left;
+    padding:10px;
+}
+.modal{
+    position:fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background:white;
+    padding: 20px;
+    padding: 10px;
+    width: auto;
+}
+.fade{
+    opacity:1;
+}
+
+.nav .nav-tabs > .active {
+     background:grey;
+}
+
+a.button-accept {
+    background-color: #5cb85c;
+    color: white;
+    cursor: pointer;
+    width: auto;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 15px;
+}
+
+a.button-accept:hover {
+    transition: 0.8s;
+    opacity: 0.8;
+}
+
+a.button-maybe {
+    background-color: #f0ad4e;;
+    color: white;
+    cursor: pointer;
+    width: auto;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 15px;
+}
+
+a.button-maybe:hover {
+    transition: 0.8s;
+    opacity: 0.8;
+}
+
+a.button-decline {
+    background-color: #d9534f;
+    color: white;
+    cursor: pointer;
+    width: auto;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 15px;
+}
+
+a.button-decline:hover {
+    transition: 0.8s;
+    opacity: 0.8;
+}
+
+.dp {
+    width: 50px;
+    height: 50px;
+}
