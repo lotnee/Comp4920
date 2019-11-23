@@ -178,7 +178,7 @@ def poll_create_event(poll):
 	if my_poll is None:
 		flash('Please contact admin, DB issues!')
 		return redirect(url_for('polls'))
-	# FIXME
+
 	date1 = None
 	largest = 0
 	for option in my_poll['options']:
@@ -296,3 +296,62 @@ def deleteInvite(eventId,userId):
 	# Delete event from User events list
 
 	return redirect(url_for("display_event", id = eventId))
+
+@app.route('/edit-event/<eventId>', methods=['GET', 'POST'])
+@login_required
+def edit_event(eventId):
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
+	event = DB.find_one(collection="Events", query={"_id": ObjectId(eventId)})
+	if event is None:
+		flash('Please contact admin, DB issues!')
+		return redirect(url_for('view_events'))
+	form = EventForm()
+	if form.validate_on_submit():
+		# time1 = form.starttime.data[0].split(':')
+		# if form.starttime.data[1] == 'PM':
+		# 	time1[0] = int(time1[0]) + 12
+		# 	if time1[0] == 24:
+		# 		time1[0] = 0
+		# time1 = time(int(time1[0]), int(time1[1]))
+
+		# form.endtime.data = form.endtime.data.split(' ')
+		# time2 = form.endtime.data[0].split(':')
+		# if form.endtime.data[1] == 'PM':
+		# 	time2[0] = int(time2[0]) + 12
+		# 	if time2[0] == 24:
+		# 		time2[0] = 0
+		# time2 = time(int(time2[0]), int(time2[1]))
+
+		# date1 = datetime((form.start.data).year,(form.start.data).month,(form.start.data).day, time1.hour, time1.minute)
+		# date2 = datetime((form.end.data).year,(form.end.data).month,(form.end.data).day, time2.hour, time2.minute)
+		if form.pictureDir.data is not None:
+			if event['pictureDir'] == 'event.jpg':
+				filename = photos.save(form.pictureDir.data, name='event/' + str(event['_id']) + '.')
+				filename = filename.split('/')[1]
+			else:
+				# delete existing photo
+				filename = "app/static/images/event/" + profile['pictureDir']
+				os.remove(os.path.join(filename))
+				filename = photos.save(form.pictureDir.data, name='event/'+ + str(event['_id']) + '.')
+				filename = filename.split('/')[1]
+			DB.update_one(collection="Events", filter={"_id": event['_id']}, data={"$set": {"pictureDir": filename}})
+		if form.eventType.data == 'private':
+			event_type = True
+		else:
+			event_type = False
+
+		DB.update_one(collection="Events", filter={"_id": event['_id']}, data={"$set": {"name": form.name.data.strip()}})
+		DB.update_one(collection="Events", filter={"_id": event['_id']}, data={"$set": {"description": form.description.data.strip()}})
+		DB.update_one(collection="Events", filter={"_id": event['_id']}, data={"$set": {"private": event_type}})
+
+		# print('name: {} , old -> {}'.format(form.name.data, event['name']))
+		# print(f'description: {form.description.data}')
+		# # print(f'start: {date1}')
+		# # print(f'end: {date2}')
+		# print(f'pictureDir: {form.pictureDir.data}')
+		# print(f'type {form.eventType.data}')
+		return redirect(url_for('view_events'))
+	return render_template('edit-event.html', title = "Edit Event Details", form=form, event=event)
