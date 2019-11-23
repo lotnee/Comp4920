@@ -76,12 +76,18 @@ def add_voter(poll):
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
-	# check poll need at least 1-2 voter
+	
+	myFriendList = []
+	for f in user['friends']:
+		profile = DB.find_one(collection="Profile", query={'_id': f['friend_id']})
+		if f['status'] == 'accepted':
+			myFriendList.append(profile)
+
 	current_poll = DB.find_one(collection="Poll", query={"_id": ObjectId(poll)})
 	if current_poll is None:
 		flash('Please contact admin, DB error!')
 		return redirect(url_for('create_poll'))
-	return render_template('add-voter.html', title = 'Add voter', me=user, poll=poll)
+	return render_template('add-voter.html', title = 'Add voter', myFriendList=myFriendList, poll=poll)
 
 @app.route('/invite-voter/<poll>/<email>')
 @login_required
@@ -139,7 +145,7 @@ def update_vote(poll):
 			check = DB.find_one(collection='Poll', query={index: user['firstName']})
 			if check is not None:
 				flash(f'You Already voted for {dt}')
-				continue
+				return redirect(url_for('polls'))
 			DB.update_one(collection='Poll', filter={'_id': ObjectId(poll)}, data={'$push': {index: user['firstName']}})
 			return redirect(url_for('polls'))
 	elif request.form.get('del') == 'del':
