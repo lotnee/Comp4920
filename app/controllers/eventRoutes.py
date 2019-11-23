@@ -191,11 +191,6 @@ def poll_create_event(poll):
 				largest = len(list(option['voters']))
 				date1 = option['date']
 
-			# for voter in option['voters']:
-			# 	if voter == user['firstName']:
-			# 		date1 = option['date']
-			# 		break;
-
 	event_obj = Event(name=my_poll['name'] , description =
 			my_poll['description'], start=date1, end=None,
 			host=user['_id'], invitees=[], pictureDir='events.jpg', private=True).json()
@@ -338,13 +333,13 @@ def edit_event(eventId):
 def add_cohost(userId, eventId):
 	# Add the userId to the event invitePrivleges
 	person = DB.find_one(collection = "Events", query = {"_id":ObjectId(eventId), "invitePrivleges": {"$elemMatch": {"cohostId": ObjectId(userId)}}})
-	print(person)
 	if person is None:
-		userDetails = DB.find_one(collection = "Profile", query = {"_id":ObjectId(userId)}, projection = {"email": 1, "firstName":1,"lastName":1})
+		userDetails = DB.find_one(collection = "Profile", query = {"_id":ObjectId(userId)}, projection = {"email":1, "firstName":1,"lastName":1, "pictureDir": 1})
 		DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data =
 														{"$push": {"invitePrivleges":
-														{"cohostId":ObjectId(userId),
-														"email":userDetails['email'],
+														{"email":userDetails['email'],
+														"cohostId":ObjectId(userId),
+														"pictureDir":userDetails['pictureDir'],
 														"name": userDetails['firstName'] + " " + userDetails['lastName']
 														}}})
 	return redirect(url_for('display_event', id = eventId))
