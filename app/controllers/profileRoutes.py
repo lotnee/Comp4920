@@ -92,18 +92,7 @@ def edit_profile():
 						filename = form.gender.data + ".jpg"
 						DB.update_one(collection="Profile", filter={"email": current_user.email}, data={"$set": {"pictureDir": filename}})
 
-				# update all friend's model picture dir if changed
-				# toUpdateList = DB.find(collection="Profile", query={"friend": {"$elemMatch": {"email": current_user.email}}})
-				# i = 0
-				# while i < toUpdateList.count():
-				# 	j = 0
-				# 	while j < len(toUpdateList[i]['friend']):
-				# 		if toUpdateList[i]['friend'][j]['email'] == current_user.email:
-				# 			friend_pic = "friends." + str(j) + ".pictureDir"
-				# 			DB.update_one(collection="Profile", filter={"email": toUpdateList[i]['email']}, data={"$set": {friend_pic: filename}})
-
-		# profile = DB.find_one(collection="Profile", query={"email": user['email']})
-		return redirect(url_for('/profile', profile_id=profile['_id']))
+		return redirect('/profile')
 
 	return render_template('edit-profile.html', title='Edit profile', form=form, profile=profile)
 
