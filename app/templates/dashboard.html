@@ -33,15 +33,52 @@
               {% endfor %}
             {% endif %}
           {% endwith %}
-          {% if events %}
-            {%for dictionary_item in events%}
-              <h4><a href="{{ url_for('display_event', id = dictionary_item['_id']) }}">{{dictionary_item['name']}}</a></h4>
-              <hr class="w3-clear">
-              <p><b>Event Description</b></p>
-              <p>{{dictionary_item['description']}}</p>
+          <h2 style="text-align:center">Poll List</h2>
+          {% if polls %}
+            {% for poll in polls%}
+            <form action="{{url_for('update_vote', poll=poll._id)}}" method="post">
+              <hr>
+            <p><h4><b>{{poll.name}}</b>
+               {% if me._id == poll.creator %}
+                  <a href="{{url_for('add_voter', poll=poll._id)}}" class="addVoter" title="Add a voter"><span class="fa fa-plus"></span></a>
+                  <a href="{{url_for('delete_poll', poll=poll._id)}}" class="delPoll" title="Delete poll"><span class="fa fa-minus"></span></a>
+                  <a href="{{url_for('poll_create_event', poll=poll._id)}}" class="createEvent" title="Create an event"><span class="fa fa-calendar"></span></a>
+               {% endif %}   
+            </p></h4>
+            <p style="text-align: center"> {{poll.description}} </p>
+            {% for dates in poll.options %}
+            {% set datetime = (dates.date|string).split(' ') %}
+            <input type="radio" name="date" value="{{dates.date}}" style="border: 2px; background-color: white;"> 
+            Date: {{datetime[0]}} Time: {{datetime[1].split(':')[0]}}:{{datetime[1].split(':')[1]}}
+              {% if dates.votes %}
+              <p>Voters</p> 
+              {% endif %}
+              {% for votes in dates.voters %}
+              <br> <i class="fa fa-user" style="color:#1E90FF"></i> {{votes}}
+              {% endfor %}
               <br>
             {% endfor %}
-          {% else %}
+            {% endfor %}
+            {% else %}
+            <h4 style="text-align: center">You currently do not have any existing polls.</h4>
+            <h5 style="text-align: center"><button class="button-polls" onclick="window.location.href = '/create-poll';">Create a poll</button></h5>
+            <p>
+            {% endif %}
+            <br>
+             <h2 style="text-align:center">Event List</h2>
+            {% if events %}
+            {%for event in events%}
+              <h4><a href="{{ url_for('display_event', id = event._id) }}">{{event.name}}</a></h4>
+              <hr class="w3-clear">
+              {% set datetime1 = (event.start|string).split(' ') %}
+              <h6>Start Date: {{datetime1[0]}} Time: {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
+              {% set datetime2 = (event.end|string).split(' ') %}
+              <h6>End Date: {{datetime2[0]}} Time: {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
+              <p><b>Event Description</b></p>
+              <p>{{event.description}}</p>
+              <br>
+            {% endfor %}
+            {% else %}
             <h3 style="text-align: center">You are currently not involved in any events.</h3>
             <h6 style="text-align: center"><button class="button-dash" onclick="window.location.href = '/create-event';">Create an event</button></h4>
             <p>

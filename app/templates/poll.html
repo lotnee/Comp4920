@@ -131,8 +131,9 @@ a.createEvent:hover {
             </p></h4>
 			<p style="text-align: center"> {{poll.description}} </p>
 			{% for dates in poll.options %}
-			<div style="display: none">{{dates.date}}</div>
-			<input type="radio" name="date" value="{{dates.date}}" style="border: 2px; background-color: white;"> {{dates.date}}
+      {% set datetime = (dates.date|string).split(' ') %}
+			<input type="radio" name="date" value="{{dates.date}}" style="border: 2px; background-color: white;"> 
+      Date: {{datetime[0]}} Time: {{datetime[1].split(':')[0]}}:{{datetime[1].split(':')[1]}}
 				{% if dates.votes %}
 				<p>Voters</p> 
 				{% endif %}
