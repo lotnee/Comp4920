@@ -23,7 +23,9 @@
           <p><b>Email:</b> {{friend.email}}</p>
           <p><b>Name:</b> {{friend.firstName}} {{friend.lastName}}</p>
         </div>
-        <img src="static/images/profile/{{friend.pictureDir}}" class="dp">
+        <a href="{{url_for('profile', profile_id=friend._id)}}">
+          <img src="static/images/profile/{{friend.pictureDir}}" class="dp">
+        </a>
         <a href="{{url_for('delete_friend', profile_id=friend._id)}}"class="cancel">Delete Friend</a>
         <br />
    {% endfor %}
