@@ -33,6 +33,7 @@
               {% endfor %}
             {% endif %}
           {% endwith %}
+          <!-- hereeee rodney -->
           {% if polls %}
             {%for dictionary_item in polls%}
               <h4><a href="{{ url_for('display_event', id = dictionary_item['_id']) }}">{{dictionary_item['name']}}</a></h4>
