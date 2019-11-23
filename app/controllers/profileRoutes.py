@@ -118,6 +118,8 @@ def profile(profile_id,is_profile_owner=False):
 	eventList = []
 	for events in user['events']:
 		events = DB.find_one(collection='Events', query={'_id': events})
+		if not events:
+			continue
 		event_dict = {'title': events['name'], 
 				'start': events['start'].strftime("%Y-%m-%d"), 
 				'end': events['end'].strftime("%Y-%m-%d")}
