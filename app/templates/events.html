@@ -54,6 +54,12 @@ a.edit {
    margin: 8px 0;
    border: none;
 }
+
+.event {
+  background-color: white;
+  padding: 10px;
+  margin-bottom: 10px;
+}
 </style>
 
 <body>
@@ -62,12 +68,13 @@ a.edit {
         {% if events %}
             <div class="events">
                 {%for event in events%}
+                <div class="event">
                 <h4><a href="{{ url_for('display_event', id = event._id) }}">{{event.name}}</a></h4>
                 <hr class="w3-clear">
                 {% set datetime1 = (event.start|string).split(' ') %}
-              <h6>Start Date: {{datetime1[0]}} Time: {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
+              <h6>Start Date: {{datetime1[0]}} at {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
               {% set datetime2 = (event.end|string).split(' ') %}
-              <h6>End Date: {{datetime2[0]}} Time: {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
+              <h6>End Date: {{datetime2[0]}} at {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
                 <p><b>Event Description</b></p>
                 <p>{{event.description}}</p>
                 <br>
@@ -75,6 +82,7 @@ a.edit {
                 <a href="{{url_for('edit_event', eventId = event._id)}}" class="edit">Edit Event</a></p>
                 <a href="{{url_for('delete_event', id = event._id)}}" class="delete">Delete Event</a></p>
                 {% endif %}
+              </div>
                 {% endfor %}
             </div>
         {% else %}
