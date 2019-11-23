@@ -53,7 +53,6 @@ a.addVoter {
   cursor: pointer;
   border-radius: 14px;
   padding: 8px 12px;
-  margin: 8px 0;
   float: right;
   font-size: 12px;
   border-color: #1E90FF;
@@ -70,14 +69,13 @@ a.addVoter:hover {
    padding: 10px;
    margin-top: 10px;
  }
- 
+
 a.delPoll {
   background-color: transparent;
   color: #1E90FF;
   cursor: pointer;
   border-radius: 14px;
   padding: 8px 12px;
-  margin: 8px 0;
   float: right;
   font-size: 12px;
   border-color: #1E90FF;
@@ -94,10 +92,7 @@ a.createEvent {
   cursor: pointer;
   border-radius: 14px;
   padding: 8px 12px;
-  margin: 8px 0;
   float: right;
-  margin-top:-70px;
-  margin-right: -50px;
   font-size: 12px;
   border-color: #1E90FF;
 }
