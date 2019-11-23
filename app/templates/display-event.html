@@ -6,21 +6,19 @@
 {% block content %}
 <!-- <style>
 .container{
-    padding:20px;
+    padding:10px;
     margin-top:100px;
     max-width:500px;
     text-align:center;
     background-color: #fafafa;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     text-align:left;
-    padding:10px;
-/*
-    border: 10px #fafafa solid;*/
 }
 .detail {
   background-color: white;
   padding:10px;
   margin-bottom: 10px;
+  border: 1px #f0f0f0 solid;
 }
 .modal{
     position:fixed;
@@ -102,7 +100,7 @@ a.button-decline:hover {
         <h6>End Date: {{datetime2[0]}} at {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
       </div>
         <div class="detail">
-       <h4>Description</h4>
+<!--        <h4>Description</h4> -->
        <p>{{event['description']}}</p>
      </div>
      <div class="detail">
