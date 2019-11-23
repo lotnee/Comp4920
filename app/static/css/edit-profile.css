@@ -18,6 +18,11 @@
     margin: 8px 0;
     float: right;
  }
+
+ .button:hover {
+   transition:0.5s;
+   opacity: 0.8;
+ }
  
  .uplbutton {
     background-color: transparent;

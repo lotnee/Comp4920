@@ -30,6 +30,12 @@
    font-size: 12px;
    border: none;
 }
+
+.button-add:hover {
+   transition: 0.5s;
+   opacity: 0.8;
+}
+
 .button-del {
    background-color: #778899;
    color: white;
@@ -44,6 +50,11 @@
    border: none;
 }
 
+.button-del:hover {
+   transition: 0.3s;
+   opacity: 0.8;
+}
+
 a.addVoter {
    background-color: transparent;
    color: #1E90FF;
@@ -52,8 +63,6 @@ a.addVoter {
    padding: 8px 12px;
    margin: 8px 0;
    float: right;
-   margin-top:-50px;
-   margin-right: -50px;
    font-size: 12px;
    border-color: #1E90FF;
 }
@@ -71,8 +80,6 @@ a.delPoll {
    padding: 8px 12px;
    margin: 8px 0;
    float: right;
-   margin-top:-50px;
-   margin-right: -70px;
    font-size: 12px;
    border-color: #1E90FF;
 }
@@ -104,7 +111,7 @@ a.createEvent:hover {
 </style>
 <body>
 <div class="container">
-	<h1 style="text-align:center">Poll List</h1><hr>
+	<h1 style="text-align:center">Poll List</h1>
 	{% with messages = get_flashed_messages() %}
 		{% if messages %}
 			{% for message in messages %}
@@ -115,8 +122,13 @@ a.createEvent:hover {
 	{% if polls %}
 		{% for poll in polls %}
 			<form action="{{url_for('update_vote', poll=poll._id)}}" method="post">
-			<hr>
-			<p><h4><b>{{poll.name}}</b></p></h4>
+         <hr>
+            <p><h4><b>{{poll.name}}</b>
+               {% if user._id == poll.creator %}
+                  <a href="{{url_for('add_voter', poll=poll._id)}}" class="addVoter" title="Add a voter"><span class="fa fa-plus"></span></a>
+                  <a href="{{url_for('delete_poll', poll=poll._id)}}" class="delPoll" title="Delete poll"><span class="fa fa-minus"></span></a>
+               {% endif %}   
+            </p></h4>
 			<p style="text-align: center"> {{poll.description}} </p>
 			{% for dates in poll.options %}
 			<div style="display: none">{{dates.date}}</div>
@@ -125,7 +137,7 @@ a.createEvent:hover {
 				<p>Voters</p> 
 				{% endif %}
 				{% for votes in dates.voters %}
-				<br> <i class="fa fa-chevron-circle-right" style="color:#1E90FF"></i> {{votes}}
+				<br> <i class="fa fa-user" style="color:#1E90FF"></i> {{votes}}
 				{% endfor %}
 				<br>
 			
@@ -134,10 +146,8 @@ a.createEvent:hover {
 			<br>
 			<button name="add" value="add" class="button-add" type="submit">Vote</button>
 			<button name="del" value="del" class="button-del" type="submit">Unvote</button>
-			{% if user._id == poll.creator %}
-			  <a href="{{url_for('add_voter', poll=poll._id)}}" class="addVoter"><span class="fa fa-plus"></span></a>
-			  <a href="{{url_for('delete_poll', poll=poll._id)}}" class="delPoll"><span class="fa fa-minus"></span></a>
-			  <a href="{{url_for('poll_create_event', poll=poll._id)}}" class="createEvent"><span class="fa fa-chevron-circle-right"></span></a>
+         {% if user._id == poll.creator %}
+			  <a href="{{url_for('poll_create_event', poll=poll._id)}}" class="createEvent" title="Create an event"><span class="fa fa-calendar"></span></a>
 			{% endif %}
 			</form>
 		{% endfor %}
