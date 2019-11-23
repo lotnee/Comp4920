@@ -70,7 +70,7 @@ a.edit {
             <div class="events">
                 {%for event in events%}
                 <div class="event">
-                <h4><a href="{{ url_for('display_event', id = event._id) }}">{{event.name}}</a></h4>
+                <h4><a href="{{ url_for('display_event', id = event._id) }}" style="text-decoration:none">{{event.name}}</a></h4>
                 <hr class="w3-clear">
                 {% set datetime1 = (event.start|string).split(' ') %}
               <h6>Start Date: {{datetime1[0]}} at {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
