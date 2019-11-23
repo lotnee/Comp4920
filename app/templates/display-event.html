@@ -21,6 +21,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background:white;
+    padding: 20px;
+    padding: 10px;
 }
 .fade{
     opacity:1;
@@ -29,88 +31,155 @@
 .nav .nav-tabs > .active {
      background:grey;
 }
+
+a.button-accept {
+    background-color: #5cb85c;
+    color: white;
+    cursor: pointer;
+    width: auto;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 15px;
+}
+
+a.button-accept:hover {
+    transition: 0.8s;
+    opacity: 0.8;
+}
+
+a.button-maybe {
+    background-color: #f0ad4e;;
+    color: white;
+    cursor: pointer;
+    width: auto;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 15px;
+}
+
+a.button-maybe:hover {
+    transition: 0.8s;
+    opacity: 0.8;
+}
+
+a.button-decline {
+    background-color: #d9534f;
+    color: white;
+    cursor: pointer;
+    width: auto;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 15px;
+}
+
+a.button-decline:hover {
+    transition: 0.8s;
+    opacity: 0.8;
+}
+
+.dp {
+    width: 50px;
+    height: 50px;
+}
 </style>
 <body>
    <div class="container">
        <h1>{{event['name'] }}</h1>
-       <br>
+       <hr>
        <h2>Description</h2>
        <p>{{event['description']}}</p>
        <div class="inviteField">
            <h2>Invitation Status</h2>
            {% if status == "invited" %}
-           <p>You have been invited! Please confirm your attendance</p>
-           <button class="btn btn-success"><a class="attendance" href="{{url_for('acceptInvite', eventId = event['_id'],acceptance = "going")}}">Accept</a></button>
-           <button class="btn btn-warning"><a class="attendance" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "maybe")}}">Maybe</a></button>
-           <button class="btn btn-danger"><a class="attendance" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "decline")}}">Decline</a></button>
+           <p>You have been invited by [host name/email].<br>
+            <hr>
+           <div style="text-align:center">
+                <a class="button-accept" href="{{url_for('acceptInvite', eventId = event['_id'],acceptance = "going")}}"><i class="fa fa-calendar-check-o"></i> Accept</a>
+                <a class="button-maybe" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "maybe")}}"><i class="fa fa-calendar-minus-o"></i> Maybe</a></button>
+                <a class="button-decline" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "decline")}}"><i class="fa fa-calendar-times-o"></i> Decline</a></button>
+            <hr>
+            </div>
            {% else %}
             <p>{{status}}</p>
            <h2>Co-Hosts</h2>
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCohosts">See All</button>
            {% endif %}
-           <h2>Invited Guests</h2>
+           <p><h2>Invited Guests <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends" style="float:right">View All</button></h2>
         </div>
-       <ul>
-
-
+        <ul>
            {% for dictionary_item in event['invitees'] %}
-            <p>{{dictionary_item['email']}} <a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}">X</a></p>
+                <p><a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}"><i class="fa fa-times" aria-hidden="true"></i></a>  {{dictionary_item['email']}}</p>
            {% endfor %}
-       </ul>
-       <!-- Parts of this code was from https://getbootstrap.com/docs/4.0/components/navs/ -->
-       <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends">See All</button>
-
-           <div class="modal fade" id = "DisplayFriends" role="dialog">
-               <ul class="nav nav-tabs">
-                   <li class="active">
+        </ul>
+        <!-- Parts of this code was from https://getbootstrap.com/docs/4.0/components/navs/ -->
+             <div class="modal fade" id = "DisplayFriends" role="dialog">
+                <ul class="nav nav-tabs">
+                    <li class="active">
                        <a data-toggle = "tab" href="#going">Going</a>
-                   </li>
-                   <li >
+                    </li>
+                    <li >
                        <a data-toggle = "tab" href="#maybe">Maybe</a>
-                   </li>
-                   <li>
-                       <a data-toggle = "tab" href="#declined">Declined</a>
-                   </li>
-                   <li>
+                    </li>
+                    <li>
+                       <a data-toggle = "tab" href="#declined">Not going</a>
+                    </li>
+                    <li>
                        <a data-toggle = "tab" href="#invited">Invited</a>
-                   </li>
+                    </li>
                 </ul>
                 <div class="tab-content">
-                    <div id = "going" class="tab-pane fade in active">
-                        <h3>Going</h3>
+                    
+                    <div id = "going" class="tab-pane fade in active"><p>
                         <ul>
-                            {% for item in going%}
-                              <li> {{item['name']}} </li>
-                            {% endfor%}
+                            {% if going %}
+                                {% for item in going%}
+                                    <p><img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
+                                    {{item['name']}}<br><br>
+                                {% endfor%}
+                            {% else %}
+                                <h4 style="text-align:center">No responses yet</h4>
+                            {% endif %}
                         </ul>
                     </div>
-                    <div id = "maybe" class="tab-pane fade in">
-                        <h3>maybe</h3>
+                    <div id = "maybe" class="tab-pane fade in"><p>
                         <ul>
-                            {% for item in maybe%}
-                              <li> {{item['name']}}  </li>
-                            {% endfor%}
+                            {% if maybe %}
+                                {% for item in maybe%}
+                                    <p><img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
+                                    {{item['name']}}<br><br>
+                                {% endfor%}
+                            {% else %}
+                                <h4 style="text-align:center">No responses yet</h4>
+                            {% endif %}
                         </ul>
                     </div>
-                    <div id = "declined" class="tab-pane fade in">
-                        <h3>Declined</h3>
+                    <div id = "declined" class="tab-pane fade in"><p>
                         <ul>
-                            {% for item in declined%}
-                              <li> {{item['name']}}  </li>
-                            {% endfor%}
+                            {% if declined %}
+                                {% for item in declined%}
+                                    <p><img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
+                                    {{item['name']}}<br><br>
+                                {% endfor%}
+                            {% else %}
+                                <h4 style="text-align:center">No responses yet</h4>
+                            {% endif %}
                         </ul>
                     </div>
-                    <div id = "invited" class="tab-pane fade in">
-                        <h3>Invited</h3>
+                    <div id = "invited" class="tab-pane fade in"><p>
                         <ul>
                             {%if host == 1 %}
                                 {% for item in invited%}
-                                  <li> {{item['name']}}  </li> <img src="/static/images/profile/{{item['pictureDir']}}" class="dp"> <a href="#">X</a>
+                                  <li> {{item['name']}}  </li> <img src="/static/images/profile/{{item['pictureDir']}}" class="dp"> 
                                 {% endfor%}
                             {% else %}
-                                {% for item in invited %}
-                                  <li> {{item['name']}}  </li> <img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
-                                {% endfor%}
+                                {% if invited %}
+                                    {% for item in invited %}
+                                    <p><img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
+                                    {{item['name']}}
+                                    {% endfor%}
+                                {% else %}
+                                <h4 style="text-align:center">No invitees yet</h4>
+                                {% endif%}
                             {% endif %}
                         </ul>
                     </div>
@@ -118,19 +187,14 @@
               </div>
 
            <!-- End code from https://getbootstrap.com/docs/4.0/components/navs/ -->
-
-
     {% if host == 1 %}
-      <input type = "text" id = "myInput" onkeyup ="hi('friends','myInput')" placeholder="Search for your friends">
-      <ul id = "friends">
-       </ul>
+        <input type = "text" id = "myInput" onkeyup ="hi('friends','myInput')" placeholder="Search for your friends">
+        <ul id = "friends"></ul>
    </div>
 
    <div class="modal fade" id = "addCohosts" role="dialog">
        <input type = "text" id = "coHostInput" onkeyup ="hi('coHosts','coHostInput')" placeholder="Search for your friends">
-       <ul id = "coHosts">
-
-        </ul>
+       <ul id = "coHosts"></ul>
    </div>
 
    <script type="text/javascript" src="{{ url_for('static', filename='js/display-event.js') }}"></script>
