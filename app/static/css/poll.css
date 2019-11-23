@@ -64,6 +64,13 @@ a.addVoter:hover {
   color: #778899;
 }
 
+.detail {
+   background-color: white;
+   border: 1px #f0f0f0 solid;
+   padding: 10px;
+   margin-top: 10px;
+ }
+ 
 a.delPoll {
   background-color: transparent;
   color: #1E90FF;

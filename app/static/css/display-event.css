@@ -24,6 +24,14 @@
     padding: 20px;
     width: auto;
 }
+
+.detail {
+    background-color: white;
+    padding:10px;
+    margin-bottom: 10px;
+    border: 1px #f0f0f0 solid;
+}
+
 .fade{
     opacity:1;
 }
