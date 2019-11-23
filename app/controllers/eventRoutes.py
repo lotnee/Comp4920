@@ -228,13 +228,13 @@ def poll_create_event(poll):
 		# check date and time
 		if date1 < datetime.now():
 			flash('Start has to be today or later!')
-			return render_template('poll-create-event.html', title = "Create Your Event", form = form, event=event)
+			return render_template('poll-create-event.html', title="Create Your Event", form=form, poll=poll, event=event_obj)
 		elif date2 < date1:
 			flash('End cannot be earlier than Start!')
-			return render_template('poll-create-event.html', title = "Create Your Event", form = form, event=event)
+			return render_template('poll-create-event.html', title="Create Your Event", form=form, poll=poll, event=event_obj)
 		elif date1 == date2:
 			flash('Start and End cannot be the same!')
-			return render_template('poll-create-event.html', title = "Create Your Event", form = form, event=event)
+			return render_template('poll-create-event.html', title="Create Your Event", form=form, poll=poll, event=event_obj)
 		if form.pictureDir.data is None:
 			filename = "event.jpg"
 		else:
@@ -258,7 +258,7 @@ def poll_create_event(poll):
 						  start = date1, end =date2,
 						  host=user['_id'],
 						  invitees=inviteesList, pictureDir=filename, private=event_type)
-		eventid = updated_event.insert(user['email'])
+		eventid = updated_event.insert(user['email'], user['_id'])
 
 		for invitees in inviteesList:
 			DB.update_one(collection = "Profile", filter = {"email":invitees['email']}, data = {"$push": {"events": ObjectId(eventid)}})

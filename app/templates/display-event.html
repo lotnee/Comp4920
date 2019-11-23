@@ -23,6 +23,7 @@
     background:white;
     padding: 20px;
     padding: 10px;
+    width: auto;
 }
 .fade{
     opacity:1;
@@ -101,8 +102,8 @@ a.button-decline:hover {
             </div>
            {% else %}
             <p>{{status}}</p>
-           <h2>Co-Hosts</h2>
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCohosts">See All</button>
+           <h2>Co-Hosts
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCohosts" style="float:right">View All</button></h2>
            {% endif %}
            <p><h2>Invited Guests <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends" style="float:right">View All</button></h2>
         </div>
@@ -113,6 +114,9 @@ a.button-decline:hover {
         </ul>
         <!-- Parts of this code was from https://getbootstrap.com/docs/4.0/components/navs/ -->
              <div class="modal fade" id = "DisplayFriends" role="dialog">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 <ul class="nav nav-tabs">
                     <li class="active">
                        <a data-toggle = "tab" href="#going">Going</a>
