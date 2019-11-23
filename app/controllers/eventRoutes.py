@@ -95,11 +95,19 @@ def view_events():
 @app.route('/event-completed')
 @login_required
 def event_completed():
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	return render_template('event-completed.html',title="Event Creation Completed")
 
 @app.route('/view-events/<path:id>')
 @login_required
 def display_event(id):
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	#get the event name or more so the ID
 	invited = []
 	going = []
@@ -156,6 +164,10 @@ def display_event(id):
 @app.route('/delete-event/<string:id>')
 @login_required
 def delete_event(id):
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
@@ -260,6 +272,10 @@ def poll_create_event(poll):
 @app.route('/add-people/<userId>/<id>')
 @login_required
 def addPeople(userId = None,id = None):
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	# we have the email and id of the user & event we want to invite,
 	# we need to update the number of people in the invitees (add the profile to it)
 	# also update the profile's thingy
@@ -275,6 +291,10 @@ def addPeople(userId = None,id = None):
 @app.route('/accept-invite/<eventId>/<acceptance>')
 @login_required
 def acceptInvite(eventId, acceptance):
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	#need to change the user to accepting that event id
 	DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId), "invitees":{"$elemMatch": {"email" : current_user.email} } }, data = {'$set': {"invitees.$.status":acceptance}}  )
 
@@ -283,6 +303,10 @@ def acceptInvite(eventId, acceptance):
 @app.route('/delete-invite/<eventId>/<userId>')
 @login_required
 def deleteInvite(eventId,userId):
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	# Delete user from the Event model from invitees
 	# Get the list of invitees from Event model
 	userEmail = DB.find_one(collection = "Profile", query  = {"_id":ObjectId(userId)}, projection = {"email":1})
@@ -332,6 +356,10 @@ def edit_event(eventId):
 @app.route('/add-coHost/<userId>/<eventId>')
 @login_required
 def add_cohost(userId, eventId):
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	# Add the userId to the event invitePrivleges
 	person = DB.find_one(collection = "Events", query = {"_id":ObjectId(eventId), "invitePrivleges": {"$elemMatch": {"cohostId": ObjectId(userId)}}})
 	if person is None:
@@ -349,7 +377,14 @@ def add_cohost(userId, eventId):
 @app.route('/delete-coHost/<userId>/<eventId>')
 @login_required
 def delete_cohost(userId, eventId):
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	# Add the userId to the event invitePrivleges
+	#check whether a valid cohost
+	value = DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$pull": {"invitePrivleges": ObjectId(userId)}})
+	if value is None:
+		flash('The user you have tried to remove is not an admin!')
 
-	DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$pull": {"invitePrivleges": ObjectId(userId)}})
 	return redirect(url_for('display_event', id = eventId))

@@ -224,13 +224,20 @@ a.button-decline:hover {
 
    <div class="modal fade" id = "addCohosts" role="dialog">
        <h3>Other Admins</h3>
-       {% for item in cohosts %}
-       <div class="cohost-list row">
+       {% if host == 1%}
+        {% for item in cohosts %}
+        <div class="cohost-list row">
+            <img class="col-lg-1 col-sm-2 img-responsive" src = "/static/images/profile/{{item['pictureDir']}}"/>
+            <p> {{item['name']}}</p> <a href="/delete-coHost/{{item['cohostId']}}/{{event['_id']}}">x </a>
+        </div>
+        {% endfor %}
 
+        {% else %}
+        <div class="cohost-list row">
             <img class="col-lg-1 col-sm-2 img-responsive" src = "/static/images/profile/{{item['pictureDir']}}"/>
             <p> {{item['name']}}</p>
-       </div>
-       {% endfor %}
+        </div>
+        {% endif %}
        <!-- all the cohosts are here -->
        {% if host == 1 or canInvite == 1%}
        <br>
