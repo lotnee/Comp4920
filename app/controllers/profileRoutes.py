@@ -32,7 +32,18 @@ def dashboard():
 		eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
 		print(eventList[0]['events'])
 		allEvents = profileEvents(eventList[0]['events'])
+		if DB.find_one(collection='Poll', query={"email":current_user.email, "polls": {"$ne" : []}}):
+			pollList = polls_in_profile(user[0]['polls'])
+			return render_template('dashboard.html',polls = pollList, events = allEvents, title='Dashboard', users=users, me=me, requests=requests)
 		return render_template('dashboard.html', events = allEvents, title='Dashboard', users=users, me=me, requests=requests)
+	if DB.find_one(collection='Poll', query={"email":current_user.email, "polls": {"$ne" : []}}):
+		pollList = polls_in_profile(user[0]['polls'])
+		if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
+			eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
+			print(eventList[0]['events'])
+			allEvents = profileEvents(eventList[0]['events'])
+			return render_template('dashboard.html',polls = pollList, events = allEvents, title='Dashboard', users=users, me=me, requests=requests)
+		return render_template('dashboard.html',polls = pollList, title='Dashboard', users=users, me=me, requests=requests)
 	return render_template('dashboard.html', title='Dashboard', users=users, me=me, requests=requests)
 
 @app.route('/edit-profile', methods=['GET', 'POST'])

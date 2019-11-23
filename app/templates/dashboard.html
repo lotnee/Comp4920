@@ -33,6 +33,18 @@
               {% endfor %}
             {% endif %}
           {% endwith %}
+          {% if polls %}
+            {%for dictionary_item in polls%}
+              <h4><a href="{{ url_for('display_event', id = dictionary_item['_id']) }}">{{dictionary_item['name']}}</a></h4>
+              <hr class="w3-clear">
+              <p><b>Polls</b></p>
+              <br>
+            {% endfor %}
+          {% else %}
+            <h3 style="text-align: center">You are currently not involved in any polls.</h3>
+            <h6 style="text-align: center"><button class="button-dash" onclick="window.location.href = '/create-poll';">Create a poll</button></h4>
+            <p>
+          {% endif %}
           {% if events %}
             {%for dictionary_item in events%}
               <h4><a href="{{ url_for('display_event', id = dictionary_item['_id']) }}">{{dictionary_item['name']}}</a></h4>
