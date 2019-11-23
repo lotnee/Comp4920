@@ -14,6 +14,13 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     text-align:left;
     padding:10px;
+/*
+    border: 10px #fafafa solid;*/
+}
+.detail {
+  background-color: white;
+  padding:10px;
+  margin-bottom: 10px;
 }
 .modal{
     position:fixed;
@@ -85,14 +92,19 @@ a.button-decline:hover {
 </style>
 <body>
    <div class="container">
-       <h1>{{event['name'] }}</h1>
+    <div class="detail">
+       <h2>{{event['name'] }}</h2>
        <hr>
        {% set datetime1 = (event.start|string).split(' ') %}
-        <h6>Start Date: {{datetime1[0]}} Time: {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
+        <h6>Start Date: {{datetime1[0]}} at {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
         {% set datetime2 = (event.end|string).split(' ') %}
-        <h6>End Date: {{datetime2[0]}} Time: {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
-       <h2>Description</h2>
+        <h6>End Date: {{datetime2[0]}} at {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
+      </div>
+        <div class="detail">
+       <h4>Description</h4>
        <p>{{event['description']}}</p>
+     </div>
+     <div class="detail">
        <div class="inviteField">
            <h2>Invitation Status</h2>
            {% if status == "invited" %}
@@ -106,9 +118,11 @@ a.button-decline:hover {
             </div>
            {% else %}
             <p>{{status}}</p>
+
            <h2>Co-Hosts
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCohosts" style="float:right">View All</button></h2>
            {% endif %}
+   
            <p><h2>Invited Guests <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends" style="float:right">View All</button></h2>
         </div>
         <ul>
@@ -198,6 +212,7 @@ a.button-decline:hover {
     {% if host == 1 %}
         <input type = "text" id = "myInput" onkeyup ="hi('friends','myInput')" placeholder="Search for your friends">
         <ul id = "friends"></ul>
+      </div>
    </div>
 
    <div class="modal fade" id = "addCohosts" role="dialog">
