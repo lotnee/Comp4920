@@ -130,7 +130,8 @@ def display_event(id):
 	cohosts = eventDetails['invitePrivleges']
 	# see whether the person has accepted or not to give them the option to accept your invite
 	for invitee in eventDetails["invitees"]:
-		details = DB.find_one(collection = "Profile", query = {"email":invitee['email']}, projection = {"firstName": 1, "lastName" : 1, "pictureDir":1})
+		details = DB.find_one(collection = "Profile", query = {"email":invitee['email']},
+		 						projection = {"firstName": 1, "lastName" : 1, "pictureDir":1})
 		#get pictureDir
 		fullName = details['firstName'] + " " +details['lastName']
 		pictureDir = details['pictureDir']

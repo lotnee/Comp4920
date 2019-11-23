@@ -2,7 +2,7 @@ from app import app
 from app.database import DB
 from flask import render_template, redirect, request, url_for
 from flask_login import current_user, login_required
-
+from bson.objectid import ObjectId
 @app.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
@@ -32,10 +32,12 @@ def search():
 		'$or':[{'$text': {'$search': request.args['query']}},
 			{'host': {'$in': list(matched_profile_info.keys())}}]
 		}))
-
+	print("====================================================")
 	for event in matched_events:
-		(firstname, lastname) = matched_profile_info[event['host']]
+		matched_user = DB.find_one(collection = "Profile", query = {"_id": event['host']}, projection = {"firstName":1, "lastName":1} )
+		(firstname, lastname) = (matched_user['firstName'], matched_user['lastName'])
 		event['host'] = '{} {}'.format(firstname,lastname)
-
+	print("====================================================")
+	#matched_events = [item for item in matched_events if item['private'] == False]
 	return render_template('search.html', title='Search Results',
 		users=matched_profiles, events=matched_events, query=request.args['query'])
