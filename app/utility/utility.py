@@ -22,7 +22,7 @@ def get_cursor(cursor_obj, key, subkey, subkey2, query, query2):
 			j += 1
 		i += 1
 	return l
-		
+
 # return index
 def get_index_2key(arrayList, key, query, key2, query2):
 	i = 0
@@ -66,3 +66,8 @@ def send_email(subject, recipients, html_body):
     msg = Message(subject, recipients=recipients)
     msg.html = html_body
     mail.send(msg)
+
+
+from app.database import DB
+def get_name(email):
+	return DB.find_one(collection = "Profile", query = {"email":email}, projection = {"firstName": 1, "lastName" : 1})
