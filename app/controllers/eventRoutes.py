@@ -290,10 +290,11 @@ def deleteInvite(eventId,userId):
 	# Delete user from the Event model from invitees
 	# Get the list of invitees from Event model
 	userEmail = DB.find_one(collection = "Profile", query  = {"_id":ObjectId(userId)}, projection = {"email":1})
-	DB.update_one(collection = "Events", filter = {"_id": ObjectId(eventId)}, data = {'$pull': {"invitees": {"id": ObjectId(userId)}}})
-	DB.update_one(collection = "Profile", filter = {"_id":ObjectId(userId)}, data = {'$pull': {"events":ObjectId(eventId)}})
+	DB.update_one(collection = "Events", filter = {"_id": ObjectId(eventId)}, data = { "$pull" : {"invitees": {"id": ObjectId(userId)}}})
+	DB.update_one(collection = "Profile", filter = {"_id":ObjectId(userId)}, data = {"$pull": {"events":ObjectId(eventId)}})
 
-	# Delete event from User events list
+	# also remove the person from the invitePrivleges
+
 
 	return redirect(url_for("display_event", id = eventId))
 
@@ -355,3 +356,19 @@ def edit_event(eventId):
 		# print(f'type {form.eventType.data}')
 		return redirect(url_for('view_events'))
 	return render_template('edit-event.html', title = "Edit Event Details", form=form, event=event)
+# In this case when we write userId it is really the profile Id
+@app.route('/add-coHost/<userId>/<eventId>')
+@login_required
+def add_cohost(userId, eventId):
+	# Add the userId to the event invitePrivleges
+	userDetails = DB.find_one(collection = "Profile", query = {"_id":ObjectId(userId)}, projection = {"email": 1})
+	DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$push": {"invitePrivleges": {"cohostId":ObjectId(userId), "email":userDetails['email']}}})
+	return redirect(url_for('display_event', id = eventId))
+
+@app.route('/delete-coHost/<userId>/<eventId>')
+@login_required
+def delete_cohost(userId, eventId):
+	# Add the userId to the event invitePrivleges
+
+	DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$pull": {"invitePrivleges": ObjectId(userId)}})
+	return redirect(url_for('display_event', id = eventId))

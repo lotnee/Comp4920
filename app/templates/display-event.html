@@ -44,15 +44,15 @@
            <button class="btn btn-warning"><a class="attendance" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "maybe")}}">Maybe</a></button>
            <button class="btn btn-danger"><a class="attendance" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "decline")}}">Decline</a></button>
            {% else %}
+            <p>{{status}}</p>
            <h2>Co-Hosts</h2>
-           <p>{{status}}</p>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCohosts">See All</button>
            {% endif %}
            <h2>Invited Guests</h2>
-
         </div>
        <ul>
 
-           
+
            {% for dictionary_item in event['invitees'] %}
             <p>{{dictionary_item['email']}} <a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}">X</a></p>
            {% endfor %}
@@ -118,18 +118,29 @@
               </div>
 
            <!-- End code from https://getbootstrap.com/docs/4.0/components/navs/ -->
+
+
     {% if host == 1 %}
-      <input type = "text" id = "myInput" onkeyup ="hi()" placeholder="Search for your friends">
+      <input type = "text" id = "myInput" onkeyup ="hi('friends','myInput')" placeholder="Search for your friends">
       <ul id = "friends">
        </ul>
    </div>
 
+   <div class="modal fade" id = "addCohosts" role="dialog">
+       <input type = "text" id = "coHostInput" onkeyup ="hi('coHosts','coHostInput')" placeholder="Search for your friends">
+       <ul id = "coHosts">
+
+        </ul>
+   </div>
+
    <script type="text/javascript" src="{{ url_for('static', filename='js/display-event.js') }}"></script>
    <script>
-       function hi(){
+       function hi(whichModal,whichInput){
+
            var id = "{{event['_id']}}"
            var friendlist = {{friends | safe}};
-           myFunction(friendlist,id)
+           console.log(friendlist)
+           myFunction(friendlist,id,whichModal,whichInput)
        }
    </script>
    {% else %}
