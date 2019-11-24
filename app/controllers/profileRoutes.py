@@ -103,9 +103,8 @@ def edit_profile():
 @app.route('/profile/<profile_id>')
 @login_required
 def profile(profile_id,is_profile_owner=False):
-	user_profile = DB.find_one(collection="Profile", query={'_id':
+	user = DB.find_one(collection="Profile", query={'_id':
 		ObjectId(profile_id)})
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
