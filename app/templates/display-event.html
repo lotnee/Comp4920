@@ -67,21 +67,23 @@
                         {% endif %}
                     {% endfor %}
             {% else %}
-            <p>No co-hosts listed.</p>
+            <p>No co-hosts listed.</p><br>
             {% endif %}
             {% endif %}
 
-           <br><h4><b>Invited Guests</b><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends" style="float:right">View All</button></h4>
-            <hr>
-
+           <h4><b>Invited Guests</b><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends" style="float:right">View All</button></h4>
+<hr>
         <ul>
-                <br>
+                
                 {% for dictionary_item in event['invitees'] %}
                 {% if loop.index <= 3%}
-                 <p><img src="/static/images/profile/{{dictionary_item['profilePic']}}"/>{{dictionary_item['name']}}
+                 <p><img src="/static/images/profile/{{dictionary_item['profilePic']}}" class="dp"> {{dictionary_item['name']}}
 
                  {% if (host ==1 or canInvite == 1) and loop.index != 1 %}
-                     <a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}"> <i class="fa fa-times" aria-hidden="true"></i></a>
+                     <a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}"> 
+                            {% if host==1 %} 
+                        <i class="fa fa-times" aria-hidden="true"></i></a>
+                        {% endif %}
                  {% else %}
                  {% endif %}
                  {% else %}
@@ -216,7 +218,10 @@
        {% for item in cohosts %}
         <div class="cohost-list row" style="padding-left:20px">
             <img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
-            {{item['name']}}<hr> <a href="{{url_for('delete_cohost', userId = item['cohostId'], eventId = event['_id'] )}}" >x</a>
+            {{item['name']}}<a href="{{url_for('delete_cohost', userId = item['cohostId'], eventId = event['_id'] )}}" > 
+                {% if host==1 %}
+                <i class="fa fa-times" aria-hidden="true"></i></a>
+                {% endif %}
         </div>
        {% endfor %}
    </div>
