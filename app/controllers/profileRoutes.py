@@ -108,12 +108,14 @@ def profile(profile_id,is_profile_owner=False):
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
-	
+
+	me = DB.find_one(collection="Profile", query={"email":
+		current_user.email})
+
 	def are_we_friends(entry):
-		return (entry['friend_id'] == user['_id'] 
+		return (entry['friend_id'] == me['_id'] 
 				and entry['status'] == 'accepted')
 	is_friend = any(filter(are_we_friends, user['friends']))
-
 	eventList = []
 	for events in user['events']:
 		events = DB.find_one(collection='Events', query={'_id': events})
