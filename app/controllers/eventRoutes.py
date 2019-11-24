@@ -112,8 +112,10 @@ def display_event(id):
 	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
 
 	# get event posts and corresponding author information
-	posts = list(DB.find(collection="Post", query={'_id': {'$in':
-		eventDetails['eventPosts']}}))
+	posts = None
+	if 'eventPosts' in eventDetails:
+		posts = list(DB.find(collection="Post", query={'_id': {'$in':
+			eventDetails['eventPosts']}}))
 	if not posts:
 		posts = {}
 	else:
