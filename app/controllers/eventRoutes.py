@@ -372,7 +372,13 @@ def add_cohost(userId, eventId):
 	# Add the userId to the event invitePrivleges
 	person = DB.find_one(collection = "Events", query = {"_id":ObjectId(eventId), "invitePrivleges": {"$elemMatch": {"cohostId": ObjectId(userId)}}})
 	if person is None:
+		#check if the user has been invited
+		#if  not any(person['email'] == current_user.email for person in eventDetails['invitees']):
 		userDetails = DB.find_one(collection = "Profile", query = {"_id":ObjectId(userId)}, projection = {"email":1, "firstName":1,"lastName":1, "pictureDir": 1})
+		if DB.find_one(collection = "Events", query = {"_id": eventId, "invitee":{"id": ObjectId(userId)}}) is None:
+			print("Hello")
+			DB.update_one(collection = "Events", filter = {"_id": ObjectId(eventId)}, data = {"$push": {"invitees":{"id": ObjectId(userId),"email":userDetails['email'], "status":"invited"}}})
+
 		DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data =
 														{"$push": {"invitePrivleges":
 														{"email":userDetails['email'],
