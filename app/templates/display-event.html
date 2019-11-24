@@ -5,6 +5,13 @@
 
 {% block content %}
 <body>
+    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    {% for message in messages %}
+                        <p style="color:red;">{{ message }}</p>
+                    {% endfor %}
+                    {% endif %}
+    {% endwith %}
    <div class="container">
     <div class="detail">
        <h2>{{event['name'] }}</h2>
@@ -31,12 +38,14 @@
             <hr>
             </div>
            {% else %}
-           <select class="form-control" name="statusType" placeholder="Invite status" required>
-                <option value="going">Going</option>
-                <option value="maybe">Maybe</option>
-                <option value="decline">Can't Go</option>
-            </select>
-
+           <form action="{{url_for('update_attendance', eventId = event['_id'])}}" method="POST">
+               <select class="form-control" name="statusType" placeholder="Invite status" required>
+                    <option name = "going" value="going">Going</option>
+                    <option name = "maybe" href="/dashboard" value="maybe">Maybe</option>
+                    <option name = "declined" value="declined">Can't Go</option>
+                </select>
+                <button class="button-add" type="submit">Update</button>
+            </form>
            <h2>Co-hosts
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCohosts" style="float:right">View All</button></h2>
                 {% for item in cohosts %}

@@ -66,6 +66,13 @@ a.edit {
 <body>
     <div class="container">
         <h1 style="text-align:center;">Events</h1></br>
+        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        {% for message in messages %}
+                            <p style="color:red;">{{ message }}</p>
+                        {% endfor %}
+                        {% endif %}
+                    {% endwith %}
         {% if events %}
             <div class="events">
                 {%for event in events%}

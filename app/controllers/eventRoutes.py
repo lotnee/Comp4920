@@ -2,7 +2,7 @@ from app import app
 from app.database import DB
 from app.models.events import Event
 from app.controllers.forms import photos,EventForm
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
 from app.utility.utility import get_list, get_cursor,get_name
 from datetime import datetime, time
@@ -101,14 +101,23 @@ def event_completed():
 		return redirect(url_for('edit_profile'))
 	return render_template('event-completed.html',title="Event Creation Completed")
 
-@app.route('/view-events/<path:id>')
+@app.route('/view-events/<id>')
 @login_required
 def display_event(id):
 	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	print(id)
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
+	#checks if the user can see the event - must either be a public event or invited to the event
 	#get the event name or more so the ID
+	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
+
+	if  not any(person['email'] == current_user.email for person in eventDetails['invitees']):
+		if eventDetails['private']:
+			flash('The event you were looking for is unavailable')
+			return redirect(url_for('view_events'))
+
 	invited = []
 	going = []
 	maybe = []
@@ -117,7 +126,7 @@ def display_event(id):
 	host = 0 # whether this person is the host of the event being displayed
 	cohosts = []
 	invitePrivleges = 0
-	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
+
 	# gets all the friends of the user
 	retDictionary = DB.find_one(collection = "Profile", query = {"email":current_user.email})
 	friends = []
@@ -388,3 +397,18 @@ def delete_cohost(userId, eventId):
 		flash('The user you have tried to remove is not an admin!')
 
 	return redirect(url_for('display_event', id = eventId))
+
+@app.route('/update-attendance/<eventId>/',methods=['GET', 'POST'])
+@login_required
+def update_attendance(eventId):
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
+
+	if request.method == 'POST':
+		attendance = request.form['statusType']
+		print(attendance)
+		# update the status of the invididual
+		DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId), "invitees": {"$elemMatch": {"email":current_user.email}}}, data = {'$set': {"invitees.$.status":attendance}})
+	return redirect('display_event', id = eventId)

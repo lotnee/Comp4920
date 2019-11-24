@@ -38,6 +38,6 @@ def search():
 		(firstname, lastname) = (matched_user['firstName'], matched_user['lastName'])
 		event['host'] = '{} {}'.format(firstname,lastname)
 	print("====================================================")
-	#matched_events = [item for item in matched_events if item['private'] == False]
+	matched_events = [item for item in matched_events if item['private'] == False]
 	return render_template('search.html', title='Search Results',
 		users=matched_profiles, events=matched_events, query=request.args['query'])
