@@ -46,15 +46,25 @@ def get_index_1key(arrayList, key, query):
 		i += 1
 	return -1
 
-# --- force create profile
+# --- DB utility function 
 from app.database import DB
 from flask import redirect, url_for, render_template
+
+# force create profile
 def validate_profile(email):
 	user = DB.find_one(collection="Profile", query={"email": email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
 	return user
+
+# get list of documents by object id
+def get_list_of_documents(obj_id_list, collection):
+	documentList = []
+	for obj_id in obj_id_list:
+		document = DB.find_one(collection=collection, query={'_id':obj_id})
+		documentList.append(document)
+	return documentList
 
 # --- mail utility function
 from app import app, mail

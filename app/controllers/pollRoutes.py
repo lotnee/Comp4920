@@ -2,25 +2,17 @@ from app import app
 from app.database import DB
 from app.models.poll import Poll, Option
 from app.controllers.forms import PollForm
-from app.utility.utility import get_index_1key, validate_profile
+from app.utility.utility import get_index_1key, validate_profile, get_list_of_documents
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
 from datetime import datetime, time
 from bson.objectid import ObjectId
-import ast
-
-def polls_in_profile(pollList):
-	polls = []
-	for poll in pollList:
-		toAdd = DB.find_one(collection='Poll', query={'_id': poll})
-		polls.append(toAdd)
-	return polls
 
 @app.route('/create-poll', methods=['GET', 'POST'])
 @login_required
 def create_poll():
 	user = validate_profile(current_user.email)
-	
+
 	form = PollForm()
 	if form.validate_on_submit():
 		form.option1t.data = form.option1t.data.split(' ')
@@ -104,7 +96,9 @@ def invite_voter(poll, email):
 @login_required
 def polls():
 	user = validate_profile(current_user.email)
-	pollList = polls_in_profile(user['polls'])
+
+	pollList = get_list_of_documents(obj_id_list=user['polls'], collection='Poll')
+
 	return render_template('poll.html',title="View Polls", polls=pollList, user=user)
 
 @app.route('/update-vote/<poll>', methods=['GET', 'POST'])

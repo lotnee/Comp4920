@@ -4,18 +4,10 @@ from app.models.events import Event
 from app.controllers.forms import photos,EventForm
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
-from app.utility.utility import validate_profile
+from app.utility.utility import validate_profile, get_list_of_documents
 from datetime import datetime, time
 from bson.objectid import ObjectId
 import json
-
-
-def profileEvents(eventLists):
-	retList = []
-	for item in eventLists:
-		event = DB.find_one(collection="Events",query={'_id':item})
-		retList.append(event)
-	return retList
 
 @app.route('/create-event', methods=['GET', 'POST'])
 @login_required
@@ -83,8 +75,7 @@ def view_events():
 
 	if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
 		eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
-		allEvents = profileEvents(eventList[0]['events']) 
-
+		allEvents = get_list_of_documents(obj_id_list=eventList[0]['events'], collection="Events")
 		return render_template('events.html', events = allEvents, title='View Events', me=user)
 	return render_template('events.html',title="View Events")
 
@@ -285,7 +276,7 @@ def deleteInvite(eventId,userId):
 @login_required
 def edit_event(eventId):
 	user = validate_profile(current_user.email)
-	
+
 	event = DB.find_one(collection="Events", query={"_id": ObjectId(eventId)})
 	if event is None:
 		flash('Please contact admin, DB issues!')

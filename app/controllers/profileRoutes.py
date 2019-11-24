@@ -2,27 +2,13 @@ from app import app, absolute_path
 from app.database import DB
 from app.models.profile import Profile
 from app.controllers.forms import ProfileForm, photos
+from app.utility.utility import get_cursor, validate_profile, get_list_of_documents
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 # from werkzeug.utils import secure_filename
-from app.utility.utility import get_cursor, validate_profile
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 import os
-
-def profileEvents(eventLists):
-	retList = []
-	for item in eventLists:
-		event = DB.find_one(collection="Events",query={'_id':item})
-		retList.append(event)
-	return retList
-
-def profilePolls(pollList):
-	retList = []
-	for item in pollList:
-		poll = DB.find_one(collection="Poll",query={'_id':item})
-		retList.append(poll)
-	return retList
 
 @app.route('/dashboard')
 @login_required
@@ -36,10 +22,10 @@ def dashboard():
 	allPolls = []
 	# if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
 	if user['events'] != []:
-		allEvents = profileEvents(user['events'])
+		allEvents = get_list_of_documents(obj_id_list=user['events'], collection='Events')
 	# if DB.find_one(collection="Profile", query={"email":current_user.email, "polls": {"$ne" : []}}):
 	if user['polls'] != []:
-		allPolls = profilePolls(user['polls'])
+		allPolls = get_list_of_documents(obj_id_list=user['polls'], collection='Poll')
 	return render_template('dashboard.html', title='Dashboard', polls = allPolls, events = allEvents, me=user, requests=requests)
 
 @app.route('/edit-profile', methods=['GET', 'POST'])
@@ -134,5 +120,5 @@ def profile(profile_id,is_profile_owner=False):
 @login_required
 def my_profile():
 	user = validate_profile(current_user.email)
-	
+
 	return profile(str(user['_id']),is_profile_owner=True)
