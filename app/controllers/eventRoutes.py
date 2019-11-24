@@ -323,8 +323,12 @@ def acceptInvite(eventId, acceptance):
 		#need to add to the event to the profile event list first
 		userId = DB.find_one(collection = "Profile", query = {"email":current_user.email}, projection = {"_id":1, "pictureDir" :1, "firstName":1, "lastName":1})
 		print(type(userId['_id']))
-		DB.update_one(collection = "Profile", filter = {"email": current_user.email}, data = {"$push": {"events":ObjectId(eventId)}})
-		DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$push": {"invitees": {"id": userId['_id'], "email":current_user.email,"status":acceptance,"profilePic":userId['pictureDir'], "name": userId['firstName'] + " " + userId['lastName']}}})
+		# if you were invited
+		if DB.find_one(collection = "Profile", filter = {"email":current_user.email, "events": {"$elemMatch" : ObjectId(eventId)}}):
+			DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId), "invitees":{"$elemMatch": {"email" : current_user.email} } }, data = {'$set': {"invitees.$.status":acceptance}})
+		else:
+			DB.update_one(collection = "Profile", filter = {"email": current_user.email}, data = {"$push": {"events":ObjectId(eventId)}})
+			DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$push": {"invitees": {"id": userId['_id'], "email":current_user.email,"status":acceptance,"profilePic":userId['pictureDir'], "name": userId['firstName'] + " " + userId['lastName']}}})
 	return  redirect(url_for("display_event", id = eventId))
 
 @app.route('/delete-invite/<eventId>/<userId>')
