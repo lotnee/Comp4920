@@ -13,7 +13,6 @@ class Event(object):
         self.invitees = invitees
         self.pictureDir = pictureDir
         self.private = private
-        self.eventPosts = []
 
     def insert(self,userEmail,userId):
         event = DB.insert(collection='Events', data=self.json())
@@ -35,11 +34,11 @@ class Event(object):
             'invitePrivleges': self.invitePrivleges,
             'invitees':self.invitees,
             'pictureDir': self.pictureDir,
-            'private': self.private
-
+            'private': self.private,
+            'eventPosts' : []
         }
 
     @staticmethod
     def add_post_by_id(event_id, post_id):
-        DB.update_one(collection='Post',filter={'_id':event_id}, 
+        DB.update_one(collection='Events',filter={'_id':event_id}, 
                 data={'$push': {'eventPosts':post_id}})

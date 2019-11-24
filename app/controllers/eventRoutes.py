@@ -1,6 +1,7 @@
 from app import app
 from app.database import DB
 from app.models.events import Event
+from app.models.post import Post
 from app.controllers.forms import photos,EventForm
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
@@ -356,7 +357,7 @@ def delete_cohost(userId, eventId):
 @app.route('/add-event-post/<eventId>', methods=['POST'])
 @login_required
 def add_event_post(eventId):
-	me = DB.find_one(collection='Profile', filter={'email': current_user.email})
+	me = DB.find_one(collection='Profile', query={'email': current_user.email})
 	author_id = me['_id']
 	timestamp = datetime.now()
 	post_text = request.form['post_text']
