@@ -13,7 +13,7 @@ import os
 @app.route('/dashboard')
 @login_required
 def dashboard():
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -105,7 +105,10 @@ def edit_profile():
 def profile(profile_id,is_profile_owner=False):
 	user_profile = DB.find_one(collection="Profile", query={'_id':
 		ObjectId(profile_id)})
-	user = validate_profile(user_profile['email'])
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	
 	def are_we_friends(entry):
 		return (entry['friend_id'] == user['_id'] 
@@ -132,7 +135,7 @@ def profile(profile_id,is_profile_owner=False):
 @app.route('/profile')
 @login_required
 def my_profile():
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))

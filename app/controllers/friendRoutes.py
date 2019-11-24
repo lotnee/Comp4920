@@ -8,7 +8,7 @@ from bson.objectid import ObjectId
 @app.route('/friends', methods=['GET', 'POST'])
 @login_required
 def friends():
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -31,7 +31,7 @@ def friends():
 @app.route('/send-request/<profile_id>')
 @login_required
 def send_request(profile_id):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -59,7 +59,7 @@ def send_request(profile_id):
 @app.route('/delete-request/<profile_id>')
 @login_required
 def delete_request(profile_id):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -84,7 +84,7 @@ def delete_request(profile_id):
 @app.route('/accept-request/<profile_id>')
 @login_required
 def accept_request(profile_id):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -110,7 +110,7 @@ def accept_request(profile_id):
 @app.route('/delete-friend/<profile_id>')
 @login_required
 def delete_friend(profile_id):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))

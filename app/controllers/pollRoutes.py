@@ -11,7 +11,7 @@ from bson.objectid import ObjectId
 @app.route('/create-poll', methods=['GET', 'POST'])
 @login_required
 def create_poll():
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -65,7 +65,7 @@ def create_poll():
 @app.route('/add-voter/<poll>', methods=['GET', 'POST'])
 @login_required
 def add_voter(poll):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -101,7 +101,7 @@ def invite_voter(poll, email):
 @app.route('/polls')
 @login_required
 def polls():
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -113,7 +113,7 @@ def polls():
 @app.route('/update-vote/<poll>', methods=['GET', 'POST'])
 @login_required
 def update_vote(poll):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -159,7 +159,7 @@ def update_vote(poll):
 @app.route('/delete-poll/<poll>')
 @login_required
 def delete_poll(poll):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))

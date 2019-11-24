@@ -12,7 +12,7 @@ import json
 @app.route('/create-event', methods=['GET', 'POST'])
 @login_required
 def create_events():
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -74,7 +74,7 @@ def create_events():
 @app.route('/view-events')
 @login_required
 def view_events():
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -103,7 +103,7 @@ def event_completed():
 @app.route('/view-events/<id>')
 @login_required
 def display_event(id):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -184,7 +184,7 @@ def display_event(id):
 @app.route('/delete-event/<string:id>')
 @login_required
 def delete_event(id):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -203,7 +203,7 @@ def delete_event(id):
 @app.route('/create-event/<poll>', methods=['GET', 'POST'])
 @login_required
 def poll_create_event(poll):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -289,7 +289,7 @@ def poll_create_event(poll):
 @app.route('/add-people/<userId>/<id>')
 @login_required
 def addPeople(userId = None,id = None):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -340,7 +340,7 @@ def deleteInvite(eventId,userId):
 @app.route('/edit-event/<eventId>', methods=['GET', 'POST'])
 @login_required
 def edit_event(eventId):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -420,7 +420,7 @@ def delete_cohost(userId, eventId):
 @app.route('/update-attendance/<eventId>/',methods=['GET', 'POST'])
 @login_required
 def update_attendance(eventId):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
@@ -435,7 +435,7 @@ def update_attendance(eventId):
 @app.route('/add-event-post/<eventId>', methods=['POST'])
 @login_required
 def add_event_post(eventId):
-	user = DB.find_one(collection="Profile", query={"email": email})
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
 	if user is None:
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
