@@ -57,8 +57,8 @@
            <h2>Event Posts </h2>
            {% for post in posts %}
            <div>
-             <p style="float:right">Author name</p>
-             <img src="/static/images/profile/male.jpg" class="dp">
+              <p style="float:right">{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</p>
+              <img src="/static/images/profile/{{post.authorDetails.pictureDir}}" class="dp">
              <div class="detail" class="dp">
                 <p><b>{{post.post_text}}</b></p>
              </div>

@@ -112,11 +112,16 @@ def display_event(id):
 	invitePrivleges = 0
 	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
 	
-	# get event posts
-	posts = DB.find(collection="Post", query={'_id': {'$in': eventDetails['eventPosts']}})
-	if not posts:	posts = DB.find(collection="Post", query={'_id': {'$in': eventPosts}})
+	# get event posts and corresponding author information
+	posts = list(DB.find(collection="Post", query={'_id': {'$in':
+		eventDetails['eventPosts']}}))
 	if not posts:
 		posts = {}
+	else:
+		for post in posts:
+			post['authorDetails'] = DB.find_one(collection="Profile", 
+					query={'_id': post['author_id']})
+	
 
 	# gets all the friends of the user
 	retDictionary = DB.find_one(collection = "Profile", query = {"email":current_user.email})
