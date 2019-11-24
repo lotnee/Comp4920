@@ -54,6 +54,21 @@
             {% endif %}
 
            <p><h2>Invited Guests <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends" style="float:right">View All</button></h2>
+           <h2>Event Posts </h2>
+           {% for post in posts %}
+           <div postid={{post._id}}>
+              <p style="float:right">{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</p>
+              <img src="/static/images/profile/{{post.authorDetails.pictureDir}}" class="dp">
+             <div class="detail" class="dp">
+                <p><b>{{post.post_text}}</b></p>
+             </div>
+             <br />
+           </div>
+           {% endfor %}
+           <form action="/add-event-post/{{event['_id']}}" method="post" >
+              <input type="text" name="post_text" value="Write something">
+              <input type="submit" value="Post">
+           </form>
         </div>
         {% if host == 1 %}
         <input type = "text" id = "myInput" onkeyup ="hi('friends','myInput')" placeholder="Search for your friends" style="float:right">

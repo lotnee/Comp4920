@@ -1,8 +1,9 @@
 from app import app
 from app.database import DB
 from app.models.events import Event
+from app.models.post import Post
 from app.controllers.forms import photos,EventForm
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
 from app.utility.utility import validate_profile, get_list_of_documents
 from datetime import datetime, time
@@ -98,6 +99,18 @@ def display_event(id):
 	cohosts = []
 	invitePrivleges = 0
 	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
+	
+	# get event posts and corresponding author information
+	posts = list(DB.find(collection="Post", query={'_id': {'$in':
+		eventDetails['eventPosts']}}))
+	if not posts:
+		posts = {}
+	else:
+		for post in posts:
+			post['authorDetails'] = DB.find_one(collection="Profile", 
+					query={'_id': post['author_id']})
+	
+
 	# gets all the friends of the user
 	friends = []
 	for person in user['friends']:
@@ -137,7 +150,8 @@ def display_event(id):
 							friends = json.dumps(friends), host = host, status = status,
 							invited = invited,maybe = maybe, going = going,
 							declined = declined, canInvite = invitePrivleges,
-							cohosts = cohosts)
+							cohosts = cohosts,
+							posts = posts)
 
 @app.route('/delete-event/<string:id>')
 @login_required
@@ -331,3 +345,16 @@ def delete_cohost(userId, eventId):
 
 	DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$pull": {"invitePrivleges": ObjectId(userId)}})
 	return redirect(url_for('display_event', id = eventId))
+
+@app.route('/add-event-post/<eventId>', methods=['POST'])
+@login_required
+def add_event_post(eventId):
+	me = DB.find_one(collection='Profile', query={'email': current_user.email})
+	author_id = me['_id']
+	timestamp = datetime.now()
+	post_text = request.form['post_text']
+	newPost = Post(author_id, timestamp, post_text)
+	newPostId = newPost.insert()
+	Event.add_post_by_id(ObjectId(eventId), newPostId)
+	return redirect(url_for('display_event', id=eventId))
+
