@@ -72,11 +72,13 @@
            <h2>Event Posts </h2>
            {% for post in posts %}
            <div postid={{post._id}}>
-              <p style="float:right">{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</p>
+             <!--  <p style="float:right; padding:10px;">{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</p> -->
               <img src="/static/images/profile/{{post.authorDetails.pictureDir}}" class="dp">
-             <div class="detail" class="dp" style ="margin-top:10px;">
-                <p><b>{{post.post_text}}</b></p>
+             <div class="detail" class="dp" style ="margin-top:-50px; margin-left:55px;">
+                <p><b><p><p>{{post.post_text}}</b></p>
+                <p style="float:right; padding:10px;">{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</p>
              </div>
+
              <br/>
            </div>
            {% endfor %}
