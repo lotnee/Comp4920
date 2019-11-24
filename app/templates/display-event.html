@@ -49,14 +49,14 @@
                     <option name = "maybe" href="/dashboard" value="maybe">Maybe</option>
                     <option name = "declined" value="declined">Can't Go</option>
                 </select>
-                <button class="btn btn-primary btn-sm" type="submit" style="margin-left: 376px;margin-top:10px;">Update</button>
+                <button class="btn btn-primary btn-sm" type="submit" style="margin-left: 376px;margin-top:10px;background-color:#1E90FF;border:none">Update</button>
             </form>
         </div>
     </div>
         <div class="detail">
 
             <h4><b>Co-hosts</b>
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCohosts" style="float:right">View All</button></h4>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCohosts" style="float:right;background-color:#1E90FF;border:none">View All</button></h4>
             <hr>
             {% if cohosts %}
                 {% for item in cohosts %}
@@ -71,7 +71,7 @@
             {% endif %}
             {% endif %}
 
-           <h4><b>Invited Guests</b><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends" style="float:right">View All</button></h4>
+           <h4><b>Invited Guests</b><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends" style="float:right;background-color:#1E90FF;border:none">View All</button></h4>
 <hr>
         <ul>
                 
@@ -116,7 +116,7 @@
 
            <form action="/add-event-post/{{event['_id']}}" method="post" >
               <input type="text" name="post_text" placeholder="Write something" style="float:left; margin-top:10px; width:100%; text-align: center;">
-              <button class="btn btn-primary btn-sm" type="submit" value="Post" style="float:right;margin-left: 376px;margin-top:10px;">Post</button>
+              <button class="btn btn-primary btn-sm" type="submit" value="Post" style="float:right;margin-left: 376px;margin-top:10px;background-color:#1E90FF;border:none">Post</button>
 
            </form>
         </div>
