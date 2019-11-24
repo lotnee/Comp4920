@@ -70,6 +70,10 @@ password: bakugo
   - Frontend Dev: [Cindy], [Anna]
   - Product Owner: weekly rotation
 
+## Acknowledgement
+  - [FullCalendar - Javascript Event Calendar](https://fullcalendar.io/)
+  - [w3cschool](https://www.w3schools.com)
+
 [Rodney]: https://github.com/lotnee
 [Quoc-An]: https://github.com/piescotch
 [Harvey]: https://github.com/wickwickthedog
