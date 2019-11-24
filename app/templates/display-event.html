@@ -77,7 +77,7 @@
              <div class="detail" class="dp" style ="margin-top:10px;">
                 <p><b>{{post.post_text}}</b></p>
              </div>
-             <br />
+             <br/>
            </div>
            {% endfor %}
            <form action="/add-event-post/{{event['_id']}}" method="post" >
@@ -86,11 +86,11 @@
            </form>
         </div>
         {% if host == 1 %}
-        <input type = "text" id = "myInput" onkeyup ="hi('friends','myInput')" placeholder="Search for your friends" style="float:right">
-        <ul id = "friends"></ul>
+        <input type = "text" id = "myInput" onkeyup ="hi('friends','myInput')" placeholder="Search for your friends" style="float:left; margin-top:10px; width:100%; text-align: center;">
+        <ul id = "friends" style="float:right; margin-top:30px; margin-left:-480px;"></ul>
         {% else %}
         {% endif %}<br>
-        <ul>
+        <ul style="margin-top:20px;">
            {% for dictionary_item in event['invitees'] %}
             <p><a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}">
             {% if (host ==1 or canInvite == 1) and loop.index != 1 %}
