@@ -55,7 +55,7 @@
               {% endfor %}
             {% endif %}
           {% endwith %}
-          <h2 style="text-align:center">Poll List</h2>
+          <h2 style="text-align:center">Active Polls</h2>
           {% if polls %}
             {% for poll in polls%}
             <div class="events">
@@ -87,11 +87,36 @@
             {% endfor %}
             {% else %}
             <h4 style="text-align: center">You currently do not have any existing polls.</h4>
-            <h5 style="text-align: center"><button class="button-polls" onclick="window.location.href = '/create-poll';">Create a poll</button></h5>
+            <h6 style="text-align: center"><button class="button-dash" onclick="window.location.href = '/create-poll';">Create a poll</button></h6>
             <p>
             {% endif %}
             <br>
-            <!-- <h2 style="text-align:center">Host Event List</h2> -->
+            <h2 style="text-align:center">Event Invitations</h2>
+            {% if invEvents %}
+            {%for event in invEvents%}
+            <div class="events">
+                <h7>{{event.host}} has <b>invited</b> you to their event <a href="{{ url_for('display_event', id = event._id) }}" style="color:#1E90FF"><i class='fas fa-angle-right'></i></a></h7>
+                <hr><div class="center-cropped" 
+                    style="background-image: url('static/images/event/{{event.pictureDir}}');">
+                 <img src="static/images/event/{{event.pictureDir}}" />
+               </div>
+              <h4><a href="{{ url_for('display_event', id = event._id) }}" style="text-decoration: none; color:#1E90FF">{{event.name}}</a></h4>
+              {% set datetime1 = (event.start|string).split(' ') %}
+              <h6><b>Start Date:</b> {{datetime1[0]}} at {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
+              {% set datetime2 = (event.end|string).split(' ') %}
+              <h6><b>End Date:</b>{{datetime2[0]}} at {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
+              <hr class="w3-clear">
+              <p><b>Event Description</b></p>
+              <p>{{event.description}}</p>
+              <br>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h3 style="text-align: center">You are currently not involved in any events.</h3>
+            <p>
+          {% endif %}
+          </br>
+            <h2 style="text-align:center">My Events</h2>
             {% if myEvents %}
             {%for event in myEvents%}
             <div class="events">
@@ -99,13 +124,13 @@
                     style="background-image: url('static/images/event/{{event.pictureDir}}');">
                  <img src="static/images/event/{{event.pictureDir}}" />
                </div>
-              <h4><a href="{{ url_for('display_event', id = event._id) }}">{{event.name}}</a></h4>
-              <h6>Host: {{me.firstName}} {{me.lastName}}</h6>
-              <hr class="w3-clear">
+              <h4><a href="{{ url_for('display_event', id = event._id) }}" style="text-decoration: none; color:#1E90FF">{{event.name}}</a></h4>
               {% set datetime1 = (event.start|string).split(' ') %}
-              <h6>Start Date: {{datetime1[0]}} at {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
+              <h6><b>Start Date:</b> {{datetime1[0]}} at {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
               {% set datetime2 = (event.end|string).split(' ') %}
-              <h6>End Date: {{datetime2[0]}} at {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
+              <h6><b>End Date:</b> {{datetime2[0]}} at {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
+              <hr class="w3-clear">
+         
               <p><b>Event Description</b></p>
               <p>{{event.description}}</p>
               <br>
@@ -117,33 +142,7 @@
             <p>
           {% endif %}
           </br>
-             <!-- <h2 style="text-align:center">Upcoming Invitations</h2> -->
-            {% if invEvents %}
-            {%for event in invEvents%}
-            <div class="events">
-                <h7>{{event.host}} has invited you to their event <i class='fas fa-angle-right'></i></h7>
-                <hr><div class="center-cropped" 
-                    style="background-image: url('static/images/event/{{event.pictureDir}}');">
-                 <img src="static/images/event/{{event.pictureDir}}" />
-               </div>
-               
-              <h4><a href="{{ url_for('display_event', id = event._id) }}">{{event.name}}</a></h4>
-              <h6>Host: {{event.host}}</h6>
-              <hr class="w3-clear">
-              {% set datetime1 = (event.start|string).split(' ') %}
-              <h6>Start Date: {{datetime1[0]}} at {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
-              {% set datetime2 = (event.end|string).split(' ') %}
-              <h6>End Date: {{datetime2[0]}} at {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
-              <p><b>Event Description</b></p>
-              <p>{{event.description}}</p>
-              <br>
-            </div>
-            {% endfor %}
-            {% else %}
-            <h3 style="text-align: center">You are currently not involved in any events.</h3>
-            <p>
-          {% endif %}
-          </br>
+             
         </div>
       <!-- End Middle Column -->
       </div>
