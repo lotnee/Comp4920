@@ -1,13 +1,15 @@
 from app import app
 from app.database import DB
-from app.utility.utility import validate_profile
 from flask import render_template, redirect, request, url_for
 from flask_login import current_user, login_required
 from bson.objectid import ObjectId
 @app.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
-	user = validate_profile(current_user.email)
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 
 	# create index for text search (Profile)
 	DB.createIndex(collection="Profile", query=[("email", "text"), ("firstName", "text"), ("lastName", "text"), ("descriptions", "text")], name='profile_search')
@@ -27,12 +29,12 @@ def search():
 		'$or':[{'$text': {'$search': request.args['query']}},
 			{'host': {'$in': list(matched_profile_info.keys())}}]
 		}))
-	print("====================================================")
+
 	for event in matched_events:
 		matched_user = DB.find_one(collection = "Profile", query = {"_id": event['host']}, projection = {"firstName":1, "lastName":1} )
 		(firstname, lastname) = (matched_user['firstName'], matched_user['lastName'])
 		event['host'] = '{} {}'.format(firstname,lastname)
-	print("====================================================")
+		
 	matched_events = [item for item in matched_events if item['private'] == False]
 	return render_template('search.html', title='Search Results',
 		users=matched_profiles, events=matched_events, query=request.args['query'])

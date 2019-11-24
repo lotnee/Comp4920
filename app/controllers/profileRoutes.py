@@ -2,7 +2,7 @@ from app import app, absolute_path
 from app.database import DB
 from app.models.profile import Profile
 from app.controllers.forms import ProfileForm, photos
-from app.utility.utility import get_cursor, validate_profile, get_list_of_documents
+from app.utility.utility import get_cursor, get_list_of_documents
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 # from werkzeug.utils import secure_filename
@@ -13,20 +13,31 @@ import os
 @app.route('/dashboard')
 @login_required
 def dashboard():
-	user = validate_profile(current_user.email)
-	
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
+
 	incoming = DB.find(collection="Profile", query={"friends": {"$elemMatch": {"friend_id": user['_id'], "status": "pending"}}})
 	requests = get_cursor(cursor_obj=incoming, key="friends", subkey="friend_id", subkey2="status", query=user['_id'], query2="pending")
 	
 	allEvents = []
 	allPolls = []
+	myEvents = []
 	# if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
 	if user['events'] != []:
-		allEvents = get_list_of_documents(obj_id_list=user['events'], collection='Events')
+		for event_id in user['events']:
+			event = DB.find_one(collection='Events', query={'_id': event_id})
+			event_host = DB.find_one(collection='Profile', query={'_id': event['host']})
+			if user['_id'] == event_host['_id']:
+				myEvents.append(event)
+			else:
+				allEvents.append({'_id': event['_id'],'name': event['name'], 'host': event_host['firstName'] + ' ' + event_host['lastName'], 'start': event['start'], 'end': event['end'], 'description': event['description'], 'pictureDir': event['pictureDir']})
+		# allEvents = get_list_of_documents(obj_id_list=user['events'], collection='Events')
 	# if DB.find_one(collection="Profile", query={"email":current_user.email, "polls": {"$ne" : []}}):
 	if user['polls'] != []:
 		allPolls = get_list_of_documents(obj_id_list=user['polls'], collection='Poll')
-	return render_template('dashboard.html', title='Dashboard', polls = allPolls, events = allEvents, me=user, requests=requests)
+	return render_template('dashboard.html', title='Dashboard', polls = allPolls, myEvents=myEvents, invEvents=allEvents, me=user, requests=requests)
 
 @app.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
@@ -94,7 +105,10 @@ def edit_profile():
 def profile(profile_id,is_profile_owner=False):
 	user_profile = DB.find_one(collection="Profile", query={'_id':
 		ObjectId(profile_id)})
-	user = validate_profile(user_profile['email'])
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	
 	def are_we_friends(entry):
 		return (entry['friend_id'] == user['_id'] 
@@ -121,6 +135,9 @@ def profile(profile_id,is_profile_owner=False):
 @app.route('/profile')
 @login_required
 def my_profile():
-	user = validate_profile(current_user.email)
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 
 	return profile(str(user['_id']),is_profile_owner=True)

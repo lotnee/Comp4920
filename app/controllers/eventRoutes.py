@@ -5,7 +5,6 @@ from app.models.post import Post
 from app.controllers.forms import photos,EventForm
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
-from app.utility.utility import validate_profile, get_list_of_documents
 from datetime import datetime, time
 from bson.objectid import ObjectId
 import json
@@ -13,7 +12,10 @@ import json
 @app.route('/create-event', methods=['GET', 'POST'])
 @login_required
 def create_events():
-	user = validate_profile(current_user.email)
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 
 	form = EventForm()
 	# if form.is_submitted():
@@ -72,13 +74,22 @@ def create_events():
 @app.route('/view-events')
 @login_required
 def view_events():
-	user = validate_profile(current_user.email)
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 
-	if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
-		eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
-		allEvents = get_list_of_documents(obj_id_list=eventList[0]['events'], collection="Events")
-		return render_template('events.html', events = allEvents, title='View Events', me=user)
-	return render_template('events.html',title="View Events")
+	allEvents = []
+	myEvents = []
+	if user['events'] != []:
+		for event_id in user['events']:
+			event = DB.find_one(collection='Events', query={'_id': event_id})
+			event_host = DB.find_one(collection='Profile', query={'_id': event['host']})
+			if user['_id'] == event_host['_id']:
+				myEvents.append(event)
+			else:
+				allEvents.append({'_id': event['_id'],'name': event['name'], 'host': event_host['firstName'] + ' ' + event_host['lastName'], 'start': event['start'], 'end': event['end'], 'description': event['description'], 'pictureDir': event['pictureDir']})
+	return render_template('events.html', title='View Events', me=user, myEvents=myEvents, invEvents=allEvents,)
 
 @app.route('/event-completed')
 @login_required
@@ -92,7 +103,10 @@ def event_completed():
 @app.route('/view-events/<id>')
 @login_required
 def display_event(id):
-	user = validate_profile(current_user.email)
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	#get the event name or more so the ID
 	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
 
@@ -169,7 +183,10 @@ def display_event(id):
 @app.route('/delete-event/<string:id>')
 @login_required
 def delete_event(id):
-	user = validate_profile(current_user.email)
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	#delete the event from the id
 	#first go through all the users that is associated with that id
 	x = DB.find_one(collection="Events", query = {"_id":ObjectId(id)})
@@ -185,7 +202,10 @@ def delete_event(id):
 @app.route('/create-event/<poll>', methods=['GET', 'POST'])
 @login_required
 def poll_create_event(poll):
-	user = validate_profile(current_user.email)
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 
 	my_poll = DB.find_one(collection="Poll", query={"_id": ObjectId(poll)})
 	if my_poll is None:
@@ -268,7 +288,10 @@ def poll_create_event(poll):
 @app.route('/add-people/<userId>/<id>')
 @login_required
 def addPeople(userId = None,id = None):
-	user = validate_profile(current_user.email)
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 	# we have the email and id of the user & event we want to invite,
 	# we need to update the number of people in the invitees (add the profile to it)
 	# also update the profile's thingy
@@ -324,7 +347,10 @@ def deleteInvite(eventId,userId):
 @app.route('/edit-event/<eventId>', methods=['GET', 'POST'])
 @login_required
 def edit_event(eventId):
-	user = validate_profile(current_user.email)
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 
 	event = DB.find_one(collection="Events", query={"_id": ObjectId(eventId)})
 	if event is None:
@@ -401,7 +427,10 @@ def delete_cohost(userId, eventId):
 @app.route('/update-attendance/<eventId>/',methods=['GET', 'POST'])
 @login_required
 def update_attendance(eventId):
-	user = validate_profile(current_user.email)
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 
 	if request.method == 'POST':
 		attendance = request.form['statusType']
@@ -413,8 +442,11 @@ def update_attendance(eventId):
 @app.route('/add-event-post/<eventId>', methods=['POST'])
 @login_required
 def add_event_post(eventId):
-	me = DB.find_one(collection='Profile', query={'email': current_user.email})
-	author_id = me['_id']
+	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
+	author_id = user['_id']
 	timestamp = datetime.now()
 	post_text = request.form['post_text']
 	newPost = Post(author_id, timestamp, post_text)
