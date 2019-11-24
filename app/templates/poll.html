@@ -22,9 +22,10 @@
          <!-- <hr> -->
             <p><h4><b>{{poll.name}}</b>
                {% if user._id == poll.creator %}
-                  <a href="{{url_for('add_voter', poll=poll._id)}}" class="addVoter" title="Add a voter"><span class="fa fa-plus"></span></a>
+                  <a href="{{url_for('poll_create_event', poll=poll._id)}}" class="createEvent" title="Create an event"><span class="fa fa-calendar"></span></a>
                   <a href="{{url_for('delete_poll', poll=poll._id)}}" class="delPoll" title="Delete poll"><span class="fa fa-minus"></span></a>
-               {% endif %}   
+                  <a href="{{url_for('add_voter', poll=poll._id)}}" class="addVoter" title="Add a voter"><span class="fa fa-plus"></span></a>
+                  {% endif %}   
             </p></h4>
 			<p style="text-align: center"> {{poll.description}} </p><hr>
 			{% for dates in poll.options %}
@@ -45,9 +46,6 @@
 			<br>
 			<button name="add" value="add" class="button-add" type="submit">Vote</button>
 			<button name="del" value="del" class="button-del" type="submit">Unvote</button>
-         {% if user._id == poll.creator %}
-			  <a href="{{url_for('poll_create_event', poll=poll._id)}}" class="createEvent" title="Create an event"><span class="fa fa-calendar"></span></a>
-			{% endif %}
 			</form>
       </div>
 		{% endfor %}

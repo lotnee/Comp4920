@@ -46,15 +46,16 @@
             {% for poll in polls%}
             <div class="events">
             <form action="{{url_for('update_vote', poll=poll._id)}}" method="post">
-              
-            <p><h4><b>{{poll.name}}</b>
-               {% if me._id == poll.creator %}
-                  <a href="{{url_for('add_voter', poll=poll._id)}}" class="addVoter" title="Add a voter"><span class="fa fa-plus"></span></a>
-                  <a href="{{url_for('delete_poll', poll=poll._id)}}" class="delPoll" title="Delete poll"><span class="fa fa-minus"></span></a>
-                  <a href="{{url_for('poll_create_event', poll=poll._id)}}" class="createEvent" title="Create an event"><span class="fa fa-calendar"></span></a>
-               {% endif %}   
-            </p></h4>
-            <p style="text-align: center"> {{poll.description}} </p>
+                {% if me._id == poll.creator %}
+                <div style="float: right">
+                   <a href="{{url_for('add_voter', poll=poll._id)}}" class="addVoter" title="Add a voter" style="color:#1E90FF; font-size:12px"><span class="fa fa-plus"></span></a>
+                   <a href="{{url_for('delete_poll', poll=poll._id)}}" class="delPoll" title="Delete poll" style="color:#1E90FF; font-size:12px"><span class="fa fa-minus"></span></a>
+                   <a href="{{url_for('poll_create_event', poll=poll._id)}}" class="createEvent" title="Create an event" style="color:#1E90FF; font-size:12px"><span class="fa fa-calendar"></span></a>
+                </div> 
+                {% endif %}   
+            <p><h4><b>{{poll.name}}</b></h4>
+            </p>
+            <p> {{poll.description}} </p>
             <hr>
             {% for dates in poll.options %}
             {% set datetime = (dates.date|string).split(' ') %}
@@ -63,12 +64,11 @@
               {% if dates.votes %}
               <p>Voters</p> 
               {% endif %}
-              {% for votes in dates.voters %}
-              <br> <i class="fa fa-user" style="color:#1E90FF"></i> {{votes}}
-              {% endfor %}
               <br>
 
             {% endfor %}
+                <button name="add" value="add" class="button-add" type="submit">Vote</button>
+                <button name="del" value="del" class="button-del" type="submit">Unvote</button>
             </div>
             {% endfor %}
             {% else %}
@@ -114,9 +114,9 @@
                   <div class="detail">
                     <hr>
                     <img src="static/images/profile/{{friend.pictureDir}}" class="dp">  {{friend.firstName}} {{friend.lastName}}<br>
-                    <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">
+                    <a href="{{url_for('accept_request', profile_id=friend._id)}}"class="accept">
                     ✓</a>
-                    <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">x</a>
+                    <a href="{{url_for('delete_request', profile_id=friend._id)}}"class="cancel">x</a>
                   </div>
                 </br>
                 {% endfor %}
