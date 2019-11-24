@@ -2,7 +2,11 @@
 {% block style%}
 <link rel="stylesheet" href="/static/css/display-event.css">
 {% endblock%}
-
+<style>
+  #friend {
+    margin-top: 10px;
+  }
+</style>
 {% block content %}
 <body>
     {% with messages = get_flashed_messages() %}
@@ -70,7 +74,7 @@
            <div postid={{post._id}}>
               <p style="float:right">{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</p>
               <img src="/static/images/profile/{{post.authorDetails.pictureDir}}" class="dp">
-             <div class="detail" class="dp">
+             <div class="detail" class="dp" style ="margin-top:10px;">
                 <p><b>{{post.post_text}}</b></p>
              </div>
              <br />
