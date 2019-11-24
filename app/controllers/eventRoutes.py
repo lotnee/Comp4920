@@ -8,6 +8,7 @@ from flask_login import current_user, login_required
 from datetime import datetime, time
 from bson.objectid import ObjectId
 import json
+import os
 
 @app.route('/create-event', methods=['GET', 'POST'])
 @login_required
@@ -296,10 +297,12 @@ def addPeople(userId = None,id = None):
 	# we need to update the number of people in the invitees (add the profile to it)
 	# also update the profile's thingy
 	profileEvents = DB.find_one(collection = "Profile", query ={"_id" : ObjectId(userId) })
+	pics = profileEvents
 	email = profileEvents['email']
 	profileEvents = profileEvents['events']
 	if ObjectId(id) not in profileEvents:
-		DB.update_one(collection = "Events", filter ={'_id':ObjectId(id)}, data = {'$push': {"invitees": {"id":ObjectId(userId),"email": email, "status": "invited"}}})
+
+		DB.update_one(collection = "Events", filter ={'_id':ObjectId(id)}, data = {'$push': {"invitees": {"id":ObjectId(userId),"email": email, "status": "invited","profilePic": pics['pictureDir'], "name":pics['firstName'] + " " + pics['lastName']}}})
 		DB.update_one(collection = "Profile", filter = {"email":email}, data = {"$push": {"events": ObjectId(id)}})
 	return redirect(url_for("display_event", id = id))
 
@@ -318,10 +321,10 @@ def acceptInvite(eventId, acceptance):
 		DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId), "invitees":{"$elemMatch": {"email" : current_user.email} } }, data = {'$set': {"invitees.$.status":acceptance}}  )
 	else:
 		#need to add to the event to the profile event list first
-		userId = DB.find_one(collection = "Profile", query = {"email":current_user.email}, projection = {"_id":1})
+		userId = DB.find_one(collection = "Profile", query = {"email":current_user.email}, projection = {"_id":1, "pictureDir" :1, "firstName":1, "lastName":1})
 		print(type(userId['_id']))
 		DB.update_one(collection = "Profile", filter = {"email": current_user.email}, data = {"$push": {"events":ObjectId(eventId)}})
-		DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$push": {"invitees": {"id": userId['_id'], "email":current_user.email,"status":acceptance}}})
+		DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$push": {"invitees": {"id": userId['_id'], "email":current_user.email,"status":acceptance,"profilePic":userId['pictureDir'], "name": userId['firstName'] + " " + userId['lastName']}}})
 	return  redirect(url_for("display_event", id = eventId))
 
 @app.route('/delete-invite/<eventId>/<userId>')
@@ -364,9 +367,9 @@ def edit_event(eventId):
 				filename = filename.split('/')[1]
 			else:
 				# delete existing photo
-				filename = "app/static/images/event/" + profile['pictureDir']
+				filename = "app/static/images/event/" + event['pictureDir']
 				os.remove(os.path.join(filename))
-				filename = photos.save(form.pictureDir.data, name='event/'+ + str(event['_id']) + '.')
+				filename = photos.save(form.pictureDir.data, name='event/' + str(event['_id']) + '.')
 				filename = filename.split('/')[1]
 			DB.update_one(collection="Events", filter={"_id": event['_id']}, data={"$set": {"pictureDir": filename}})
 		if form.eventType.data == 'private':
@@ -396,8 +399,7 @@ def add_cohost(userId, eventId):
 		#if  not any(person['email'] == current_user.email for person in eventDetails['invitees']):
 		userDetails = DB.find_one(collection = "Profile", query = {"_id":ObjectId(userId)}, projection = {"email":1, "firstName":1,"lastName":1, "pictureDir": 1})
 		if DB.find_one(collection = "Events", query = {"_id": ObjectId(eventId), "invitees":{ "$elemMatch": {"id": ObjectId(userId)}}}) is None:
-			print("Hello")
-			DB.update_one(collection = "Events", filter = {"_id": ObjectId(eventId)}, data = {"$push": {"invitees":{"id": ObjectId(userId),"email":userDetails['email'], "status":"invited"}}})
+			DB.update_one(collection = "Events", filter = {"_id": ObjectId(eventId)}, data = {"$push": {"invitees":{"id": ObjectId(userId),"email":userDetails['email'], "status":"invited","profilePic":userDetails['pictureDir'],"name": userDetails['firstName'] + " " + userDetails['lastName']}}})
 
 		DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data =
 														{"$push": {"invitePrivleges":

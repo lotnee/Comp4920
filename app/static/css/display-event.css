@@ -22,13 +22,11 @@
     background-repeat: no-repeat;
     overflow: hidden;
   }
-  
+
   .center-cropped img {
-    min-height: 100%;
-    min-width: 100%;
-    opacity: 0;
+    max-width: 100%;
   }
-  
+
 .modal{
     position:fixed;
     top: 50%;
@@ -102,4 +100,7 @@ a.button-decline:hover {
 .dp {
     width: 50px;
     height: 50px;
+}
+#attendanceStatus {
+    max-width: 20%
 }

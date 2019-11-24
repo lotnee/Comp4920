@@ -101,3 +101,14 @@ a.createEvent:hover {
  transition: 0.8s;
  color: #778899;
 }
+
+.button-polls {
+  background-color: #1E90FF;
+  color: white;
+  cursor: pointer;
+  width: auto;
+  border-radius: 14px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  border: none;
+}
