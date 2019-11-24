@@ -133,11 +133,11 @@ def update_vote(poll):
 			index = get_index_1key(arrayList=toUpdate, key='options', query=dt)
 			print(index)
 			index = "options." + str(index) + ".voters"
-			check = DB.find_one(collection='Poll', query={index: user['firstName']})
+			check = DB.find_one(collection='Poll', query={index: user['email']})
 			if check is not None:
 				flash(f'You Already voted for {dt}')
 				return redirect(url_for('polls'))
-			DB.update_one(collection='Poll', filter={'_id': ObjectId(poll)}, data={'$push': {index: user['firstName']}})
+			DB.update_one(collection='Poll', filter={'_id': ObjectId(poll)}, data={'$push': {index: user['email']}})
 			return redirect(url_for('polls'))
 	elif request.form.get('del') == 'del':
 		for dates in options:
@@ -147,11 +147,11 @@ def update_vote(poll):
 			index = get_index_1key(arrayList=toUpdate, key='options', query=dt)
 			print(index)
 			index = "options." + str(index) + ".voters"
-			check = DB.find_one(collection='Poll', query={index: user['firstName']})
+			check = DB.find_one(collection='Poll', query={index: user['email']})
 			if check is None:
 				flash(f'You haven\'t voted for {dt}')
-				continue
-			DB.update_one(collection='Poll', filter={'_id': ObjectId(poll)}, data={'$pull': {index: user['firstName']}})
+				return redirect(url_for('polls'))
+			DB.update_one(collection='Poll', filter={'_id': ObjectId(poll)}, data={'$pull': {index: user['email']}})
 			return redirect(url_for('polls'))
 	flash(f'Pick an option')	
 	return redirect(url_for('polls'))

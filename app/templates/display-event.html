@@ -2,11 +2,6 @@
 {% block style%}
 <link rel="stylesheet" href="/static/css/display-event.css">
 {% endblock%}
-<style>
-  #friend {
-    margin-top: 10px;
-  }
-</style>
 {% block content %}
 <body>
     {% with messages = get_flashed_messages() %}
@@ -25,17 +20,18 @@
        <h2>{{event['name'] }}</h2>
        <hr>
        {% set datetime1 = (event.start|string).split(' ') %}
-        <h6>Start Date: {{datetime1[0]}} at {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
+        <h6><b>Start Date:</b> {{datetime1[0]}} at {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
         {% set datetime2 = (event.end|string).split(' ') %}
-        <h6>End Date: {{datetime2[0]}} at {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
+        <h6><b>End Date:</b> {{datetime2[0]}} at {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
       </div>
         <div class="detail">
-       <h4>Description</h4>
+       <h4><b>Description</b></h4>
        <p>{{event['description']}}</p>
      </div>
      <div class="detail">
        <div class="inviteField">
-           <h2>Invitation Status</h2>
+
+        <h4><b>Attendance Status</b></h4>
            {% if host != 1 %}
            <p>You have been invited by {{hostName}}</p>
            {%endif%}
@@ -43,7 +39,7 @@
            <div style="text-align:center">
                 <a class="button-accept" href="{{url_for('acceptInvite', eventId = event['_id'],acceptance = "going")}}"><i class="fa fa-calendar-check-o"></i> Accept</a>
                 <a class="button-maybe" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "maybe")}}"><i class="fa fa-calendar-minus-o"></i> Maybe</a></button>
-                <a class="button-decline" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "decline")}}"><i class="fa fa-calendar-times-o"></i>D</a></button>
+                <a class="button-decline" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "decline")}}"><i class="fa fa-calendar-times-o"></i>Decline</a></button>
             <hr>
             </div>
            {% else %}
@@ -53,42 +49,78 @@
                     <option name = "maybe" href="/dashboard" value="maybe">Maybe</option>
                     <option name = "declined" value="declined">Can't Go</option>
                 </select>
-                <button class="button-add" type="submit">Update</button>
+                <button class="btn btn-primary btn-sm" type="submit" style="margin-left: 376px;margin-top:10px;">Update</button>
             </form>
-           <h2>Co-hosts
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCohosts" style="float:right">View All</button></h2>
-                {% for item in cohosts %}
-                    {% if loop.index <= 3 %}
-                        <img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
-                        {{item['name']}}<hr>
-                    {% else %}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-
-           <p><h2>Invited Guests <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends" style="float:right">View All</button></h2>
         </div>
-        {% if host == 1 %}
-        <input type = "text" id = "myInput" onkeyup ="hi('friends','myInput')" placeholder="Search for your friends" style="float:left; margin-top:10px; width:100%; text-align: center;">
-        <ul id = "friends" style="float:right; margin-top:30px; margin-left:-480px;"></ul>
-        {% else %}
-        {% endif %}<br><br>
-        <ul style="margin-top:20px;">
-           {% for dictionary_item in event['invitees'] %}
-           {% if loop.index <= 3 %}
+    </div>
+        <div class="detail">
 
-
-            <p><img src = "/static/images/profile/{{dictionary_item['profilePic']}}"/> {{dictionary_item['name']}}
-
-            {% if (host ==1 or canInvite == 1) and loop.index != 1 %}
-                <a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}"><i class="fa fa-times" aria-hidden="true"></i></a></p>
+            <h4><b>Co-hosts</b>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCohosts" style="float:right">View All</button></h4>
+            <hr>
+            {% if cohosts %}
+                {% for item in cohosts %}
+                        {% if loop.index <= 3 %}
+                            <img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
+                            {{item['name']}}<hr>
+                        {% else %}
+                        {% endif %}
+                    {% endfor %}
             {% else %}
-            </p>
+            <p>No co-hosts listed.</p>
             {% endif %}
-            {%else%}
             {% endif %}
+
+           <br><h4><b>Invited Guests</b><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends" style="float:right">View All</button></h4>
+            <hr>
+
+        <ul>
+                <br>
+                {% for dictionary_item in event['invitees'] %}
+                {% if loop.index <= 3%}
+                 <p><img src="/static/images/profile/{{dictionary_item['profilePic']}}"/>{{dictionary_item['name']}}
+
+                 {% if (host ==1 or canInvite == 1) and loop.index != 1 %}
+                     <a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}"> <i class="fa fa-times" aria-hidden="true"></i></a>
+                 {% else %}
+                 {% endif %}
+                 {% else %}
+                 {% endif %}
+                {% endfor %}
+             </ul>
+
+             {% if host == 1 %}
+             <input type = "text" id = "myInput" onkeyup ="hi('friends','myInput')" placeholder="Search for your friends" style="float:left; margin-top:10px; width:100%; text-align: center;">
+             <ul id = "friends" style="float:right; margin-top:-6px;"></ul>
+
+             {% else %}
+             {% endif %}<br>
+           </div>
+           <div class="detail">
+            <h4><b>Event Posts</b></h4>
+            <hr>
+           {% for post in posts %}
+           <div postid={{post._id}}>
+             <!--  <p style="float:right; padding:10px;">{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</p> -->
+              <img src="/static/images/profile/{{post.authorDetails.pictureDir}}" class="dp">
+             <div class="detail" class="dp" style ="margin-top:-50px; margin-left:55px;">
+                <p><i>{{post.post_text}}</i></p>
+                <p style="float:right; padding:10px;color:#189AB4;"><i>{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</i></p>
+             </div>
+
+             <br/>
+           </div>
            {% endfor %}
-        </ul>
+
+           <form action="/add-event-post/{{event['_id']}}" method="post" >
+              <input type="text" name="post_text" placeholder="Write something" style="float:left; margin-top:10px; width:100%; text-align: center;">
+              <button class="btn btn-primary btn-sm" type="submit" value="Post" style="float:right;margin-left: 376px;margin-top:10px;">Post</button>
+
+           </form>
+        </div>
+    </div>
+
+
 
         <!-- Parts of this code was from https://getbootstrap.com/docs/4.0/components/navs/ -->
              <div class="modal fade" id = "DisplayFriends" role="dialog">
@@ -210,19 +242,6 @@
 
     </div>
     {%endif%}
-    <h2>Event Posts </h2>
-    {% for post in posts %}
-    <div postid={{post._id}}>
-      <!--  <p style="float:right; padding:10px;">{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</p> -->
-       <img src="/static/images/profile/{{post.authorDetails.pictureDir}}" class="dp">
-      <div class="detail" class="dp" style ="margin-top:-50px; margin-left:55px;">
-         <p><b>{{post.post_text}}</b></p>
-         <p style="float:right; padding:10px;">{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</p>
-      </div>
-
-      <br/>
-    </div>
-    {% endfor %}
     <form action="/add-event-post/{{event['_id']}}" method="post" >
        <input type="text" name="post_text" value="Write something">
        <input type="submit" value="Post">
