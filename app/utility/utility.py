@@ -48,15 +48,6 @@ def get_index_1key(arrayList, key, query):
 
 # --- DB utility function 
 from app.database import DB
-from flask import redirect, url_for, render_template
-
-# force create profile
-def validate_profile(email):
-	user = DB.find_one(collection="Profile", query={"email": email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
-	return user
 
 # get list of documents by object id
 def get_list_of_documents(obj_id_list, collection):
@@ -68,6 +59,7 @@ def get_list_of_documents(obj_id_list, collection):
 
 # --- mail utility function
 from app import app, mail
+from flask import url_for, render_template
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
 

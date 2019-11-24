@@ -2,7 +2,7 @@ from app import app, absolute_path
 from app.database import DB
 from app.models.profile import Profile
 from app.controllers.forms import ProfileForm, photos
-from app.utility.utility import get_cursor, validate_profile, get_list_of_documents
+from app.utility.utility import get_cursor, get_list_of_documents
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 # from werkzeug.utils import secure_filename
@@ -13,8 +13,11 @@ import os
 @app.route('/dashboard')
 @login_required
 def dashboard():
-	user = validate_profile(current_user.email)
-	
+	user = DB.find_one(collection="Profile", query={"email": email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
+
 	incoming = DB.find(collection="Profile", query={"friends": {"$elemMatch": {"friend_id": user['_id'], "status": "pending"}}})
 	requests = get_cursor(cursor_obj=incoming, key="friends", subkey="friend_id", subkey2="status", query=user['_id'], query2="pending")
 	
@@ -129,6 +132,9 @@ def profile(profile_id,is_profile_owner=False):
 @app.route('/profile')
 @login_required
 def my_profile():
-	user = validate_profile(current_user.email)
+	user = DB.find_one(collection="Profile", query={"email": email})
+	if user is None:
+		flash('Please create your profile first!')
+		return redirect(url_for('edit_profile'))
 
 	return profile(str(user['_id']),is_profile_owner=True)
