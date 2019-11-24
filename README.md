@@ -1,6 +1,24 @@
-# Comp4920
-
-## Setup guide
+# Comp4920 t3 2019
+```
+Team: Pls let us graduate
+```
+### [Hangouts](https://github.com/lotnee/Comp4920)
+```
+Our webapp allow users to:-
+1. create and join events
+2. invite their friends 
+3. allow users to create poll 
+3. allow event scheduling between friends 
+4. ensuring freinds can see the availability of user’s calendar
+```
+## Getting Started
+Follow the instructions will get you a copy of the project up and running on your local machine
+### Prerequisites
+```
+python version 3.7
+```
+### Installing
+This will install the modules used for the project
 ```
 pip3 install -r requirements.txt
 ```
@@ -20,68 +38,29 @@ Forgot password:-
 1. click forgot password link
 2. check console get the reset link
 3. login with new password
-```
 
+Calendar in profile:-
+1. if there isn't any events, calendar will be empty
+
+friend:-
+1. need to have friends to be able to invite them to polls or events
+```
 ## Login details
 ```
-email: adm1n@hangouts
-password: adm1n
-
-email: friend@hangouts
-password: friend
-
-* for testing
-email: testQA@hangouts
-password: 12345
+todo
 ```
-## Current Progress
-<table>
-  <tr/>
-    <th/> Core Deliverables
-    <th/> status
-    <th/> test
-  <tr/>
-  	<th/> IU & UX
-    <th/> IN PROGRESS
-    <th/> -
-  <tr/>
-  	<th/> Authentication System & profile creation
-    <th/> COMPLETED
-    <th/> WORKS
-  <tr/>
-  	<th/> Upload photo(profile)
-    <th/> COMPLETED
-    <th/> WORKS
-  <tr/>
-  	<th/> Add & Del friends
-    <th/> COMPLETED
-    <th/> WORKS
-  <tr/>
-  	<th/> Create & Del event
-    <th/> COMPLETED
-    <th/> WORKS
-  <tr/>
-  	<th/> Upload photo(event)
-    <th/> COMPLETED
-    <th/> WORKS
-  <tr/>
-  	<th/> Invite & Remove friends
-    <th/> IN PROGRESS
-    <th/> -
-  <tr/>
-  	<th/> Edit event & Edit photo(event)
-    <th/> IN PROGRESS
-    <th/> -
-  <tr/>
-  	<th/> Edit profile & Edit photo(profile)
-    <th/> COMPLETED
-    <th/> WORKS
-  <tr/>
-  	<th/> Search bar
-    <th/> COMPLETED
-    <th/> WORKS
-  <tr/>
-    <th/> Poll create event
-    <th/> IN PROGRESS
-    <th/> WORKS
-</table>
+## Built with
+  - Flask - Web framework
+  - (cloud) MongoDB - database
+
+## Authors
+  - Scrum Master: [Rodney] 
+  - Backend Dev: [Rodney], [Quoc-An], [Harvey]
+  - Frontend Dev: [Cindy], [Anna]
+  - Product Owner: weekly rotation
+
+[Rodney]: https://github.com/lotnee
+[Quoc-An]: https://github.com/piescotch
+[Harvey]: https://github.com/wickwickthedog
+[Cindy]: https://github.com/xinyichen97
+[Anna]: https://github.com/z5115212
