@@ -2,7 +2,7 @@ from app import app
 from app.database import DB
 from app.models.events import Event
 from app.controllers.forms import photos,EventForm
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
 from app.utility.utility import get_list, get_cursor,get_name
 from datetime import datetime, time
@@ -352,3 +352,16 @@ def delete_cohost(userId, eventId):
 
 	DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$pull": {"invitePrivleges": ObjectId(userId)}})
 	return redirect(url_for('display_event', id = eventId))
+
+@app.route('/add-event-post/<eventId>', methods=['POST'])
+@login_required
+def add_event_post(eventId):
+	me = DB.find_one(collection='Profile', filter={'email': current_user.email})
+	author_id = me['_id']
+	timestamp = datetime.now()
+	post_text = request.form['post_text']
+	newPost = Post(author_id, timestamp, post_text)
+	newPostId = newPost.insert()
+	Event.add_post_by_id(ObjectId(eventId), newPostId)
+	return redirect(url_for('display_event', id=eventId))
+
