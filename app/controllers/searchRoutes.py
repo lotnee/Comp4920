@@ -29,8 +29,8 @@ def search():
 		}))
 
 	for event in matched_events:
-		(firstname, lastname) = matched_profile_info[event['host']]
-		event['host'] = '{} {}'.format(firstname,lastname)
+		host_profile = DB.find_one(collection="Profile", query={'_id': event['host']})
+		event['host'] = '{} {}'.format(host_profile['firstName'], host_profile['lastName'])
 
 	return render_template('search.html', title='Search Results',
 		users=matched_profiles, events=matched_events, query=request.args['query'])
