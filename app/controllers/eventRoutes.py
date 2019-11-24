@@ -324,7 +324,7 @@ def acceptInvite(eventId, acceptance):
 		userId = DB.find_one(collection = "Profile", query = {"email":current_user.email}, projection = {"_id":1, "pictureDir" :1, "firstName":1, "lastName":1})
 		print(type(userId['_id']))
 		# if you were invited
-		if DB.find_one(collection = "Profile", filter = {"email":current_user.email, "events": {"$elemMatch" : ObjectId(eventId)}}):
+		if DB.find_one(collection = "Profile", query = {"email":current_user.email, "events":  ObjectId(eventId)}):
 			DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId), "invitees":{"$elemMatch": {"email" : current_user.email} } }, data = {'$set': {"invitees.$.status":acceptance}})
 		else:
 			DB.update_one(collection = "Profile", filter = {"email": current_user.email}, data = {"$push": {"events":ObjectId(eventId)}})
