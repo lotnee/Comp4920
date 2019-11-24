@@ -236,7 +236,7 @@
         {% for item in cohosts %}
          <div class="cohost-list row" style="padding-left:20px">
              <img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
-             {{item['name']}}<hr> <a href="{{url_for('delete_cohost', userId = item['cohostId'], eventId = event['_id'] )}}" >x</a>
+             {{item['name']}}<hr>
          </div>
         {% endfor %}
 
