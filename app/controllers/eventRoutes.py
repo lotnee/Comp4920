@@ -267,10 +267,7 @@ def poll_create_event(poll):
 @app.route('/add-people/<userId>/<id>')
 @login_required
 def addPeople(userId = None,id = None):
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
 	# we have the email and id of the user & event we want to invite,
 	# we need to update the number of people in the invitees (add the profile to it)
 	# also update the profile's thingy
