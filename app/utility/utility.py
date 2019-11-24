@@ -46,9 +46,10 @@ def get_index_1key(arrayList, key, query):
 		i += 1
 	return -1
 
-# --- DB utility function 
+# --- DB utility function
 from app.database import DB
-from flask import redirect, url_for, render_template
+from flask import redirect, url_for, render_template,flash
+from bson.objectid import ObjectId
 
 # force create profile
 def validate_profile(email):
@@ -65,6 +66,7 @@ def get_list_of_documents(obj_id_list, collection):
 		document = DB.find_one(collection=collection, query={'_id':obj_id})
 		documentList.append(document)
 	return documentList
+
 
 # --- mail utility function
 from app import app, mail

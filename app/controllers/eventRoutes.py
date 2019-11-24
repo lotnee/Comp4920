@@ -96,11 +96,10 @@ def display_event(id):
 	#get the event name or more so the ID
 	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
 
-	if  not any(person['email'] == current_user.email for person in eventDetails['invitees']):
-		if eventDetails['private']:
-			flash('The event you were looking for is unavailable')
-			return redirect(url_for('view_events'))
-
+	# if  not any(person['email'] == current_user.email for person in eventDetails['invitees']):
+	# 	if eventDetails['private']:
+	# 		flash('The event you were looking for is unavailable')
+	# 		return redirect(url_for('view_events'))
 	invited = []
 	going = []
 	maybe = []
@@ -159,8 +158,8 @@ def display_event(id):
 			invited.append(dictionaryItem)
 		if invitee["email"] == current_user.email and invitee['status'] != "invited":
 			status = invitee['status'] # user has already responded
-		nameDetails = DB.find_one(collection = "Profile", query = {"_id": eventDetails['host']}, projection = {"firstName":1, "lastName":1})
-		hostName = nameDetails['firstName'] + " " + nameDetails['lastName']
+	nameDetails = DB.find_one(collection = "Profile", query = {"_id": eventDetails['host']}, projection = {"firstName":1, "lastName":1})
+	hostName = nameDetails['firstName'] + " " + nameDetails['lastName']
 	return render_template('display-event.html', event = eventDetails,
 							friends = json.dumps(friends), host = host, status = status,
 							invited = invited,maybe = maybe, going = going,
@@ -290,8 +289,16 @@ def acceptInvite(eventId, acceptance):
 		flash('Please create your profile first!')
 		return redirect(url_for('edit_profile'))
 	#need to change the user to accepting that event id
-	DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId), "invitees":{"$elemMatch": {"email" : current_user.email} } }, data = {'$set': {"invitees.$.status":acceptance}}  )
-
+	# check if the event is public
+	isPublic = DB.find_one(collection = "Events", query = {"_id":ObjectId(eventId)}, projection = {"private":1})
+	if isPublic['private']:
+		DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId), "invitees":{"$elemMatch": {"email" : current_user.email} } }, data = {'$set': {"invitees.$.status":acceptance}}  )
+	else:
+		#need to add to the event to the profile event list first
+		userId = DB.find_one(collection = "Profile", query = {"email":current_user.email}, projection = {"_id":1})
+		print(type(userId['_id']))
+		DB.update_one(collection = "Profile", filter = {"email": current_user.email}, data = {"$push": {"events":ObjectId(eventId)}})
+		DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$push": {"invitees": {"id": userId['_id'], "email":current_user.email,"status":acceptance}}})
 	return  redirect(url_for("display_event", id = eventId))
 
 @app.route('/delete-invite/<eventId>/<userId>')
