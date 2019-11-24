@@ -8,3 +8,4 @@ Werkzeug
 wtforms
 flask_mail
 itsdangerous
+python-dotenv
