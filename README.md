@@ -46,9 +46,19 @@ Calendar in profile:-
 friend:-
 1. need to have friends to be able to invite them to polls or events
 ```
-## Login details
+## Few Login details for you to test
 ```
-todo
+email: bugcat@capoo
+password: bugcat
+
+email: prinny@disgaea
+password: prinny
+
+email: kurtis@disgaea
+password: kurtis
+
+email: bakugo@hero
+password: bakugo
 ```
 ## Built with
   - Flask - Web framework
