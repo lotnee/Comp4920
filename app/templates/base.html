@@ -45,13 +45,13 @@
 }
 
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #f1f1f1; opacity: 0.8;}
+.dropdown-content a:hover {background-color: transparent; opacity:0.8;}
 
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {display: block;}
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {background-color: #50C7C7;}
+.dropdown:hover .dropbtn {background-color: transparent;}
 </style>
 
 <!-- Body -->
@@ -74,12 +74,6 @@
                <li><a href="/polls">Polls</a></li>
 
             </ul>
-            <form class="navbar-form navbar-left" action="/search">
-               <div class="input-group">
-                     <input type="search" class="form-control" placeholder="Search" id="sitesearch" name="query">
-               </div>
-            </form>
-
 <!--       <li class="nav-item dropdown" style="margin-top:-20px; float: center">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#189AB4; text-decoration:none">
           Create <i class="fa fa-caret-down"></i>
@@ -99,7 +93,11 @@
 			   <ul class="nav navbar-nav navbar-right">
    <!--             <li><a href="/create-poll"><span class="fa fa-plus"></span> New Poll</a></li>
                <li><a href="/create-event"><span class="fa fa-plus"></span> New Event</a></li> -->
-
+               <form class="navbar-form navbar-left" action="/search">
+                <div class="input-group">
+                      <input type="search" class="form-control" placeholder="Search" id="sitesearch" name="query">
+                </div>
+             </form>
                <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
             {% endif %}
