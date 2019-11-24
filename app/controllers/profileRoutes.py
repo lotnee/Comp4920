@@ -92,8 +92,10 @@ def edit_profile():
 @app.route('/profile/<profile_id>')
 @login_required
 def profile(profile_id,is_profile_owner=False):
-	user = validate_profile(current_user.email)
-
+	user_profile = DB.find_one(collection="Profile", query={'_id':
+		ObjectId(profile_id)})
+	user = validate_profile(user_profile['email'])
+	
 	def are_we_friends(entry):
 		return (entry['friend_id'] == user['_id'] 
 				and entry['status'] == 'accepted')
