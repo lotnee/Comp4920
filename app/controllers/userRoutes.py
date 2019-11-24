@@ -7,6 +7,10 @@ from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
+# redirect user back to login due to status 401
+@app.errorhandler(401)
+def page_not_found(e):
+    return redirect(url_for('login'))
 
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
@@ -36,6 +40,7 @@ def login():
 	return render_template('login.html', title='Log In', form=form)
 
 @app.route('/logout')
+@login_required
 def logout():
 	logout_user()
 	return redirect(url_for('login'))
