@@ -7,6 +7,7 @@
    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
    <link rel="stylesheet" href="../static/css/dashboard.css">
+   <script src='https://kit.fontawesome.com/a076d05399.js'></script>
    <title>Dashboard</title>
 </head>
 <style>
@@ -90,7 +91,7 @@
             <p>
             {% endif %}
             <br>
-            <h2 style="text-align:center">MY Event List</h2>
+            <!-- <h2 style="text-align:center">Host Event List</h2> -->
             {% if myEvents %}
             {%for event in myEvents%}
             <div class="events">
@@ -116,14 +117,16 @@
             <p>
           {% endif %}
           </br>
-             <h2 style="text-align:center">INVITED Event List</h2>
+             <!-- <h2 style="text-align:center">Upcoming Invitations</h2> -->
             {% if invEvents %}
             {%for event in invEvents%}
             <div class="events">
-                <div class="center-cropped" 
+                <h7>{{event.host}} has invited you to their event <i class='fas fa-angle-right'></i></h7>
+                <hr><div class="center-cropped" 
                     style="background-image: url('static/images/event/{{event.pictureDir}}');">
                  <img src="static/images/event/{{event.pictureDir}}" />
                </div>
+               
               <h4><a href="{{ url_for('display_event', id = event._id) }}">{{event.name}}</a></h4>
               <h6>Host: {{event.host}}</h6>
               <hr class="w3-clear">
