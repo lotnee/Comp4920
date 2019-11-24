@@ -55,21 +55,49 @@ a.edit {
    border: none;
 }
 
+
 .event {
   background-color: white;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px #f0f0f0 solid;
 }
+
+.center-cropped {
+  height: 200px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.center-cropped img {
+  min-height: 100%;
+  min-width: 100%;
+  opacity: 0;
+}
+
+/* img.eventpic {
+  width:  100%;
+  height: 100%;
+  clip: rect(0px,auto,50px,0px);
+} */
 </style>
 
 <body>
     <div class="container">
+    
         <h1 style="text-align:center;">Events</h1></br>
         {% if events %}
             <div class="events">
                 {%for event in events%}
                 <div class="event">
+                    <div class="center-cropped" 
+                    style="background-image: url('static/images/event/{{event.pictureDir}}');">
+                 <img src="static/images/event/{{event.pictureDir}}" />
+               </div>
+              
+   
+                    
                 <h4><a href="{{ url_for('display_event', id = event._id) }}" style="text-decoration:none">{{event.name}}</a></h4>
                 <hr class="w3-clear">
                 {% set datetime1 = (event.start|string).split(' ') %}
