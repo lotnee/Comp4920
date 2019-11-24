@@ -114,9 +114,9 @@
                   <div class="detail">
                     <hr>
                     <img src="static/images/profile/{{friend.pictureDir}}" class="dp">  {{friend.firstName}} {{friend.lastName}}<br>
-                    <a href="{{url_for('accept_request', email=friend.email)}}"class="accept">
+                    <a href="{{url_for('accept_request', profile_id=friend._id)}}"class="accept">
                     ✓</a>
-                    <a href="{{url_for('delete_request', email=friend.email)}}"class="cancel">x</a>
+                    <a href="{{url_for('delete_request', profile_id=friend._id)}}"class="cancel">x</a>
                   </div>
                 </br>
                 {% endfor %}
