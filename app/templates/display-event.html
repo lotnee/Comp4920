@@ -55,20 +55,16 @@
 
            <p><h2>Invited Guests <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends" style="float:right">View All</button></h2>
            <h2>Event Posts </h2>
+           {% for post in posts %}
            <div>
+             <p style="float:right">Author name</p>
              <img src="/static/images/profile/male.jpg" class="dp">
-             <div class="detail">
-                 <p><b>Oh my god I love this event, wow!!!!</p>
+             <div class="detail" class="dp">
+                <p><b>{{post.post_text}}</b></p>
              </div>
              <br />
            </div>
-           <div>
-             <img src="/static/images/profile/male.jpg" class="dp">
-             <div class="detail">
-                 <p><b>Oh my god I love this event, wow!!!!</p>
-             </div>
-             <br />
-           </div>
+           {% endfor %}
            <form action="/add-event-post/{{event['_id']}}" method="post" >
               <input type="text" name="post_text" value="Write something">
               <input type="submit" value="Post">

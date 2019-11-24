@@ -111,6 +111,13 @@ def display_event(id):
 	cohosts = []
 	invitePrivleges = 0
 	eventDetails = DB.find_one(collection = "Events", query = {"_id":ObjectId(id)})
+	
+	# get event posts
+	posts = DB.find(collection="Post", query={'_id': {'$in': eventDetails['eventPosts']}})
+	if not posts:	posts = DB.find(collection="Post", query={'_id': {'$in': eventPosts}})
+	if not posts:
+		posts = {}
+
 	# gets all the friends of the user
 	retDictionary = DB.find_one(collection = "Profile", query = {"email":current_user.email})
 	friends = []
@@ -151,7 +158,8 @@ def display_event(id):
 							friends = json.dumps(friends), host = host, status = status,
 							invited = invited,maybe = maybe, going = going,
 							declined = declined, canInvite = invitePrivleges,
-							cohosts = cohosts)
+							cohosts = cohosts,
+							posts = posts)
 
 @app.route('/delete-event/<string:id>')
 @login_required
