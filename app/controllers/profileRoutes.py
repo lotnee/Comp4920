@@ -27,10 +27,6 @@ def profilePolls(pollList):
 @app.route('/dashboard')
 @login_required
 def dashboard():
-	# user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	# if user is None:
-	# 	flash('Please create your profile first!')
-	# 	return redirect(url_for('edit_profile'))
 	user = validate_profile(current_user.email)
 	
 	incoming = DB.find(collection="Profile", query={"friends": {"$elemMatch": {"friend_id": user['_id'], "status": "pending"}}})
@@ -110,10 +106,6 @@ def edit_profile():
 @app.route('/profile/<profile_id>')
 @login_required
 def profile(profile_id,is_profile_owner=False):
-	# user = DB.find_one(collection="Profile", query={"_id": ObjectId(profile_id)})
-	# if user is None:
-	# 	flash('Please create your profile first!')
-	# 	return redirect(url_for('edit_profile'))
 	user = validate_profile(current_user.email)
 
 	def are_we_friends(entry):
@@ -142,5 +134,5 @@ def profile(profile_id,is_profile_owner=False):
 @login_required
 def my_profile():
 	user = validate_profile(current_user.email)
-	# me = DB.find_one(collection="Profile", query={"email": current_user.email})
+	
 	return profile(str(user['_id']),is_profile_owner=True)
