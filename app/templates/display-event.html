@@ -7,6 +7,11 @@
 <body>
    <div class="container">
     <div class="detail">
+            <div class="event">
+                <div class="center-cropped" 
+                    style="background-image: url('static/images/event/{{event.pictureDir}}');">
+                 <img src="static/images/event/{{event.pictureDir}}" />
+               </div>
        <h2>{{event['name'] }}</h2>
        <hr>
        {% set datetime1 = (event.start|string).split(' ') %}
