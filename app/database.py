@@ -1,10 +1,11 @@
 import pymongo
+import os
 
 class DB(object):
 
 	@staticmethod
 	def init():
-		client = pymongo.MongoClient("mongodb+srv://cs4920:cs4920@cs4920-8drst.gcp.mongodb.net/")
+		client = pymongo.MongoClient("mongodb+srv://"+os.getenv('MONGODB_USERNAME')+":"+os.getenv('MONGODB_PASSWORD')+"@cs4920-8drst.gcp.mongodb.net/")
 		DB.DATABASE = client['Hangouts']
 
 	@staticmethod

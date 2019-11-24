@@ -15,7 +15,8 @@ Our webapp allow users to:-
 Follow the instructions will get you a copy of the project up and running on your local machine
 ### Prerequisites
 ```
-python version 3.7
+1. python version 3.7
+2. you will need a .env file, copy content from example.env and create a new file name .env and paste it
 ```
 ### Installing
 This will install the modules used for the project
