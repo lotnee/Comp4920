@@ -69,7 +69,8 @@ def create_events():
 						  host=user['_id'],
 						  invitees=[], pictureDir=filename, private=False)
 		event.insert(current_user.email, user['_id'])
-		return redirect(url_for('event_completed'))
+		flash('Create event successful')
+		return redirect(url_for('view_events'))
 	return render_template('create-event.html', title="Create Your Event", form=form)
 
 @app.route('/view-events')
@@ -92,14 +93,14 @@ def view_events():
 				allEvents.append({'_id': event['_id'],'name': event['name'], 'host': event_host['firstName'] + ' ' + event_host['lastName'], 'start': event['start'], 'end': event['end'], 'description': event['description'], 'pictureDir': event['pictureDir']})
 	return render_template('events.html', title='View Events', me=user, myEvents=myEvents, invEvents=allEvents,)
 
-@app.route('/event-completed')
-@login_required
-def event_completed():
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
-	return render_template('event-completed.html',title="Event Creation Completed")
+# @app.route('/event-completed')
+# @login_required
+# def event_completed():
+# 	user = DB.find_one(collection="Profile", query={"email": current_user.email})
+# 	if user is None:
+# 		flash('Please create your profile first!')
+# 		return redirect(url_for('edit_profile'))
+# 	return render_template('event-completed.html',title="Event Creation Completed")
 
 @app.route('/view-events/<id>')
 @login_required
