@@ -2,27 +2,17 @@ from app import app
 from app.database import DB
 from app.models.poll import Poll, Option
 from app.controllers.forms import PollForm
-from app.utility.utility import get_index_1key
+from app.utility.utility import get_index_1key, validate_profile, get_list_of_documents
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
 from datetime import datetime, time
 from bson.objectid import ObjectId
-import ast
-
-def polls_in_profile(pollList):
-	polls = []
-	for poll in pollList:
-		toAdd = DB.find_one(collection='Poll', query={'_id': poll})
-		polls.append(toAdd)
-	return polls
 
 @app.route('/create-poll', methods=['GET', 'POST'])
 @login_required
 def create_poll():
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
+
 	form = PollForm()
 	if form.validate_on_submit():
 		form.option1t.data = form.option1t.data.split(' ')
@@ -72,11 +62,8 @@ def create_poll():
 @app.route('/add-voter/<poll>', methods=['GET', 'POST'])
 @login_required
 def add_voter(poll):
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
-	
+	user = validate_profile(current_user.email)
+
 	myFriendList = []
 	for f in user['friends']:
 		profile = DB.find_one(collection="Profile", query={'_id': f['friend_id']})
@@ -92,10 +79,6 @@ def add_voter(poll):
 @app.route('/invite-voter/<poll>/<email>')
 @login_required
 def invite_voter(poll, email):
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
 	friend = DB.find_one(collection="Profile", query={"email": email})
 	if friend is None:
 		flash(f'Friend {email} not found!')
@@ -112,27 +95,23 @@ def invite_voter(poll, email):
 @app.route('/polls')
 @login_required
 def polls():
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
-	pollList = polls_in_profile(user['polls'])
+	user = validate_profile(current_user.email)
+
+	pollList = get_list_of_documents(obj_id_list=user['polls'], collection='Poll')
+
 	return render_template('poll.html',title="View Polls", polls=pollList, user=user)
 
 @app.route('/update-vote/<poll>', methods=['GET', 'POST'])
 @login_required
 def update_vote(poll):
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
+
 	toUpdate = DB.find_one(collection='Poll', query={'_id': ObjectId(poll)})
 	if toUpdate is None:
 		flash('Please contact admin, DB error!')
 		return redirect(url_for('polls'))
 	options = request.form.getlist('date')
-	# print(options)
-	# counter = 0 
+
 	if request.form.get('add') == 'add':
 		for dates in options:
 			# dates = dates.split(' ')[0]
@@ -150,11 +129,9 @@ def update_vote(poll):
 			return redirect(url_for('polls'))
 	elif request.form.get('del') == 'del':
 		for dates in options:
-			# dates = dates.split(' ')[0]
+
 			dt = datetime.strptime(dates, "%Y-%m-%d %H:%M:%S")
-			# print(dt)
-			# test = DB.find_one(collection='Poll', query={'options': dt})
-			# print(test)
+
 			index = get_index_1key(arrayList=toUpdate, key='options', query=dt)
 			print(index)
 			index = "options." + str(index) + ".voters"
@@ -170,10 +147,8 @@ def update_vote(poll):
 @app.route('/delete-poll/<poll>')
 @login_required
 def delete_poll(poll):
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
+
 	toDelete = DB.find_one(collection='Poll', query={'_id': ObjectId(poll)})
 	if toDelete is None:
 		flash('Please contact admin, DB error!')
