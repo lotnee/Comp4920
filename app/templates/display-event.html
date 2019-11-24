@@ -19,9 +19,8 @@
    <div class="container">
     <div class="detail">
             <div class="event">
-                <div class="center-cropped"
-                    style="background-image: url('/static/images/event/{{event.pictureDir}}');">
-                 <img src="/static/images/event/{{event.pictureDir}}" />
+                <div class="center-cropped">
+                 <img  src="/static/images/event/{{event.pictureDir}}" />
                </div>
        <h2>{{event['name'] }}</h2>
        <hr>
@@ -38,9 +37,8 @@
        <div class="inviteField">
            <h2>Invitation Status</h2>
            {% if host != 1 %}
-           <p>You have been invited by {{hostName}}</p>.<br>
+           <p>You have been invited by {{hostName}}</p>
            {%endif%}
-            <hr>
             {% if status == "invited" %}
            <div style="text-align:center">
                 <a class="button-accept" href="{{url_for('acceptInvite', eventId = event['_id'],acceptance = "going")}}"><i class="fa fa-calendar-check-o"></i> Accept</a>
@@ -50,7 +48,7 @@
             </div>
            {% else %}
            <form action="{{url_for('update_attendance', eventId = event['_id'])}}" method="POST">
-               <select class="form-control" name="statusType" placeholder="Invite status" required>
+               <select class="form-control" id = "attendanceStatus" name="statusType" placeholder="Invite status" required>
                     <option name = "going" value="going">Going</option>
                     <option name = "maybe" href="/dashboard" value="maybe">Maybe</option>
                     <option name = "declined" value="declined">Can't Go</option>
@@ -69,42 +67,29 @@
             {% endif %}
 
            <p><h2>Invited Guests <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#DisplayFriends" style="float:right">View All</button></h2>
-           <h2>Event Posts </h2>
-           {% for post in posts %}
-           <div postid={{post._id}}>
-             <!--  <p style="float:right; padding:10px;">{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</p> -->
-              <img src="/static/images/profile/{{post.authorDetails.pictureDir}}" class="dp">
-             <div class="detail" class="dp" style ="margin-top:-50px; margin-left:55px;">
-                <p><b>{{post.post_text}}</b></p>
-                <p style="float:right; padding:10px;">{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</p>
-             </div>
-
-             <br/>
-           </div>
-           {% endfor %}
-           <form action="/add-event-post/{{event['_id']}}" method="post" >
-              <input type="text" name="post_text" value="Write something">
-              <input type="submit" value="Post">
-           </form>
         </div>
         {% if host == 1 %}
         <input type = "text" id = "myInput" onkeyup ="hi('friends','myInput')" placeholder="Search for your friends" style="float:left; margin-top:10px; width:100%; text-align: center;">
         <ul id = "friends" style="float:right; margin-top:30px; margin-left:-480px;"></ul>
         {% else %}
-        {% endif %}<br>
+        {% endif %}<br><br>
         <ul style="margin-top:20px;">
            {% for dictionary_item in event['invitees'] %}
-            <p><a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}">
+           {% if loop.index <= 3 %}
+
+
+            <p><img src = "/static/images/profile/{{dictionary_item['profilePic']}}"/> {{dictionary_item['name']}}
+
             {% if (host ==1 or canInvite == 1) and loop.index != 1 %}
-                <i class="fa fa-times" aria-hidden="true"></i>
+                <a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}"><i class="fa fa-times" aria-hidden="true"></i></a></p>
             {% else %}
+            </p>
             {% endif %}
-            {% if loop.index <= 3 %}
-                 </a>{{dictionary_item['email']}}</p>
-                 {% else %}
+            {%else%}
             {% endif %}
            {% endfor %}
         </ul>
+
         <!-- Parts of this code was from https://getbootstrap.com/docs/4.0/components/navs/ -->
              <div class="modal fade" id = "DisplayFriends" role="dialog">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -174,7 +159,7 @@
                                         <p><img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
                                         {{item['name']}}<hr>
                                         {% endfor%}
-                                { % else %}
+                                {% else %}
                                     <h4 style="text-align:center">No invitees yet</h4>
                                 {% endif%}
                             {% endif %}
@@ -216,9 +201,32 @@
        }
    </script>
     {% else %}
+        {% for item in cohosts %}
+         <div class="cohost-list row" style="padding-left:20px">
+             <img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
+             {{item['name']}}<hr> <a href="{{url_for('delete_cohost', userId = item['cohostId'], eventId = event['_id'] )}}" >x</a>
+         </div>
+        {% endfor %}
 
     </div>
     {%endif%}
+    <h2>Event Posts </h2>
+    {% for post in posts %}
+    <div postid={{post._id}}>
+      <!--  <p style="float:right; padding:10px;">{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</p> -->
+       <img src="/static/images/profile/{{post.authorDetails.pictureDir}}" class="dp">
+      <div class="detail" class="dp" style ="margin-top:-50px; margin-left:55px;">
+         <p><b>{{post.post_text}}</b></p>
+         <p style="float:right; padding:10px;">{{post.authorDetails.firstName}} {{post.authorDetails.lastName}}</p>
+      </div>
+
+      <br/>
+    </div>
+    {% endfor %}
+    <form action="/add-event-post/{{event['_id']}}" method="post" >
+       <input type="text" name="post_text" value="Write something">
+       <input type="submit" value="Post">
+    </form>
 
 </body>
 
