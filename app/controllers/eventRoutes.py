@@ -8,6 +8,7 @@ from flask_login import current_user, login_required
 from datetime import datetime, time
 from bson.objectid import ObjectId
 import json
+import os
 
 @app.route('/create-event', methods=['GET', 'POST'])
 @login_required
@@ -364,9 +365,9 @@ def edit_event(eventId):
 				filename = filename.split('/')[1]
 			else:
 				# delete existing photo
-				filename = "app/static/images/event/" + profile['pictureDir']
+				filename = "app/static/images/event/" + event['pictureDir']
 				os.remove(os.path.join(filename))
-				filename = photos.save(form.pictureDir.data, name='event/'+ + str(event['_id']) + '.')
+				filename = photos.save(form.pictureDir.data, name='event/' + str(event['_id']) + '.')
 				filename = filename.split('/')[1]
 			DB.update_one(collection="Events", filter={"_id": event['_id']}, data={"$set": {"pictureDir": filename}})
 		if form.eventType.data == 'private':
