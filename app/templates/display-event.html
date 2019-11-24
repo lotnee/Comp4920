@@ -2,11 +2,6 @@
 {% block style%}
 <link rel="stylesheet" href="/static/css/display-event.css">
 {% endblock%}
-<style>
-  #friend {
-    margin-top: 10px;
-  }
-</style>
 {% block content %}
 <body>
     {% with messages = get_flashed_messages() %}
@@ -50,7 +45,7 @@
             </div>
            {% else %}
            <form action="{{url_for('update_attendance', eventId = event['_id'])}}" method="POST">
-               <select class="form-control" name="statusType" placeholder="Invite status" required>
+               <select class="form-control" style="width:350px";name="statusType" placeholder="Invite status" required>
                     <option name = "going" value="going">Going</option>
                     <option name = "maybe" href="/dashboard" value="maybe">Maybe</option>
                     <option name = "declined" value="declined">Can't Go</option>
@@ -92,7 +87,7 @@
         <ul id = "friends" style="float:right; margin-top:30px; margin-left:-480px;"></ul>
         {% else %}
         {% endif %}<br>
-        <ul style="margin-top:20px;">
+        <ul style="margin-top:30px;">
            {% for dictionary_item in event['invitees'] %}
             <p><a href="{{url_for('deleteInvite', eventId = event['_id'], userId = dictionary_item['id'])}}">
             {% if (host ==1 or canInvite == 1) and loop.index != 1 %}
