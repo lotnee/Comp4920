@@ -150,7 +150,7 @@ def update_vote(poll):
 			check = DB.find_one(collection='Poll', query={index: user['email']})
 			if check is None:
 				flash(f'You haven\'t voted for {dt}')
-				continue
+				return redirect(url_for('polls'))
 			DB.update_one(collection='Poll', filter={'_id': ObjectId(poll)}, data={'$pull': {index: user['email']}})
 			return redirect(url_for('polls'))
 	flash(f'Pick an option')	
