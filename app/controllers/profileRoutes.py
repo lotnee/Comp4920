@@ -20,13 +20,21 @@ def dashboard():
 	
 	allEvents = []
 	allPolls = []
+	myEvents = []
 	# if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
 	if user['events'] != []:
-		allEvents = get_list_of_documents(obj_id_list=user['events'], collection='Events')
+		for event_id in user['events']:
+			event = DB.find_one(collection='Events', query={'_id': event_id})
+			event_host = DB.find_one(collection='Profile', query={'_id': event['host']})
+			if user['_id'] == event_host['_id']:
+				myEvents.append(event)
+			else:
+				allEvents.append({'_id': event['_id'],'name': event['name'], 'host': event_host['firstName'] + ' ' + event_host['lastName'], 'start': event['start'], 'end': event['end'], 'description': event['description'], 'pictureDir': event['pictureDir']})
+		# allEvents = get_list_of_documents(obj_id_list=user['events'], collection='Events')
 	# if DB.find_one(collection="Profile", query={"email":current_user.email, "polls": {"$ne" : []}}):
 	if user['polls'] != []:
 		allPolls = get_list_of_documents(obj_id_list=user['polls'], collection='Poll')
-	return render_template('dashboard.html', title='Dashboard', polls = allPolls, events = allEvents, me=user, requests=requests)
+	return render_template('dashboard.html', title='Dashboard', polls = allPolls, myEvents=myEvents, invEvents=allEvents, me=user, requests=requests)
 
 @app.route('/edit-profile', methods=['GET', 'POST'])
 @login_required

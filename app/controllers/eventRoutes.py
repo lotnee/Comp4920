@@ -5,7 +5,7 @@ from app.models.post import Post
 from app.controllers.forms import photos,EventForm
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
-from app.utility.utility import validate_profile, get_list_of_documents
+from app.utility.utility import validate_profile
 from datetime import datetime, time
 from bson.objectid import ObjectId
 import json
@@ -74,11 +74,17 @@ def create_events():
 def view_events():
 	user = validate_profile(current_user.email)
 
-	if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
-		eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
-		allEvents = get_list_of_documents(obj_id_list=eventList[0]['events'], collection="Events")
-		return render_template('events.html', events = allEvents, title='View Events', me=user)
-	return render_template('events.html',title="View Events")
+	allEvents = []
+	myEvents = []
+	if user['events'] != []:
+		for event_id in user['events']:
+			event = DB.find_one(collection='Events', query={'_id': event_id})
+			event_host = DB.find_one(collection='Profile', query={'_id': event['host']})
+			if user['_id'] == event_host['_id']:
+				myEvents.append(event)
+			else:
+				allEvents.append({'_id': event['_id'],'name': event['name'], 'host': event_host['firstName'] + ' ' + event_host['lastName'], 'start': event['start'], 'end': event['end'], 'description': event['description'], 'pictureDir': event['pictureDir']})
+	return render_template('events.html', title='View Events', me=user, myEvents=myEvents, invEvents=allEvents,)
 
 @app.route('/event-completed')
 @login_required
