@@ -107,8 +107,10 @@ a.edit {
               {% set datetime2 = (event.end|string).split(' ') %}
               <h6><b>End Date:</b> {{datetime2[0]}} at {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
               <hr class="w3-clear">
+              
               <h6><b>Event Description</b></h6>
-              <p>{{event.description}}</p>
+              <div class="desc" style="width:400px;">
+              <p>{{event.description}}</p></div>
               <br>
               <a href="{{url_for('edit_event', eventId = event._id)}}" class="edit">Edit Event</a></p>
                 <a href="{{url_for('delete_event', id = event._id)}}" class="delete">Delete Event</a></p>
