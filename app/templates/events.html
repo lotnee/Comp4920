@@ -96,7 +96,7 @@ a.edit {
             {% if myEvents %}
             {%for event in myEvents%}
             <div class="events">
-                <div class="center-cropped" 
+                <div class="center-cropped"
                     style="background-image: url('static/images/event/{{event.pictureDir}}');">
                  <img src="static/images/event/{{event.pictureDir}}" />
                </div>
@@ -127,19 +127,19 @@ a.edit {
             <div class="events">
                 {%for event in invEvents%}
                 <div class="event">
-                    <div class="center-cropped" 
+                    <div class="center-cropped"
                     style="background-image: url('static/images/event/{{event.pictureDir}}');">
                  <img src="static/images/event/{{event.pictureDir}}" />
                </div>
-                    
-                <h4><a href="{{ url_for('display_event', id = event._id) }}" style="text-decoration:none" style="text-decoration: none; color:#1E90FF"></a>>{{event.name}}</a></h4>
+
+                <h4><a href="{{ url_for('display_event', id = event._id) }}" style="text-decoration:none" style="text-decoration: none; color:#1E90FF">{{event.name}}</a></h4>
                 <h6><b>Hosted by:</b> {{event.host}}</h6>
                 {% set datetime1 = (event.start|string).split(' ') %}
               <h6><b>Start Date:</b> {{datetime1[0]}} at {{datetime1[1].split(':')[0]}}:{{datetime1[1].split(':')[1]}}</h6>
               {% set datetime2 = (event.end|string).split(' ') %}
               <h6><b>End Date:</b> {{datetime2[0]}} at {{datetime2[1].split(':')[0]}}:{{datetime2[1].split(':')[1]}}</h6>
                 <hr class="w3-clear">
-        
+
                 <h6><b>Event Description</b></h6>
                 <p>{{event.description}}</p>
                 <br>
