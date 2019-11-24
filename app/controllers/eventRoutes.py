@@ -4,7 +4,7 @@ from app.models.events import Event
 from app.controllers.forms import photos,EventForm
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
-from app.utility.utility import get_list, get_cursor,get_name
+from app.utility.utility import validate_profile
 from datetime import datetime, time
 from bson.objectid import ObjectId
 import json
@@ -20,10 +20,11 @@ def profileEvents(eventLists):
 @app.route('/create-event', methods=['GET', 'POST'])
 @login_required
 def create_events():
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
+	# user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# if user is None:
+	# 	flash('Please create your profile first!')
+	# 	return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
 	form = EventForm()
 	# if form.is_submitted():
 	if form.validate_on_submit():
@@ -81,10 +82,11 @@ def create_events():
 @app.route('/view-events')
 @login_required
 def view_events():
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
+	# user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# if user is None:
+	# 	flash('Please create your profile first!')
+	# 	return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
 	if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
 		eventList = DB.find(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}})
 		allEvents = profileEvents(eventList[0]['events']) #FIXME doesn't seem right
@@ -100,6 +102,7 @@ def event_completed():
 @app.route('/view-events/<path:id>')
 @login_required
 def display_event(id):
+	user = validate_profile(current_user.email)
 	#get the event name or more so the ID
 	invited = []
 	going = []
@@ -155,10 +158,11 @@ def display_event(id):
 @app.route('/delete-event/<string:id>')
 @login_required
 def delete_event(id):
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
+	# user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# if user is None:
+	# 	flash('Please create your profile first!')
+	# 	return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
 	#delete the event from the id
 	#first go through all the users that is associated with that id
 	x = DB.find_one(collection="Events", query = {"_id":ObjectId(id)})
@@ -174,10 +178,11 @@ def delete_event(id):
 @app.route('/create-event/<poll>', methods=['GET', 'POST'])
 @login_required
 def poll_create_event(poll):
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
+	# user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# if user is None:
+	# 	flash('Please create your profile first!')
+	# 	return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
 	my_poll = DB.find_one(collection="Poll", query={"_id": ObjectId(poll)})
 	if my_poll is None:
 		flash('Please contact admin, DB issues!')
@@ -294,10 +299,11 @@ def deleteInvite(eventId,userId):
 @app.route('/edit-event/<eventId>', methods=['GET', 'POST'])
 @login_required
 def edit_event(eventId):
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
+	# user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# if user is None:
+	# 	flash('Please create your profile first!')
+	# 	return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
 	event = DB.find_one(collection="Events", query={"_id": ObjectId(eventId)})
 	if event is None:
 		flash('Please contact admin, DB issues!')

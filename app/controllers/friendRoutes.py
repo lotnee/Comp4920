@@ -1,6 +1,6 @@
 from app import app
 from app.database import DB
-from app.utility.utility import get_list, get_cursor, get_index_2key
+from app.utility.utility import get_list, get_cursor, get_index_2key, validate_profile
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 from bson.objectid import ObjectId
@@ -8,10 +8,11 @@ from bson.objectid import ObjectId
 @app.route('/friends', methods=['GET', 'POST'])
 @login_required
 def friends():
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
+	# user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# if user is None:
+	# 	flash('Please create your profile first!')
+	# 	return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
 	users = list(DB.find_all(collection="Profile"))
 	me = DB.find_one(collection="Profile", query={"email": current_user.email})
 
@@ -31,10 +32,11 @@ def friends():
 @app.route('/send-request/<profile_id>')
 @login_required
 def send_request(profile_id):
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
+	# user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# if user is None:
+	# 	flash('Please create your profile first!')
+	# 	return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
 	# only can add user with a profile
 	friend = DB.find_one(collection="Profile", query={"_id": ObjectId(profile_id)})
 	if friend is None:
@@ -59,10 +61,11 @@ def send_request(profile_id):
 @app.route('/delete-request/<profile_id>')
 @login_required
 def delete_request(profile_id):
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
+	# user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# if user is None:
+	# 	flash('Please create your profile first!')
+	# 	return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
 	# only can add user with a profile
 	friend = DB.find_one(collection="Profile", query={"_id": ObjectId(profile_id)})
 	if friend is None:
@@ -84,10 +87,11 @@ def delete_request(profile_id):
 @app.route('/accept-request/<profile_id>')
 @login_required
 def accept_request(profile_id):
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
+	# user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# if user is None:
+	# 	flash('Please create your profile first!')
+	# 	return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
 	# only can add user with a profile
 	friend = DB.find_one(collection="Profile", query={"_id": ObjectId(profile_id)})
 	if friend is None:
@@ -110,11 +114,11 @@ def accept_request(profile_id):
 @app.route('/delete-friend/<profile_id>')
 @login_required
 def delete_friend(profile_id):
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
-
+	# user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# if user is None:
+	# 	flash('Please create your profile first!')
+	# 	return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
 	added = DB.find_one(collection="Profile", query={"$and": [{"_id": user['_id']}, {"friends": {"$elemMatch": {"friend_id": ObjectId(profile_id), "status": "accepted"}}}]})
 	added2 = DB.find_one(collection="Profile", query={"$and": [{"_id": ObjectId(profile_id)}, {"friends": {"$elemMatch": {"friend_id": user['_id'], "status": "accepted"}}}]})
 	

@@ -5,7 +5,7 @@ from app.controllers.forms import ProfileForm, photos
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
 # from werkzeug.utils import secure_filename
-from app.utility.utility import get_list, get_cursor
+from app.utility.utility import get_cursor, validate_profile
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 import os
@@ -27,22 +27,24 @@ def profilePolls(pollList):
 @app.route('/dashboard')
 @login_required
 def dashboard():
-	user = DB.find_one(collection="Profile", query={"email": current_user.email})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
-	users = list(DB.find_all(collection="Profile"))
-	# me = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# user = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# if user is None:
+	# 	flash('Please create your profile first!')
+	# 	return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
+	
 	incoming = DB.find(collection="Profile", query={"friends": {"$elemMatch": {"friend_id": user['_id'], "status": "pending"}}})
 	requests = get_cursor(cursor_obj=incoming, key="friends", subkey="friend_id", subkey2="status", query=user['_id'], query2="pending")
 	
 	allEvents = []
 	allPolls = []
-	if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
+	# if DB.find_one(collection="Profile", query={"email":current_user.email, "events": {"$ne" : []}}):
+	if user['events'] != []:
 		allEvents = profileEvents(user['events'])
-	if DB.find_one(collection="Profile", query={"email":current_user.email, "polls": {"$ne" : []}}):
+	# if DB.find_one(collection="Profile", query={"email":current_user.email, "polls": {"$ne" : []}}):
+	if user['polls'] != []:
 		allPolls = profilePolls(user['polls'])
-	return render_template('dashboard.html', title='Dashboard', polls = allPolls, events = allEvents, users=users, me=user, requests=requests)
+	return render_template('dashboard.html', title='Dashboard', polls = allPolls, events = allEvents, me=user, requests=requests)
 
 @app.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
@@ -108,19 +110,14 @@ def edit_profile():
 @app.route('/profile/<profile_id>')
 @login_required
 def profile(profile_id,is_profile_owner=False):
-	user = DB.find_one(collection="Profile", query={"_id": ObjectId(profile_id)})
-	if user is None:
-		flash('Please create your profile first!')
-		return redirect(url_for('edit_profile'))
-	# creates a json file for calender
-	print(list(user['events']))
-	# path = os.path.join(absolute_path, 'static/css')
-	# print(path)
-
-	me = DB.find_one(collection="Profile", query={"email": current_user.email})
+	# user = DB.find_one(collection="Profile", query={"_id": ObjectId(profile_id)})
+	# if user is None:
+	# 	flash('Please create your profile first!')
+	# 	return redirect(url_for('edit_profile'))
+	user = validate_profile(current_user.email)
 
 	def are_we_friends(entry):
-		return (entry['friend_id'] == me['_id'] 
+		return (entry['friend_id'] == user['_id'] 
 				and entry['status'] == 'accepted')
 	is_friend = any(filter(are_we_friends, user['friends']))
 
@@ -144,5 +141,6 @@ def profile(profile_id,is_profile_owner=False):
 @app.route('/profile')
 @login_required
 def my_profile():
-	me = DB.find_one(collection="Profile", query={"email": current_user.email})
-	return profile(str(me['_id']),is_profile_owner=True)
+	user = validate_profile(current_user.email)
+	# me = DB.find_one(collection="Profile", query={"email": current_user.email})
+	return profile(str(user['_id']),is_profile_owner=True)
