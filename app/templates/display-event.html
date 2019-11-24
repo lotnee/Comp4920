@@ -15,7 +15,7 @@
    <div class="container">
     <div class="detail">
             <div class="event">
-                <div class="center-cropped" 
+                <div class="center-cropped"
                     style="background-image: url('/static/images/event/{{event.pictureDir}}');">
                  <img src="/static/images/event/{{event.pictureDir}}" />
                </div>
@@ -33,9 +33,11 @@
      <div class="detail">
        <div class="inviteField">
            <h2>Invitation Status</h2>
-           {% if status == "invited" %}
-           <p>You have been invited by [host name/email].<br>
+           {% if host != 1 %}
+           <p>You have been invited by {{hostName}}</p>.<br>
+           {%endif%}
             <hr>
+            {% if status == "invited" %}
            <div style="text-align:center">
                 <a class="button-accept" href="{{url_for('acceptInvite', eventId = event['_id'],acceptance = "going")}}"><i class="fa fa-calendar-check-o"></i> Accept</a>
                 <a class="button-maybe" href="{{url_for('acceptInvite', eventId = event['_id'], acceptance = "maybe")}}"><i class="fa fa-calendar-minus-o"></i> Maybe</a></button>
@@ -191,7 +193,7 @@
        {% for item in cohosts %}
         <div class="cohost-list row" style="padding-left:20px">
             <img src="/static/images/profile/{{item['pictureDir']}}" class="dp">
-            {{item['name']}}<hr>
+            {{item['name']}}<hr> <a href="{{url_for('delete_cohost', userId = item['cohostId'], eventId = event['_id'] )}}" >x</a>
         </div>
        {% endfor %}
    </div>
@@ -208,6 +210,7 @@
        }
    </script>
     {% else %}
+
     </div>
     {%endif%}
 

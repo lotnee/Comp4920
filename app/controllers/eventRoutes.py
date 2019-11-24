@@ -157,13 +157,13 @@ def display_event(id):
 			invited.append(dictionaryItem)
 		if invitee["email"] == current_user.email and invitee['status'] != "invited":
 			status = invitee['status'] # user has already responded
-
+		nameDetails = DB.find_one(collection = "Profile", query = {"_id": eventDetails['host']}, projection = {"firstName":1, "lastName":1})
+		hostName = nameDetails['firstName'] + " " + nameDetails['lastName']
 	return render_template('display-event.html', event = eventDetails,
 							friends = json.dumps(friends), host = host, status = status,
 							invited = invited,maybe = maybe, going = going,
 							declined = declined, canInvite = invitePrivleges,
-							cohosts = cohosts,
-							posts = posts)
+							cohosts = cohosts, posts = posts, hostName = hostName)
 
 @app.route('/delete-event/<string:id>')
 @login_required
@@ -301,11 +301,15 @@ def deleteInvite(eventId,userId):
 		return redirect(url_for('edit_profile'))
 	# Delete user from the Event model from invitees
 	# Get the list of invitees from Event model
+	# also delete them from invitePrivleges
+	if DB.find_one(collection = "Events", query = {"_id": ObjectId(eventId), "invitePrivleges": {"$elemMatch": {"cohostId": ObjectId(userId)}}}):
+		print("ASGASGASG")
+		DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$pull": {"invitePrivleges": {"cohostId": ObjectId(userId)}}})
 	userEmail = DB.find_one(collection = "Profile", query  = {"_id":ObjectId(userId)}, projection = {"email":1})
 	DB.update_one(collection = "Events", filter = {"_id": ObjectId(eventId)}, data = { "$pull" : {"invitees": {"id": ObjectId(userId)}}})
 	DB.update_one(collection = "Profile", filter = {"_id":ObjectId(userId)}, data = {"$pull": {"events":ObjectId(eventId)}})
 
-	# also remove the person from the invitePrivleges
+
 	return redirect(url_for("display_event", id = eventId))
 
 @app.route('/edit-event/<eventId>', methods=['GET', 'POST'])
@@ -356,7 +360,7 @@ def add_cohost(userId, eventId):
 		#check if the user has been invited
 		#if  not any(person['email'] == current_user.email for person in eventDetails['invitees']):
 		userDetails = DB.find_one(collection = "Profile", query = {"_id":ObjectId(userId)}, projection = {"email":1, "firstName":1,"lastName":1, "pictureDir": 1})
-		if DB.find_one(collection = "Events", query = {"_id": eventId, "invitee":{"id": ObjectId(userId)}}) is None:
+		if DB.find_one(collection = "Events", query = {"_id": ObjectId(eventId), "invitees":{ "$elemMatch": {"id": ObjectId(userId)}}}) is None:
 			print("Hello")
 			DB.update_one(collection = "Events", filter = {"_id": ObjectId(eventId)}, data = {"$push": {"invitees":{"id": ObjectId(userId),"email":userDetails['email'], "status":"invited"}}})
 
@@ -379,7 +383,7 @@ def delete_cohost(userId, eventId):
 		return redirect(url_for('edit_profile'))
 	# Add the userId to the event invitePrivleges
 	#check whether a valid cohost
-	value = DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$pull": {"invitePrivleges": ObjectId(userId)}})
+	value = DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId)}, data = {"$pull": {"invitePrivleges": {"cohostId":ObjectId(userId)}}})
 	if value is None:
 		flash('The user you have tried to remove is not an admin!')
 
@@ -395,7 +399,7 @@ def update_attendance(eventId):
 		print(attendance)
 		# update the status of the invididual
 		DB.update_one(collection = "Events", filter = {"_id":ObjectId(eventId), "invitees": {"$elemMatch": {"email":current_user.email}}}, data = {'$set': {"invitees.$.status":attendance}})
-	return redirect('display_event', id = eventId)
+	return redirect(url_for('display_event', id = eventId))
 
 @app.route('/add-event-post/<eventId>', methods=['POST'])
 @login_required
